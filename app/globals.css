@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Design tokens ─────────────────────────────────────────────── */
+/* ─── Design tokens — Dark mode (default) ───────────────────────── */
 :root {
   --bg:      #060608;
   --s1:      #0e0e14;
@@ -10,13 +10,37 @@
   --s3:      #1e1e2a;
   --border:  #252535;
   --border2: #32324a;
+
   --a1: #6ee7b7;
   --a2: #818cf8;
   --a3: #f472b6;
   --a4: #fbbf24;
+
   --text:  #dddaf0;
   --muted: #6b6880;
   --faint: #3a3850;
+
+  --nav-bg:       rgba(6,6,8,0.95);
+  --nav-bg-solid: rgba(6,6,8,0.99);
+}
+
+/* ─── Light mode overrides ───────────────────────────────────────── */
+html.light {
+  --bg:      #f2f2fa;
+  --s1:      #ffffff;
+  --s2:      #eaeaf5;
+  --s3:      #dddaf0;
+  --border:  #ccc9e8;
+  --border2: #b4b0d4;
+
+  /* accents unchanged — they pop on both backgrounds */
+
+  --text:  #1c1a2e;
+  --muted: #7a7890;
+  --faint: #a8a5be;
+
+  --nav-bg:       rgba(242,242,250,0.95);
+  --nav-bg-solid: rgba(242,242,250,0.99);
 }
 
 /* ─── Base ───────────────────────────────────────────────────────── */
@@ -30,6 +54,7 @@ body {
   font-family: var(--font-space-grotesk), system-ui, sans-serif;
   position: relative;
   overflow-x: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 body::before {
@@ -45,6 +70,11 @@ body::before {
     rgba(255, 255, 255, 0.012) 3px,
     rgba(255, 255, 255, 0.012) 4px
   );
+  transition: opacity 0.3s ease;
+}
+
+html.light body::before {
+  opacity: 0;
 }
 
 /* ─── Section layout ─────────────────────────────────────────────── */

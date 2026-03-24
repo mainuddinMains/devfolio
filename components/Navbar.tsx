@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { personalInfo } from "@/data/personal"
+import ThemeToggle from "@/components/ThemeToggle"
 
 const NAV_LINKS = [
   { label: "About",     href: "#about"     },
@@ -43,7 +44,7 @@ export default function Navbar() {
         zIndex: 200,
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
-        background: "rgba(6,6,8,0.95)",
+        background: "var(--nav-bg)",
         borderBottom: "1px solid var(--border)",
         boxShadow: scrolled
           ? "0 4px 24px rgba(0,0,0,0.45)"
@@ -137,6 +138,9 @@ export default function Navbar() {
             </button>
           ))}
 
+          {/* Theme toggle */}
+          <ThemeToggle />
+
           {/* + Add button */}
           <button
             onClick={() => scrollTo("#add-project")}
@@ -166,6 +170,11 @@ export default function Navbar() {
           >
             + Add
           </button>
+        </div>
+
+        {/* ── Theme toggle (always visible on mobile, hidden on desktop where it's in nav-links) ── */}
+        <div className="nav-theme-mobile">
+          <ThemeToggle />
         </div>
 
         {/* ── Hamburger (mobile) ── */}
@@ -206,7 +215,7 @@ export default function Navbar() {
           className="nav-mobile-menu"
           style={{
             borderTop: "1px solid var(--border)",
-            background: "rgba(6,6,8,0.98)",
+            background: "var(--nav-bg-solid)",
             padding: "1rem 2rem",
             display: "flex",
             flexDirection: "column",
@@ -262,9 +271,13 @@ export default function Navbar() {
 
       {/* ── Responsive rules injected as a style tag ── */}
       <style>{`
+        /* Desktop: hide the standalone mobile toggle (it's inside nav-links-desktop) */
+        .nav-theme-mobile { display: none; }
+
         @media (max-width: 640px) {
           .nav-links-desktop { display: none !important; }
           .nav-hamburger     { display: flex !important; }
+          .nav-theme-mobile  { display: flex; }
         }
       `}</style>
     </header>
