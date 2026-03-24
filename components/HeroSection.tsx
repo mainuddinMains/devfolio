@@ -1,8 +1,11 @@
 "use client"
 
-import { useRef, useEffect, useState } from "react"
+import { useRef, useEffect, useState, useCallback } from "react"
 import { personalInfo } from "@/data/personal"
 import GlowingAvatar from "@/components/GlowingAvatar"
+
+const LS_NAME    = "devfolio_hero_name"
+const LS_TAGLINE = "devfolio_hero_tagline"
 
 interface Stats {
   projects: number
@@ -15,12 +18,6 @@ interface HeroSectionProps {
   stats: Stats
 }
 
-const PILLS = [
-  { label: "Software Dev",    bg: "rgba(110,231,183,0.1)", color: "#6ee7b7", border: "rgba(110,231,183,0.25)" },
-  { label: "AI / ML / Data",  bg: "rgba(129,140,248,0.1)", color: "#818cf8", border: "rgba(129,140,248,0.25)" },
-  { label: "Creative Design", bg: "rgba(244,114,182,0.1)", color: "#f472b6", border: "rgba(244,114,182,0.25)" },
-]
-
 const STAT_COLORS = ["#6ee7b7", "#818cf8", "#f472b6", "#fbbf24"]
 
 function scrollTo(id: string) {
@@ -29,7 +26,33 @@ function scrollTo(id: string) {
 
 export default function HeroSection({ stats }: HeroSectionProps) {
   const wrapperRef = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible]   = useState(false)
+  const [heroName, setHeroName]       = useState(personalInfo.name)
+  const [tagline, setTagline]         = useState("Love to build things")
+  const [editingName, setEditingName] = useState(false)
+  const [editingTag, setEditingTag]   = useState(false)
+
+  // Load saved values from localStorage
+  useEffect(() => {
+    const savedName = localStorage.getItem(LS_NAME)
+    const savedTag  = localStorage.getItem(LS_TAGLINE)
+    if (savedName) setHeroName(savedName)
+    if (savedTag)  setTagline(savedTag)
+  }, [])
+
+  const saveName = useCallback((val: string) => {
+    const trimmed = val.trim() || personalInfo.name
+    setHeroName(trimmed)
+    localStorage.setItem(LS_NAME, trimmed)
+    setEditingName(false)
+  }, [])
+
+  const saveTagline = useCallback((val: string) => {
+    const trimmed = val.trim() || "Love to build things"
+    setTagline(trimmed)
+    localStorage.setItem(LS_TAGLINE, trimmed)
+    setEditingTag(false)
+  }, [])
 
   useEffect(() => {
     const el = wrapperRef.current
@@ -138,29 +161,7 @@ export default function HeroSection({ stats }: HeroSectionProps) {
           {/* ── LEFT: text content ── */}
           <div className="hero-left">
 
-            {/* 1. Discipline pills */}
-            <div className="fade-up" style={{ animationDelay: "0s", display: "flex", flexWrap: "wrap", gap: "0.6rem" }}>
-              {PILLS.map((pill) => (
-                <span
-                  key={pill.label}
-                  style={{
-                    background: pill.bg,
-                    color: pill.color,
-                    border: `1px solid ${pill.border}`,
-                    borderRadius: 20,
-                    padding: "0.3rem 0.9rem",
-                    fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "0.65rem",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.06em",
-                  }}
-                >
-                  {pill.label}
-                </span>
-              ))}
-            </div>
-
-            {/* 2. Name greeting */}
+            {/* 1. Name greeting */}
             <p
               className="fade-up"
               style={{
@@ -170,34 +171,114 @@ export default function HeroSection({ stats }: HeroSectionProps) {
                 color: "var(--muted)",
                 margin: 0,
                 letterSpacing: "0.04em",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.4rem",
               }}
             >
               Hi, I&apos;m{" "}
-              <span style={{ color: "#6ee7b7", fontWeight: 700 }}>
-                {personalInfo.name}
-              </span>
+              {editingName ? (
+                <input
+                  autoFocus
+                  defaultValue={heroName}
+                  onBlur={(e) => saveName(e.currentTarget.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") saveName(e.currentTarget.value)
+                    if (e.key === "Escape") setEditingName(false)
+                  }}
+                  style={{
+                    background: "rgba(110,231,183,0.08)",
+                    border: "1px solid rgba(110,231,183,0.4)",
+                    borderRadius: 4,
+                    color: "#6ee7b7",
+                    fontWeight: 700,
+                    fontFamily: "var(--font-jetbrains-mono)",
+                    fontSize: "inherit",
+                    padding: "0.1rem 0.4rem",
+                    outline: "none",
+                    width: "14rem",
+                  }}
+                />
+              ) : (
+                <span
+                  title="Click to edit"
+                  onClick={() => setEditingName(true)}
+                  style={{
+                    color: "#6ee7b7",
+                    fontWeight: 700,
+                    cursor: "text",
+                    borderBottom: "1px dashed rgba(110,231,183,0.35)",
+                    paddingBottom: "1px",
+                  }}
+                >
+                  {heroName}
+                </span>
+              )}
+              <span
+                title="Edit name"
+                onClick={() => setEditingName(true)}
+                style={{ cursor: "pointer", opacity: 0.4, fontSize: "0.75em", userSelect: "none" }}
+              >✎</span>
             </p>
 
-            {/* 3. Headline */}
-            <h1
+            {/* 2. Tagline */}
+            <div
               className="fade-up"
               style={{
-                animationDelay: "0.1s",
-                fontSize: "clamp(1.8rem, 4.5vw, 3.8rem)",
-                fontWeight: 700,
-                letterSpacing: "-0.03em",
-                lineHeight: 1.1,
-                color: "var(--text)",
-                margin: 0,
+                animationDelay: "0.15s",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
               }}
             >
-              Building at the intersection of{" "}
-              <span style={{ color: "#6ee7b7" }}>code</span>
-              {", "}
-              <span style={{ color: "#818cf8" }}>intelligence</span>
-              {" & "}
-              <span style={{ color: "#f472b6" }}>design</span>
-            </h1>
+              {editingTag ? (
+                <input
+                  autoFocus
+                  defaultValue={tagline}
+                  onBlur={(e) => saveTagline(e.currentTarget.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") saveTagline(e.currentTarget.value)
+                    if (e.key === "Escape") setEditingTag(false)
+                  }}
+                  style={{
+                    background: "rgba(129,140,248,0.08)",
+                    border: "1px solid rgba(129,140,248,0.4)",
+                    borderRadius: 4,
+                    color: "var(--text)",
+                    fontWeight: 600,
+                    fontFamily: "var(--font-space-grotesk)",
+                    fontSize: "clamp(1.1rem, 2.5vw, 1.6rem)",
+                    letterSpacing: "-0.01em",
+                    padding: "0.1rem 0.4rem",
+                    outline: "none",
+                    width: "22rem",
+                  }}
+                />
+              ) : (
+                <p
+                  title="Click to edit"
+                  onClick={() => setEditingTag(true)}
+                  style={{
+                    fontSize: "clamp(1.1rem, 2.5vw, 1.6rem)",
+                    fontWeight: 600,
+                    color: "var(--text)",
+                    margin: 0,
+                    letterSpacing: "-0.01em",
+                    cursor: "text",
+                    borderBottom: "1px dashed rgba(129,140,248,0.35)",
+                    paddingBottom: "1px",
+                  }}
+                >
+                  {tagline}
+                </p>
+              )}
+              <span
+                title="Edit tagline"
+                onClick={() => setEditingTag(true)}
+                style={{ cursor: "pointer", opacity: 0.4, fontSize: "0.85rem", userSelect: "none" }}
+              >✎</span>
+            </div>
+
 
             {/* 3. Bio */}
             <p
