@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
 import type { Project } from "@/lib/types"
 
@@ -244,6 +244,19 @@ export default function ProjectsSection({
   onProjectClick,
 }: ProjectsSectionProps) {
   const [activeFilter, setActiveFilter] = useState<FilterKey>("all")
+  const sectionRef = useRef<HTMLElement>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect() } },
+      { threshold: 0.05 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   const filtered =
     activeFilter === "all"
@@ -251,7 +264,12 @@ export default function ProjectsSection({
       : projects.filter((p) => p.category === activeFilter)
 
   return (
-    <section id="projects">
+    <section
+      id="projects"
+      ref={sectionRef}
+      className={visible ? "animate-in" : undefined}
+      style={{ opacity: visible ? undefined : 0 }}
+    >
       {/* ── Header row ── */}
       <div
         style={{

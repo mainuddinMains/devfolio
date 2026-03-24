@@ -1,5 +1,6 @@
 "use client"
 
+import { useRef, useEffect, useState } from "react"
 import { personalInfo } from "@/data/personal"
 
 interface Stats {
@@ -14,24 +15,9 @@ interface HeroSectionProps {
 }
 
 const PILLS = [
-  {
-    label: "Software Dev",
-    bg: "rgba(110,231,183,0.1)",
-    color: "#6ee7b7",
-    border: "rgba(110,231,183,0.25)",
-  },
-  {
-    label: "AI / ML / Data",
-    bg: "rgba(129,140,248,0.1)",
-    color: "#818cf8",
-    border: "rgba(129,140,248,0.25)",
-  },
-  {
-    label: "Creative Design",
-    bg: "rgba(244,114,182,0.1)",
-    color: "#f472b6",
-    border: "rgba(244,114,182,0.25)",
-  },
+  { label: "Software Dev",    bg: "rgba(110,231,183,0.1)", color: "#6ee7b7", border: "rgba(110,231,183,0.25)" },
+  { label: "AI / ML / Data",  bg: "rgba(129,140,248,0.1)", color: "#818cf8", border: "rgba(129,140,248,0.25)" },
+  { label: "Creative Design", bg: "rgba(244,114,182,0.1)", color: "#f472b6", border: "rgba(244,114,182,0.25)" },
 ]
 
 const STAT_COLORS = ["#6ee7b7", "#818cf8", "#f472b6", "#fbbf24"]
@@ -41,16 +27,29 @@ function scrollTo(id: string) {
 }
 
 export default function HeroSection({ stats }: HeroSectionProps) {
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = wrapperRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect() } },
+      { threshold: 0.05 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   const statItems = [
-    { label: "Projects",      value: stats.projects },
-    { label: "Disciplines",   value: stats.disciplines },
-    { label: "Years Exp",     value: stats.years },
-    { label: "Technologies",  value: stats.technologies },
+    { label: "Projects",     value: stats.projects },
+    { label: "Disciplines",  value: stats.disciplines },
+    { label: "Years Exp",    value: stats.years },
+    { label: "Technologies", value: stats.technologies },
   ]
 
   return (
     <>
-      {/* ── Keyframe injection ── */}
       <style>{`
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(16px); }
@@ -64,6 +63,8 @@ export default function HeroSection({ stats }: HeroSectionProps) {
 
       <div
         id="about"
+        ref={wrapperRef}
+        className={visible ? "animate-in" : undefined}
         style={{
           maxWidth: 1000,
           margin: "0 auto",
@@ -71,18 +72,11 @@ export default function HeroSection({ stats }: HeroSectionProps) {
           display: "flex",
           flexDirection: "column",
           gap: "2rem",
+          opacity: visible ? undefined : 0,
         }}
       >
         {/* ── 1. Discipline pills ── */}
-        <div
-          className="fade-up"
-          style={{
-            animationDelay: "0s",
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "0.6rem",
-          }}
-        >
+        <div className="fade-up" style={{ animationDelay: "0s", display: "flex", flexWrap: "wrap", gap: "0.6rem" }}>
           {PILLS.map((pill) => (
             <span
               key={pill.label}
@@ -108,7 +102,7 @@ export default function HeroSection({ stats }: HeroSectionProps) {
           className="fade-up"
           style={{
             animationDelay: "0.1s",
-            fontSize: "clamp(2.2rem, 5vw, 3.8rem)",
+            fontSize: "clamp(1.8rem, 5vw, 3.8rem)",
             fontWeight: 700,
             letterSpacing: "-0.03em",
             lineHeight: 1.12,
@@ -143,29 +137,14 @@ export default function HeroSection({ stats }: HeroSectionProps) {
         </p>
 
         {/* ── 4. CTA buttons ── */}
-        <div
-          className="fade-up"
-          style={{
-            animationDelay: "0.3s",
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "0.75rem",
-          }}
-        >
+        <div className="fade-up" style={{ animationDelay: "0.3s", display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
           <button
             onClick={() => scrollTo("#projects")}
             style={{
-              background: "#6ee7b7",
-              color: "#060608",
-              border: "none",
-              borderRadius: 6,
-              padding: "0.6rem 1.3rem",
-              fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.78rem",
-              fontWeight: 700,
-              letterSpacing: "0.04em",
-              cursor: "pointer",
-              transition: "opacity 0.15s ease",
+              background: "#6ee7b7", color: "#060608", border: "none", borderRadius: 6,
+              padding: "0.6rem 1.3rem", fontFamily: "var(--font-jetbrains-mono)",
+              fontSize: "0.78rem", fontWeight: 700, letterSpacing: "0.04em",
+              cursor: "pointer", transition: "opacity 0.15s ease",
             }}
             onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "0.85")}
             onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "1")}
@@ -176,17 +155,10 @@ export default function HeroSection({ stats }: HeroSectionProps) {
           <button
             onClick={() => scrollTo("#add-project")}
             style={{
-              background: "#818cf8",
-              color: "#fff",
-              border: "none",
-              borderRadius: 6,
-              padding: "0.6rem 1.3rem",
-              fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.78rem",
-              fontWeight: 700,
-              letterSpacing: "0.04em",
-              cursor: "pointer",
-              transition: "opacity 0.15s ease",
+              background: "#818cf8", color: "#fff", border: "none", borderRadius: 6,
+              padding: "0.6rem 1.3rem", fontFamily: "var(--font-jetbrains-mono)",
+              fontSize: "0.78rem", fontWeight: 700, letterSpacing: "0.04em",
+              cursor: "pointer", transition: "opacity 0.15s ease",
             }}
             onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "0.85")}
             onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "1")}
@@ -197,27 +169,18 @@ export default function HeroSection({ stats }: HeroSectionProps) {
           <button
             onClick={() => scrollTo("#skills")}
             style={{
-              background: "none",
-              color: "var(--text)",
-              border: "1px solid var(--border2)",
-              borderRadius: 6,
-              padding: "0.6rem 1.3rem",
-              fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.78rem",
-              fontWeight: 600,
-              letterSpacing: "0.04em",
-              cursor: "pointer",
-              transition: "border-color 0.15s ease, color 0.15s ease",
+              background: "none", color: "var(--text)", border: "1px solid var(--border2)",
+              borderRadius: 6, padding: "0.6rem 1.3rem", fontFamily: "var(--font-jetbrains-mono)",
+              fontSize: "0.78rem", fontWeight: 600, letterSpacing: "0.04em",
+              cursor: "pointer", transition: "border-color 0.15s ease, color 0.15s ease",
             }}
             onMouseEnter={(e) => {
               const el = e.currentTarget as HTMLButtonElement
-              el.style.borderColor = "var(--muted)"
-              el.style.color = "#fff"
+              el.style.borderColor = "var(--muted)"; el.style.color = "#fff"
             }}
             onMouseLeave={(e) => {
               const el = e.currentTarget as HTMLButtonElement
-              el.style.borderColor = "var(--border2)"
-              el.style.color = "var(--text)"
+              el.style.borderColor = "var(--border2)"; el.style.color = "var(--text)"
             }}
           >
             My Skills
@@ -226,7 +189,7 @@ export default function HeroSection({ stats }: HeroSectionProps) {
 
         {/* ── 5. Stats bar ── */}
         <div
-          className="fade-up"
+          className="fade-up hero-stats"
           style={{
             animationDelay: "0.45s",
             display: "grid",
@@ -247,26 +210,10 @@ export default function HeroSection({ stats }: HeroSectionProps) {
                 background: "var(--s1)",
               }}
             >
-              <div
-                style={{
-                  fontSize: "1.5rem",
-                  fontWeight: 700,
-                  color: STAT_COLORS[i],
-                  lineHeight: 1,
-                  marginBottom: "0.4rem",
-                }}
-              >
+              <div style={{ fontSize: "1.5rem", fontWeight: 700, color: STAT_COLORS[i], lineHeight: 1, marginBottom: "0.4rem" }}>
                 {item.value}
               </div>
-              <div
-                style={{
-                  fontFamily: "var(--font-jetbrains-mono)",
-                  fontSize: "0.65rem",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.07em",
-                  color: "var(--muted)",
-                }}
-              >
+              <div style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.07em", color: "var(--muted)" }}>
                 {item.label}
               </div>
             </div>

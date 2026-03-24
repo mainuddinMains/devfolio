@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import type { Project } from "@/lib/types"
 
 interface AddProjectFormProps {
@@ -68,6 +68,19 @@ export default function AddProjectForm({ onAddProject }: AddProjectFormProps) {
   const [fields, setFields] = useState(EMPTY)
   const [message, setMessage] = useState<{ text: string; type: "success" | "error" } | null>(null)
   const successTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect() } },
+      { threshold: 0.05 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   function set(key: keyof typeof EMPTY, value: string) {
     setFields((prev) => ({ ...prev, [key]: value }))
@@ -139,7 +152,12 @@ export default function AddProjectForm({ onAddProject }: AddProjectFormProps) {
         .apf-textarea::placeholder { color: var(--muted); opacity: 1; }
       `}</style>
 
-      <section id="add-project" style={{ paddingBottom: "6rem" }}>
+      <section
+        id="add-project"
+        ref={sectionRef}
+        className={visible ? "animate-in" : undefined}
+        style={{ paddingBottom: "6rem", opacity: visible ? undefined : 0 }}
+      >
         {/* ── Header ── */}
         <div style={{ marginBottom: "1.2rem" }}>
           <p style={{ ...labelStyle, letterSpacing: "0.14em", margin: "0 0 0.45rem" }}>
@@ -201,6 +219,7 @@ export default function AddProjectForm({ onAddProject }: AddProjectFormProps) {
 
             {/* 2-column grid for the remaining fields */}
             <div
+              className="form-2col"
               style={{
                 display:             "grid",
                 gridTemplateColumns: "1fr 1fr",
@@ -295,7 +314,7 @@ export default function AddProjectForm({ onAddProject }: AddProjectFormProps) {
             </Field>
 
             {/* 8. Emoji — left column max-width */}
-            <div style={{ display: "grid", gridTemplateColumns: "90px 1fr", gap: "0.9rem" }}>
+            <div className="form-emoji-col" style={{ display: "grid", gridTemplateColumns: "90px 1fr", gap: "0.9rem" }}>
               <Field>
                 <label style={labelStyle}>Emoji Icon</label>
                 <input

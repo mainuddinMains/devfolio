@@ -4,23 +4,16 @@
 
 /* ─── Design tokens ─────────────────────────────────────────────── */
 :root {
-  /* Backgrounds */
   --bg:      #060608;
   --s1:      #0e0e14;
   --s2:      #16161f;
   --s3:      #1e1e2a;
-
-  /* Borders */
   --border:  #252535;
   --border2: #32324a;
-
-  /* Accent palette */
-  --a1: #6ee7b7;   /* green  — Software Dev  */
-  --a2: #818cf8;   /* purple — AI / ML       */
-  --a3: #f472b6;   /* pink   — Design        */
-  --a4: #fbbf24;   /* amber  — highlight     */
-
-  /* Text */
+  --a1: #6ee7b7;
+  --a2: #818cf8;
+  --a3: #f472b6;
+  --a4: #fbbf24;
   --text:  #dddaf0;
   --muted: #6b6880;
   --faint: #3a3850;
@@ -39,7 +32,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Subtle scanline texture */
 body::before {
   content: "";
   pointer-events: none;
@@ -60,6 +52,63 @@ section {
   max-width: 1000px;
   margin: 0 auto;
   padding: 3.5rem 2rem;
+}
+
+/* ─── Scroll animation ───────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+.animate-in {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* ─── Responsive: Hero stats bar ────────────────────────────────── */
+@media (max-width: 480px) {
+  .hero-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  /* Remove right border on even cells (col 2 in 2x2) */
+  .hero-stats > div:nth-child(even) {
+    border-right: none !important;
+  }
+  /* Add bottom border to first row */
+  .hero-stats > div:nth-child(1),
+  .hero-stats > div:nth-child(2) {
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+/* ─── Responsive: Form grids ─────────────────────────────────────── */
+@media (max-width: 600px) {
+  .form-2col {
+    grid-template-columns: 1fr !important;
+  }
+  .form-emoji-col {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ─── Responsive: Education card year ───────────────────────────── */
+@media (max-width: 480px) {
+  .edu-card-inner {
+    flex-wrap: wrap !important;
+  }
+  .edu-year {
+    width: 100%;
+    margin-left: 0 !important;
+    margin-top: 0.35rem;
+  }
+}
+
+/* ─── Responsive: Footer ─────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .footer-inner {
+    flex-direction: column !important;
+    text-align: center;
+    align-items: center !important;
+  }
 }
 
 /* ─── Utilities ──────────────────────────────────────────────────── */

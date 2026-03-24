@@ -1,5 +1,6 @@
 "use client"
 
+import { useRef, useEffect, useState } from "react"
 import { education } from "@/data/education"
 import type { Education } from "@/lib/types"
 
@@ -10,9 +11,21 @@ const TYPE_CONFIG: Record<Education["type"], { color: string; accent: string }> 
 }
 
 export default function EducationSection() {
-  const sorted = [...education].sort(
-    (a, b) => parseInt(b.endYear) - parseInt(a.endYear)
-  )
+  const sectionRef = useRef<HTMLElement>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect() } },
+      { threshold: 0.1 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  const sorted = [...education].sort((a, b) => parseInt(b.endYear) - parseInt(a.endYear))
 
   return (
     <>
@@ -21,40 +34,21 @@ export default function EducationSection() {
         .edu-card:hover { border-color: var(--border2) !important; }
       `}</style>
 
-      <section id="education">
+      <section
+        id="education"
+        ref={sectionRef}
+        className={visible ? "animate-in" : undefined}
+        style={{ opacity: visible ? undefined : 0 }}
+      >
         {/* ── Header ── */}
         <div style={{ marginBottom: "1.75rem" }}>
-          <p
-            style={{
-              fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.65rem",
-              color: "var(--muted)",
-              textTransform: "uppercase",
-              letterSpacing: "0.14em",
-              margin: "0 0 0.45rem",
-            }}
-          >
+          <p style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "0.65rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.14em", margin: "0 0 0.45rem" }}>
             Academic Background
           </p>
-          <h2
-            style={{
-              fontFamily: "var(--font-space-grotesk)",
-              fontSize: "1.4rem",
-              fontWeight: 700,
-              margin: "0 0 0.6rem",
-              color: "var(--text)",
-            }}
-          >
+          <h2 style={{ fontFamily: "var(--font-space-grotesk)", fontSize: "1.4rem", fontWeight: 700, margin: "0 0 0.6rem", color: "var(--text)" }}>
             Education
           </h2>
-          <div
-            style={{
-              width: 36,
-              height: 2,
-              borderRadius: 2,
-              background: "#818cf8",
-            }}
-          />
+          <div style={{ width: 36, height: 2, borderRadius: 2, background: "#818cf8" }} />
         </div>
 
         {/* ── Cards ── */}
@@ -64,77 +58,31 @@ export default function EducationSection() {
             return (
               <div
                 key={entry.id}
-                className="edu-card"
-                style={{
-                  background: "var(--s1)",
-                  border: "1px solid var(--border)",
-                  borderRadius: 10,
-                  padding: "1.2rem",
-                  display: "flex",
-                  gap: "1.2rem",
-                  alignItems: "flex-start",
-                }}
+                className="edu-card edu-card-inner"
+                style={{ background: "var(--s1)", border: "1px solid var(--border)", borderRadius: 10, padding: "1.2rem", display: "flex", gap: "1.2rem", alignItems: "flex-start" }}
               >
-                {/* Colored dot */}
-                <div
-                  style={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: "50%",
-                    background: cfg.color,
-                    flexShrink: 0,
-                    marginTop: 5,
-                  }}
-                />
+                {/* Dot */}
+                <div style={{ width: 10, height: 10, borderRadius: "50%", background: cfg.color, flexShrink: 0, marginTop: 5 }} />
 
                 {/* Content */}
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p
-                    style={{
-                      fontSize: "0.92rem",
-                      fontWeight: 600,
-                      color: "var(--text)",
-                      margin: "0 0 0.2rem",
-                    }}
-                  >
+                  <p style={{ fontSize: "0.92rem", fontWeight: 600, color: "var(--text)", margin: "0 0 0.2rem" }}>
                     {entry.degree}
                   </p>
-                  <p
-                    style={{
-                      fontFamily: "var(--font-jetbrains-mono)",
-                      fontSize: "0.72rem",
-                      color: cfg.accent,
-                      margin: "0 0 0.15rem",
-                    }}
-                  >
+                  <p style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "0.72rem", color: cfg.accent, margin: "0 0 0.15rem" }}>
                     {entry.institution}
                   </p>
-                  <p
-                    style={{
-                      fontFamily: "var(--font-jetbrains-mono)",
-                      fontSize: "0.68rem",
-                      color: "var(--muted)",
-                      margin: 0,
-                    }}
-                  >
+                  <p style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "0.68rem", color: "var(--muted)", margin: 0 }}>
                     {entry.field}
                   </p>
                 </div>
 
-                {/* Year range */}
+                {/* Year */}
                 <p
-                  style={{
-                    fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "0.68rem",
-                    color: "var(--muted)",
-                    whiteSpace: "nowrap",
-                    margin: 0,
-                    flexShrink: 0,
-                  }}
+                  className="edu-year"
+                  style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "0.68rem", color: "var(--muted)", whiteSpace: "nowrap", margin: 0, flexShrink: 0 }}
                 >
-                  {entry.startYear === entry.endYear
-                    ? entry.endYear
-                    : `${entry.startYear} – ${entry.endYear}`}
+                  {entry.startYear === entry.endYear ? entry.endYear : `${entry.startYear} – ${entry.endYear}`}
                 </p>
               </div>
             )
