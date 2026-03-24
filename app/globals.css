@@ -5,9 +5,9 @@
 /* ─── Design tokens — Dark mode (default) ───────────────────────── */
 :root {
   --bg:      #060608;
-  --s1:      #0e0e14;
-  --s2:      #16161f;
-  --s3:      #1e1e2a;
+  --s1:      rgba(14,14,20,0.82);
+  --s2:      rgba(22,22,31,0.88);
+  --s3:      rgba(30,30,42,0.92);
   --border:  #252535;
   --border2: #32324a;
 
@@ -27,9 +27,9 @@
 /* ─── Light mode overrides ───────────────────────────────────────── */
 html.light {
   --bg:      #f2f2fa;
-  --s1:      #ffffff;
-  --s2:      #eaeaf5;
-  --s3:      #dddaf0;
+  --s1:      rgba(255,255,255,0.88);
+  --s2:      rgba(234,234,245,0.90);
+  --s3:      rgba(221,218,240,0.92);
   --border:  #ccc9e8;
   --border2: #b4b0d4;
 
