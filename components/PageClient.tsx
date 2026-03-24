@@ -5,6 +5,7 @@ import HeroSection from "@/components/HeroSection"
 import SkillsSection from "@/components/SkillsSection"
 import EducationSection from "@/components/EducationSection"
 import ProjectsSection from "@/components/ProjectsSection"
+import ProjectModal from "@/components/ProjectModal"
 import { projects as initialProjects } from "@/data/projects"
 import type { Project } from "@/lib/types"
 
@@ -23,9 +24,14 @@ const DIVIDER = (
 
 export default function PageClient() {
   const [projects, setProjects] = useState<Project[]>(initialProjects)
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
   function handleProjectClick(project: Project) {
-    console.log("Project clicked:", project)
+    setSelectedProject(project)
+  }
+
+  function handleDelete(id: string) {
+    setProjects((prev) => prev.filter((p) => p.id !== id))
   }
 
   return (
@@ -41,6 +47,12 @@ export default function PageClient() {
       <ProjectsSection
         projects={projects}
         onProjectClick={handleProjectClick}
+      />
+
+      <ProjectModal
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
+        onDelete={handleDelete}
       />
     </>
   )
