@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from "react"
 import { education } from "@/data/education"
 import type { Education } from "@/lib/types"
+import Draggable from "@/components/Draggable"
 
 const TYPE_CONFIG: Record<Education["type"], { color: string; accent: string }> = {
   degree:      { color: "#6ee7b7", accent: "#6ee7b7" },
@@ -56,10 +57,10 @@ export default function EducationSection() {
           {sorted.map((entry) => {
             const cfg = TYPE_CONFIG[entry.type]
             return (
+              <Draggable key={entry.id} id={`edu-${entry.id}`}>
               <div
-                key={entry.id}
                 className="edu-card edu-card-inner"
-                style={{ background: "var(--s1)", border: "1px solid var(--border)", borderRadius: 10, padding: "1.2rem", display: "flex", gap: "1.2rem", alignItems: "flex-start" }}
+                style={{ background: "var(--s1)", border: "1px solid var(--border)", borderRadius: 10, padding: "1.2rem", display: "flex", gap: "1.2rem", alignItems: "flex-start", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
               >
                 {/* Dot */}
                 <div style={{ width: 10, height: 10, borderRadius: "50%", background: cfg.color, flexShrink: 0, marginTop: 5 }} />
@@ -85,6 +86,7 @@ export default function EducationSection() {
                   {entry.startYear === entry.endYear ? entry.endYear : `${entry.startYear} – ${entry.endYear}`}
                 </p>
               </div>
+              </Draggable>
             )
           })}
         </div>

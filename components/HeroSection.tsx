@@ -4,8 +4,43 @@ import { useRef, useEffect, useState, useCallback } from "react"
 import { personalInfo } from "@/data/personal"
 import GlowingAvatar from "@/components/GlowingAvatar"
 
-const LS_NAME    = "devfolio_hero_name"
-const LS_TAGLINE = "devfolio_hero_tagline"
+const LS_NAME        = "devfolio_hero_name"
+const LS_TAGLINE     = "devfolio_hero_tagline"
+const LS_NAME_POS    = "devfolio_hero_name_pos"
+const LS_TAGLINE_POS = "devfolio_hero_tagline_pos"
+
+type Pos = { x: number; y: number }
+
+function useDraggable(lsKey: string): [Pos, (e: React.MouseEvent) => void, React.Dispatch<React.SetStateAction<Pos>>] {
+  const [pos, setPos] = useState<Pos>({ x: 0, y: 0 })
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(lsKey)
+      if (saved) setPos(JSON.parse(saved))
+    } catch { /* ignore */ }
+  }, [lsKey])
+
+  const onMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault()
+    const startX = e.clientX - pos.x
+    const startY = e.clientY - pos.y
+
+    function onMove(ev: MouseEvent) {
+      const next = { x: ev.clientX - startX, y: ev.clientY - startY }
+      setPos(next)
+      localStorage.setItem(lsKey, JSON.stringify(next))
+    }
+    function onUp() {
+      document.removeEventListener("mousemove", onMove)
+      document.removeEventListener("mouseup", onUp)
+    }
+    document.addEventListener("mousemove", onMove)
+    document.addEventListener("mouseup", onUp)
+  }, [pos, lsKey])
+
+  return [pos, onMouseDown, setPos]
+}
 
 interface Stats {
   projects: number
@@ -26,13 +61,15 @@ function scrollTo(id: string) {
 
 export default function HeroSection({ stats }: HeroSectionProps) {
   const wrapperRef = useRef<HTMLDivElement>(null)
-  const [visible, setVisible]   = useState(false)
+  const [visible, setVisible]         = useState(false)
   const [heroName, setHeroName]       = useState(personalInfo.name)
   const [tagline, setTagline]         = useState("Love to build things")
   const [editingName, setEditingName] = useState(false)
   const [editingTag, setEditingTag]   = useState(false)
+  const [namePos, onDragName]         = useDraggable(LS_NAME_POS)
+  const [tagPos,  onDragTag]          = useDraggable(LS_TAGLINE_POS)
 
-  // Load saved values from localStorage
+  // Load saved text values from localStorage
   useEffect(() => {
     const savedName = localStorage.getItem(LS_NAME)
     const savedTag  = localStorage.getItem(LS_TAGLINE)
@@ -162,75 +199,111 @@ export default function HeroSection({ stats }: HeroSectionProps) {
           <div className="hero-left">
 
             {/* 1. Name greeting */}
-            <p
+            <div
               className="fade-up"
               style={{
                 animationDelay: "0.08s",
-                fontFamily: "var(--font-jetbrains-mono)",
-                fontSize: "clamp(0.8rem, 1.5vw, 1rem)",
-                color: "var(--muted)",
-                margin: 0,
-                letterSpacing: "0.04em",
-                display: "flex",
+                transform: `translate(${namePos.x}px, ${namePos.y}px)`,
+                display: "inline-flex",
                 alignItems: "center",
                 gap: "0.4rem",
+                userSelect: "none",
               }}
             >
-              Hi, I&apos;m{" "}
-              {editingName ? (
-                <input
-                  autoFocus
-                  defaultValue={heroName}
-                  onBlur={(e) => saveName(e.currentTarget.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") saveName(e.currentTarget.value)
-                    if (e.key === "Escape") setEditingName(false)
-                  }}
-                  style={{
-                    background: "rgba(110,231,183,0.08)",
-                    border: "1px solid rgba(110,231,183,0.4)",
-                    borderRadius: 4,
-                    color: "#6ee7b7",
-                    fontWeight: 700,
-                    fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "inherit",
-                    padding: "0.1rem 0.4rem",
-                    outline: "none",
-                    width: "14rem",
-                  }}
-                />
-              ) : (
-                <span
-                  title="Click to edit"
-                  onClick={() => setEditingName(true)}
-                  style={{
-                    color: "#6ee7b7",
-                    fontWeight: 700,
-                    cursor: "text",
-                    borderBottom: "1px dashed rgba(110,231,183,0.35)",
-                    paddingBottom: "1px",
-                  }}
-                >
-                  {heroName}
-                </span>
-              )}
+              {/* drag handle */}
               <span
-                title="Edit name"
-                onClick={() => setEditingName(true)}
-                style={{ cursor: "pointer", opacity: 0.4, fontSize: "0.75em", userSelect: "none" }}
-              >✎</span>
-            </p>
+                onMouseDown={onDragName}
+                title="Drag to reposition"
+                style={{
+                  cursor: "grab",
+                  opacity: 0.3,
+                  fontSize: "1rem",
+                  lineHeight: 1,
+                  touchAction: "none",
+                }}
+              >⠿</span>
+              <p
+                style={{
+                  fontFamily: "var(--font-jetbrains-mono)",
+                  fontSize: "clamp(0.8rem, 1.5vw, 1rem)",
+                  color: "var(--muted)",
+                  margin: 0,
+                  letterSpacing: "0.04em",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.4rem",
+                }}
+              >
+                Hi, I&apos;m{" "}
+                {editingName ? (
+                  <input
+                    autoFocus
+                    defaultValue={heroName}
+                    onBlur={(e) => saveName(e.currentTarget.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") saveName(e.currentTarget.value)
+                      if (e.key === "Escape") setEditingName(false)
+                    }}
+                    style={{
+                      background: "rgba(110,231,183,0.08)",
+                      border: "1px solid rgba(110,231,183,0.4)",
+                      borderRadius: 4,
+                      color: "#6ee7b7",
+                      fontWeight: 700,
+                      fontFamily: "var(--font-jetbrains-mono)",
+                      fontSize: "inherit",
+                      padding: "0.1rem 0.4rem",
+                      outline: "none",
+                      width: "14rem",
+                    }}
+                  />
+                ) : (
+                  <span
+                    title="Click to edit"
+                    onClick={() => setEditingName(true)}
+                    style={{
+                      color: "#6ee7b7",
+                      fontWeight: 700,
+                      cursor: "text",
+                      borderBottom: "1px dashed rgba(110,231,183,0.35)",
+                      paddingBottom: "1px",
+                    }}
+                  >
+                    {heroName}
+                  </span>
+                )}
+                <span
+                  title="Edit name"
+                  onClick={() => setEditingName(true)}
+                  style={{ cursor: "pointer", opacity: 0.4, fontSize: "0.75em", userSelect: "none" }}
+                >✎</span>
+              </p>
+            </div>
 
             {/* 2. Tagline */}
             <div
               className="fade-up"
               style={{
                 animationDelay: "0.15s",
-                display: "flex",
+                transform: `translate(${tagPos.x}px, ${tagPos.y}px)`,
+                display: "inline-flex",
                 alignItems: "center",
                 gap: "0.5rem",
+                userSelect: "none",
               }}
             >
+              {/* drag handle */}
+              <span
+                onMouseDown={onDragTag}
+                title="Drag to reposition"
+                style={{
+                  cursor: "grab",
+                  opacity: 0.3,
+                  fontSize: "1rem",
+                  lineHeight: 1,
+                  touchAction: "none",
+                }}
+              >⠿</span>
               {editingTag ? (
                 <input
                   autoFocus

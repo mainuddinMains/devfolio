@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from "react"
 import { skills } from "@/data/skills"
+import Draggable from "@/components/Draggable"
 
 const COLUMNS = [
   { category: "dev"    as const, label: "Software Dev", emoji: "💻", accent: "#6ee7b7", iconBg: "rgba(110,231,183,0.12)" },
@@ -58,7 +59,8 @@ export default function SkillsSection() {
           {COLUMNS.map((col) => {
             const colSkills = skills.filter((s) => s.category === col.category)
             return (
-              <div key={col.category} style={{ background: "var(--s1)", border: "1px solid var(--border)", borderRadius: 10, padding: "1.1rem" }}>
+              <Draggable key={col.category} id={`skill-col-${col.category}`}>
+              <div style={{ background: "var(--s1)", border: "1px solid var(--border)", borderRadius: 10, padding: "1.1rem", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.85rem" }}>
                   <div style={{ width: 28, height: 28, borderRadius: 6, background: col.iconBg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.9rem", flexShrink: 0 }}>
                     {col.emoji}
@@ -81,6 +83,7 @@ export default function SkillsSection() {
                   ))}
                 </div>
               </div>
+              </Draggable>
             )
           })}
         </div>

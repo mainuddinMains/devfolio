@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
 import type { Project } from "@/lib/types"
+import Draggable from "@/components/Draggable"
 
 /* ── Config maps ──────────────────────────────────────────────────── */
 
@@ -395,11 +396,12 @@ export default function ProjectsSection({
           }}
         >
           {filtered.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onClick={() => onProjectClick(project)}
-            />
+            <Draggable key={project.id} id={`project-${project.id}`}>
+              <ProjectCard
+                project={project}
+                onClick={() => onProjectClick(project)}
+              />
+            </Draggable>
           ))}
         </div>
       )}

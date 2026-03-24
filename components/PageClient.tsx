@@ -8,6 +8,7 @@ import ProjectsSection from "@/components/ProjectsSection"
 import ProjectModal from "@/components/ProjectModal"
 import AddProjectForm from "@/components/AddProjectForm"
 import Footer from "@/components/Footer"
+import Draggable from "@/components/Draggable"
 import { projects as defaultProjects } from "@/data/projects"
 import type { Project } from "@/lib/types"
 
@@ -62,18 +63,30 @@ export default function PageClient() {
 
   return (
     <>
-      <HeroSection
-        stats={{ projects: projects.length, disciplines: 3, years: 4, technologies: 8 }}
-      />
+      <Draggable id="hero">
+        <HeroSection
+          stats={{ projects: projects.length, disciplines: 3, years: 4, technologies: 8 }}
+        />
+      </Draggable>
       {DIVIDER}
-      <SkillsSection />
+      <Draggable id="skills">
+        <SkillsSection />
+      </Draggable>
       {DIVIDER}
-      <EducationSection />
+      <Draggable id="education">
+        <EducationSection />
+      </Draggable>
       {DIVIDER}
-      <ProjectsSection projects={projects} onProjectClick={handleProjectClick} />
+      <Draggable id="projects">
+        <ProjectsSection projects={projects} onProjectClick={handleProjectClick} />
+      </Draggable>
       {DIVIDER}
-      <AddProjectForm onAddProject={handleAddProject} />
-      <Footer />
+      <Draggable id="add-project-form">
+        <AddProjectForm onAddProject={handleAddProject} />
+      </Draggable>
+      <Draggable id="footer">
+        <Footer />
+      </Draggable>
 
       <ProjectModal
         project={selectedProject}

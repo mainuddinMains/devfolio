@@ -5,9 +5,9 @@
 /* ─── Design tokens — Dark mode (default) ───────────────────────── */
 :root {
   --bg:      #060608;
-  --s1:      rgba(14,14,20,0.82);
-  --s2:      rgba(22,22,31,0.88);
-  --s3:      rgba(30,30,42,0.92);
+  --s1:      rgba(14,14,20,0.75);
+  --s2:      rgba(22,22,31,0.70);
+  --s3:      rgba(30,30,42,0.80);
   --border:  #252535;
   --border2: #32324a;
 
@@ -20,26 +20,24 @@
   --muted: #6b6880;
   --faint: #3a3850;
 
-  --nav-bg:       rgba(6,6,8,0.95);
+  --nav-bg:       rgba(6,6,8,0.92);
   --nav-bg-solid: rgba(6,6,8,0.99);
 }
 
 /* ─── Light mode overrides ───────────────────────────────────────── */
 html.light {
   --bg:      #f2f2fa;
-  --s1:      rgba(255,255,255,0.88);
-  --s2:      rgba(234,234,245,0.90);
-  --s3:      rgba(221,218,240,0.92);
+  --s1:      rgba(255,255,255,0.78);
+  --s2:      rgba(234,234,245,0.75);
+  --s3:      rgba(221,218,240,0.80);
   --border:  #ccc9e8;
   --border2: #b4b0d4;
-
-  /* accents unchanged — they pop on both backgrounds */
 
   --text:  #1c1a2e;
   --muted: #7a7890;
   --faint: #a8a5be;
 
-  --nav-bg:       rgba(242,242,250,0.95);
+  --nav-bg:       rgba(242,242,250,0.92);
   --nav-bg-solid: rgba(242,242,250,0.99);
 }
 
@@ -49,32 +47,59 @@ html {
 }
 
 body {
-  background: var(--bg);
+  background-color: #060608;
+  background-image: url('/images/bg.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   color: var(--text);
   font-family: var(--font-space-grotesk), system-ui, sans-serif;
   position: relative;
   overflow-x: hidden;
-  transition: background 0.3s ease, color 0.3s ease;
+  transition: color 0.3s ease;
 }
 
-body::before {
-  content: "";
-  pointer-events: none;
+/* Mobile: fixed attachment is janky on iOS */
+@media (max-width: 768px) {
+  body { background-attachment: scroll; }
+}
+
+/* Dark overlay so text stays readable over the photo */
+body::after {
+  content: '';
   position: fixed;
   inset: 0;
+  background: rgba(4,4,8,0.82);
   z-index: 0;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0px,
-    transparent 3px,
-    rgba(255, 255, 255, 0.012) 3px,
-    rgba(255, 255, 255, 0.012) 4px
-  );
-  transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
-html.light body::before {
-  opacity: 0;
+html.light body::after {
+  background: rgba(242,242,250,0.78);
+}
+
+/* ─── Z-index layering (everything above body::after) ───────────── */
+nav {
+  position: relative;
+  z-index: 200;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+footer {
+  position: relative;
+  z-index: 1;
+  background: rgba(6,6,8,0.70);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+html.light footer {
+  background: rgba(242,242,250,0.75);
 }
 
 /* ─── Section layout ─────────────────────────────────────────────── */
@@ -83,11 +108,11 @@ section {
   padding: 3.5rem 1.5rem;
   position: relative;
   z-index: 1;
-  background: rgba(6,6,8,0.65);
+  background: rgba(6,6,8,0.55);
 }
 
 html.light section {
-  background: rgba(242,242,250,0.72);
+  background: rgba(242,242,250,0.60);
 }
 
 @media (min-width: 640px) {
@@ -104,8 +129,17 @@ html.light section {
 
 /* ─── Desktop section headings ──────────────────────────────────── */
 @media (min-width: 1024px) {
-  .section-title { font-size: 1.65rem !important; }
-  .section-eyebrow { font-size: 0.7rem !important; }
+  .section-title   { font-size: 1.65rem !important; }
+  .section-eyebrow { font-size: 0.7rem  !important; }
+}
+
+/* ─── Frosted glass on all cards ─────────────────────────────────── */
+.project-card,
+.edu-card,
+.skill-chip,
+.skill-col-card {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 /* ─── Scroll animation ───────────────────────────────────────────── */
@@ -123,11 +157,9 @@ html.light section {
   .hero-stats {
     grid-template-columns: repeat(2, 1fr) !important;
   }
-  /* Remove right border on even cells (col 2 in 2x2) */
   .hero-stats > div:nth-child(even) {
     border-right: none !important;
   }
-  /* Add bottom border to first row */
   .hero-stats > div:nth-child(1),
   .hero-stats > div:nth-child(2) {
     border-bottom: 1px solid var(--border);
@@ -136,19 +168,13 @@ html.light section {
 
 /* ─── Responsive: Form grids ─────────────────────────────────────── */
 @media (max-width: 600px) {
-  .form-2col {
-    grid-template-columns: 1fr !important;
-  }
-  .form-emoji-col {
-    grid-template-columns: 1fr !important;
-  }
+  .form-2col      { grid-template-columns: 1fr !important; }
+  .form-emoji-col { grid-template-columns: 1fr !important; }
 }
 
 /* ─── Responsive: Education card year ───────────────────────────── */
 @media (max-width: 480px) {
-  .edu-card-inner {
-    flex-wrap: wrap !important;
-  }
+  .edu-card-inner { flex-wrap: wrap !important; }
   .edu-year {
     width: 100%;
     margin-left: 0 !important;
@@ -165,33 +191,7 @@ html.light section {
   }
 }
 
-/* ─── Canvas background z-index layering ────────────────────────── */
-nav {
-  position: relative;
-  z-index: 200;
-}
-
-footer {
-  position: relative;
-  z-index: 1;
-  background: rgba(6,6,8,0.65);
-}
-
-html.light footer {
-  background: rgba(242,242,250,0.72);
-}
-
-/* backdrop-filter on cards so canvas shows through subtly */
-.project-card,
-.edu-card,
-.skill-chip {
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-
 /* ─── Utilities ──────────────────────────────────────────────────── */
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+  .text-balance { text-wrap: balance; }
 }

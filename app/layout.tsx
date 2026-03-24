@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google"
 import "./globals.css"
 import Navbar from "@/components/Navbar"
-import MatrixBackground from "@/components/MatrixBackground"
 import { personalInfo } from "@/data/personal"
 
 const spaceGrotesk = Space_Grotesk({
@@ -41,7 +40,6 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <MatrixBackground />
         <Navbar />
         <main>{children}</main>
       </body>
