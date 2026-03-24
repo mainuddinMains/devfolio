@@ -6,6 +6,7 @@ import SkillsSection from "@/components/SkillsSection"
 import EducationSection from "@/components/EducationSection"
 import ProjectsSection from "@/components/ProjectsSection"
 import ProjectModal from "@/components/ProjectModal"
+import AddProjectForm from "@/components/AddProjectForm"
 import { projects as initialProjects } from "@/data/projects"
 import type { Project } from "@/lib/types"
 
@@ -34,6 +35,10 @@ export default function PageClient() {
     setProjects((prev) => prev.filter((p) => p.id !== id))
   }
 
+  function handleAddProject(project: Project) {
+    setProjects((prev) => [project, ...prev])
+  }
+
   return (
     <>
       <HeroSection
@@ -48,6 +53,9 @@ export default function PageClient() {
         projects={projects}
         onProjectClick={handleProjectClick}
       />
+
+      {DIVIDER}
+      <AddProjectForm onAddProject={handleAddProject} />
 
       <ProjectModal
         project={selectedProject}
