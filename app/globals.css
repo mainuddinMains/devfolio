@@ -81,6 +81,13 @@ html.light body::before {
 section {
   width: 100%;
   padding: 3.5rem 1.5rem;
+  position: relative;
+  z-index: 1;
+  background: rgba(6,6,8,0.65);
+}
+
+html.light section {
+  background: rgba(242,242,250,0.72);
 }
 
 @media (min-width: 640px) {
@@ -156,6 +163,30 @@ section {
     text-align: center;
     align-items: center !important;
   }
+}
+
+/* ─── Canvas background z-index layering ────────────────────────── */
+nav {
+  position: relative;
+  z-index: 200;
+}
+
+footer {
+  position: relative;
+  z-index: 1;
+  background: rgba(6,6,8,0.65);
+}
+
+html.light footer {
+  background: rgba(242,242,250,0.72);
+}
+
+/* backdrop-filter on cards so canvas shows through subtly */
+.project-card,
+.edu-card,
+.skill-chip {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 /* ─── Utilities ──────────────────────────────────────────────────── */
