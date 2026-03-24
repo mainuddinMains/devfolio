@@ -160,7 +160,25 @@ export default function HeroSection({ stats }: HeroSectionProps) {
               ))}
             </div>
 
-            {/* 2. Headline */}
+            {/* 2. Name greeting */}
+            <p
+              className="fade-up"
+              style={{
+                animationDelay: "0.08s",
+                fontFamily: "var(--font-jetbrains-mono)",
+                fontSize: "clamp(0.8rem, 1.5vw, 1rem)",
+                color: "var(--muted)",
+                margin: 0,
+                letterSpacing: "0.04em",
+              }}
+            >
+              Hi, I&apos;m{" "}
+              <span style={{ color: "#6ee7b7", fontWeight: 700 }}>
+                {personalInfo.name}
+              </span>
+            </p>
+
+            {/* 3. Headline */}
             <h1
               className="fade-up"
               style={{

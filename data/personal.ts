@@ -1,7 +1,7 @@
 import type { PersonalInfo } from "@/lib/types"
 
 export const personalInfo: PersonalInfo = {
-  name: "Alex Rivera",
+  name: "Mainuddin Sarker",
   title: "Software Developer · AI Engineer · Designer",
   bio: "Multi-disciplinary creator building at the intersection of code, intelligence & design.",
   email: "",
