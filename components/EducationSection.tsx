@@ -42,10 +42,10 @@ export default function EducationSection() {
       >
         {/* ── Header ── */}
         <div style={{ marginBottom: "1.75rem" }}>
-          <p style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "0.65rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.14em", margin: "0 0 0.45rem" }}>
+          <p className="section-eyebrow" style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "0.65rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.14em", margin: "0 0 0.45rem" }}>
             Academic Background
           </p>
-          <h2 style={{ fontFamily: "var(--font-space-grotesk)", fontSize: "1.4rem", fontWeight: 700, margin: "0 0 0.6rem", color: "var(--text)" }}>
+          <h2 className="section-title" style={{ fontFamily: "var(--font-space-grotesk)", fontSize: "1.4rem", fontWeight: 700, margin: "0 0 0.6rem", color: "var(--text)" }}>
             Education
           </h2>
           <div style={{ width: 36, height: 2, borderRadius: 2, background: "#818cf8" }} />

@@ -54,10 +54,9 @@ export default function Navbar() {
     >
       <nav
         style={{
-          maxWidth: 1000,
-          margin: "0 auto",
-          padding: "0 2rem",
-          height: 56,
+          width: "100%",
+          padding: "0 2.5rem",
+          height: 60,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",

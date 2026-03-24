@@ -34,4 +34,5 @@ export interface PersonalInfo {
   email?: string
   github?: string
   linkedin?: string
+  avatarUrl?: string
 }

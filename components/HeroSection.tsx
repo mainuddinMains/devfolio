@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from "react"
 import { personalInfo } from "@/data/personal"
+import GlowingAvatar from "@/components/GlowingAvatar"
 
 interface Stats {
   projects: number
@@ -59,147 +60,212 @@ export default function HeroSection({ stats }: HeroSectionProps) {
           opacity: 0;
           animation: fadeUp 0.7s ease-out forwards;
         }
+
+        /* ── Wrapper ── */
+        .hero-wrap {
+          width: 100%;
+          padding: 5rem 1.5rem 3.5rem;
+          opacity: 0;
+        }
+        .hero-wrap.visible { opacity: 1; }
+
+        @media (min-width: 640px)  { .hero-wrap { padding: 6rem 2.5rem 4rem; } }
+        @media (min-width: 1024px) { .hero-wrap { padding: 7rem 4rem 5rem; } }
+        @media (min-width: 1440px) { .hero-wrap { padding: 7rem 6rem 5rem; } }
+
+        /* ── Two-column grid ── */
+        .hero-grid {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          align-items: center;
+          gap: 3rem;
+        }
+
+        /* Left: stacked content */
+        .hero-left {
+          display: flex;
+          flex-direction: column;
+          gap: 1.75rem;
+        }
+
+        /* Right: avatar — centered */
+        .hero-avatar-col {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        /* Stats bar below the grid */
+        .hero-stats-bar {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          border: 1px solid var(--border);
+          border-radius: 10px;
+          overflow: hidden;
+          margin-top: 3rem;
+        }
+
+        /* ── Mobile (< 768px): stack, avatar on top ── */
+        @media (max-width: 767px) {
+          .hero-grid {
+            grid-template-columns: 1fr;
+          }
+          .hero-avatar-col {
+            order: -1;   /* avatar above text */
+          }
+          .hero-avatar-col .avatar-size-override {
+            width: 180px !important;
+            height: 180px !important;
+          }
+        }
+
+        /* Mobile: 2x2 stats */
+        @media (max-width: 480px) {
+          .hero-stats-bar { grid-template-columns: repeat(2, 1fr); }
+          .hero-stats-bar > div:nth-child(even) { border-right: none !important; }
+          .hero-stats-bar > div:nth-child(1),
+          .hero-stats-bar > div:nth-child(2)    { border-bottom: 1px solid var(--border); }
+        }
       `}</style>
 
       <div
         id="about"
         ref={wrapperRef}
-        className={visible ? "animate-in" : undefined}
-        style={{
-          maxWidth: 1000,
-          margin: "0 auto",
-          padding: "6rem 2rem 4rem",
-          display: "flex",
-          flexDirection: "column",
-          gap: "2rem",
-          opacity: visible ? undefined : 0,
-        }}
+        className={`hero-wrap${visible ? " visible animate-in" : ""}`}
       >
-        {/* ── 1. Discipline pills ── */}
-        <div className="fade-up" style={{ animationDelay: "0s", display: "flex", flexWrap: "wrap", gap: "0.6rem" }}>
-          {PILLS.map((pill) => (
-            <span
-              key={pill.label}
+        <div className="hero-grid">
+
+          {/* ── LEFT: text content ── */}
+          <div className="hero-left">
+
+            {/* 1. Discipline pills */}
+            <div className="fade-up" style={{ animationDelay: "0s", display: "flex", flexWrap: "wrap", gap: "0.6rem" }}>
+              {PILLS.map((pill) => (
+                <span
+                  key={pill.label}
+                  style={{
+                    background: pill.bg,
+                    color: pill.color,
+                    border: `1px solid ${pill.border}`,
+                    borderRadius: 20,
+                    padding: "0.3rem 0.9rem",
+                    fontFamily: "var(--font-jetbrains-mono)",
+                    fontSize: "0.65rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.06em",
+                  }}
+                >
+                  {pill.label}
+                </span>
+              ))}
+            </div>
+
+            {/* 2. Headline */}
+            <h1
+              className="fade-up"
               style={{
-                background: pill.bg,
-                color: pill.color,
-                border: `1px solid ${pill.border}`,
-                borderRadius: 20,
-                padding: "0.3rem 0.85rem",
-                fontFamily: "var(--font-jetbrains-mono)",
-                fontSize: "0.65rem",
-                textTransform: "uppercase",
-                letterSpacing: "0.06em",
+                animationDelay: "0.1s",
+                fontSize: "clamp(1.8rem, 4.5vw, 3.8rem)",
+                fontWeight: 700,
+                letterSpacing: "-0.03em",
+                lineHeight: 1.1,
+                color: "var(--text)",
+                margin: 0,
               }}
             >
-              {pill.label}
-            </span>
-          ))}
+              Building at the intersection of{" "}
+              <span style={{ color: "#6ee7b7" }}>code</span>
+              {", "}
+              <span style={{ color: "#818cf8" }}>intelligence</span>
+              {" & "}
+              <span style={{ color: "#f472b6" }}>design</span>
+            </h1>
+
+            {/* 3. Bio */}
+            <p
+              className="fade-up"
+              style={{
+                animationDelay: "0.2s",
+                fontFamily: "var(--font-jetbrains-mono)",
+                fontSize: "0.85rem",
+                color: "var(--muted)",
+                lineHeight: 1.85,
+                maxWidth: 560,
+                margin: 0,
+              }}
+            >
+              {personalInfo.name} —{" "}
+              {personalInfo.bio}
+            </p>
+
+            {/* 4. CTAs */}
+            <div className="fade-up" style={{ animationDelay: "0.3s", display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
+              <button
+                onClick={() => scrollTo("#projects")}
+                style={{
+                  background: "#6ee7b7", color: "#060608", border: "none", borderRadius: 6,
+                  padding: "0.65rem 1.5rem", fontFamily: "var(--font-jetbrains-mono)",
+                  fontSize: "0.8rem", fontWeight: 700, letterSpacing: "0.04em",
+                  cursor: "pointer", transition: "opacity 0.15s ease",
+                }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "0.85")}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "1")}
+              >
+                View Projects
+              </button>
+
+              <button
+                onClick={() => scrollTo("#add-project")}
+                style={{
+                  background: "#818cf8", color: "#fff", border: "none", borderRadius: 6,
+                  padding: "0.65rem 1.5rem", fontFamily: "var(--font-jetbrains-mono)",
+                  fontSize: "0.8rem", fontWeight: 700, letterSpacing: "0.04em",
+                  cursor: "pointer", transition: "opacity 0.15s ease",
+                }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "0.85")}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "1")}
+              >
+                Add Project
+              </button>
+
+              <button
+                onClick={() => scrollTo("#skills")}
+                style={{
+                  background: "none", color: "var(--text)", border: "1px solid var(--border2)",
+                  borderRadius: 6, padding: "0.65rem 1.5rem", fontFamily: "var(--font-jetbrains-mono)",
+                  fontSize: "0.8rem", fontWeight: 600, letterSpacing: "0.04em",
+                  cursor: "pointer", transition: "border-color 0.15s ease, color 0.15s ease",
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLButtonElement
+                  el.style.borderColor = "var(--muted)"; el.style.color = "var(--text)"
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLButtonElement
+                  el.style.borderColor = "var(--border2)"; el.style.color = "var(--text)"
+                }}
+              >
+                My Skills
+              </button>
+            </div>
+
+          </div>
+
+          {/* ── RIGHT: glowing avatar ── */}
+          <div className="hero-avatar-col fade-up" style={{ animationDelay: "0.2s" }}>
+            <div className="avatar-size-override" style={{ width: 260, height: 260 }}>
+              <GlowingAvatar
+                avatarUrl={personalInfo.avatarUrl}
+                name={personalInfo.name}
+                size={260}
+              />
+            </div>
+          </div>
+
         </div>
 
-        {/* ── 2. Headline ── */}
-        <h1
-          className="fade-up"
-          style={{
-            animationDelay: "0.1s",
-            fontSize: "clamp(1.8rem, 5vw, 3.8rem)",
-            fontWeight: 700,
-            letterSpacing: "-0.03em",
-            lineHeight: 1.12,
-            color: "var(--text)",
-            maxWidth: 760,
-            margin: 0,
-          }}
-        >
-          Building at the intersection of{" "}
-          <span style={{ color: "#6ee7b7" }}>code</span>
-          {", "}
-          <span style={{ color: "#818cf8" }}>intelligence</span>
-          {" & "}
-          <span style={{ color: "#f472b6" }}>design</span>
-        </h1>
-
-        {/* ── 3. Subtitle ── */}
-        <p
-          className="fade-up"
-          style={{
-            animationDelay: "0.2s",
-            fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.82rem",
-            color: "var(--muted)",
-            lineHeight: 1.85,
-            maxWidth: 520,
-            margin: 0,
-          }}
-        >
-          {personalInfo.name !== "Your Name" ? `${personalInfo.name} — ` : ""}
-          {personalInfo.bio}
-        </p>
-
-        {/* ── 4. CTA buttons ── */}
-        <div className="fade-up" style={{ animationDelay: "0.3s", display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
-          <button
-            onClick={() => scrollTo("#projects")}
-            style={{
-              background: "#6ee7b7", color: "#060608", border: "none", borderRadius: 6,
-              padding: "0.6rem 1.3rem", fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.78rem", fontWeight: 700, letterSpacing: "0.04em",
-              cursor: "pointer", transition: "opacity 0.15s ease",
-            }}
-            onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "0.85")}
-            onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "1")}
-          >
-            View Projects
-          </button>
-
-          <button
-            onClick={() => scrollTo("#add-project")}
-            style={{
-              background: "#818cf8", color: "#fff", border: "none", borderRadius: 6,
-              padding: "0.6rem 1.3rem", fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.78rem", fontWeight: 700, letterSpacing: "0.04em",
-              cursor: "pointer", transition: "opacity 0.15s ease",
-            }}
-            onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "0.85")}
-            onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "1")}
-          >
-            Add Project
-          </button>
-
-          <button
-            onClick={() => scrollTo("#skills")}
-            style={{
-              background: "none", color: "var(--text)", border: "1px solid var(--border2)",
-              borderRadius: 6, padding: "0.6rem 1.3rem", fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.78rem", fontWeight: 600, letterSpacing: "0.04em",
-              cursor: "pointer", transition: "border-color 0.15s ease, color 0.15s ease",
-            }}
-            onMouseEnter={(e) => {
-              const el = e.currentTarget as HTMLButtonElement
-              el.style.borderColor = "var(--muted)"; el.style.color = "#fff"
-            }}
-            onMouseLeave={(e) => {
-              const el = e.currentTarget as HTMLButtonElement
-              el.style.borderColor = "var(--border2)"; el.style.color = "var(--text)"
-            }}
-          >
-            My Skills
-          </button>
-        </div>
-
-        {/* ── 5. Stats bar ── */}
-        <div
-          className="fade-up hero-stats"
-          style={{
-            animationDelay: "0.45s",
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            border: "1px solid var(--border)",
-            borderRadius: 8,
-            overflow: "hidden",
-            marginTop: "0.5rem",
-          }}
-        >
+        {/* ── Stats bar — always visible below the grid ── */}
+        <div className="hero-stats-bar fade-up" style={{ animationDelay: "0.45s" }}>
           {statItems.map((item, i) => (
             <div
               key={item.label}
@@ -213,12 +279,13 @@ export default function HeroSection({ stats }: HeroSectionProps) {
               <div style={{ fontSize: "1.5rem", fontWeight: 700, color: STAT_COLORS[i], lineHeight: 1, marginBottom: "0.4rem" }}>
                 {item.value}
               </div>
-              <div style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.07em", color: "var(--muted)" }}>
+              <div style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "0.62rem", textTransform: "uppercase", letterSpacing: "0.07em", color: "var(--muted)" }}>
                 {item.label}
               </div>
             </div>
           ))}
         </div>
+
       </div>
     </>
   )

@@ -15,7 +15,7 @@ const LS_KEY = "devfolio_projects"
 const defaultIds = new Set(defaultProjects.map((p) => p.id))
 
 const DIVIDER = (
-  <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 2rem" }}>
+  <div style={{ padding: "0 2.5rem" }}>
     <hr style={{ border: "none", borderTop: "1px solid var(--border)", opacity: 0.4, margin: 0 }} />
   </div>
 )

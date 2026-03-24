@@ -1,10 +1,12 @@
 import type { PersonalInfo } from "@/lib/types"
 
 export const personalInfo: PersonalInfo = {
-  name: "Your Name",
+  name: "Alex Rivera",
   title: "Software Developer · AI Engineer · Designer",
   bio: "Multi-disciplinary creator building at the intersection of code, intelligence & design.",
   email: "",
   github: "",
   linkedin: "",
+  // To use your photo: copy it to public/images/avatar.jpg and set avatarUrl: "/images/avatar.jpg"
+  avatarUrl: "",
 }

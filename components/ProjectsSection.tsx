@@ -284,6 +284,7 @@ export default function ProjectsSection({
         {/* Left */}
         <div>
           <p
+            className="section-eyebrow"
             style={{
               fontFamily: "var(--font-jetbrains-mono)",
               fontSize: "0.65rem",
@@ -296,6 +297,7 @@ export default function ProjectsSection({
             Portfolio
           </p>
           <h2
+            className="section-title"
             style={{
               fontFamily: "var(--font-space-grotesk)",
               fontSize: "1.4rem",
@@ -388,7 +390,7 @@ export default function ProjectsSection({
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
             gap: "1rem",
           }}
         >
