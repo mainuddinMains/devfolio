@@ -1,284 +1,105 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import { personalInfo } from "@/data/personal"
-import ThemeToggle from "@/components/ThemeToggle"
+import { useState } from 'react'
 
-const NAV_LINKS = [
-  { label: "About",     href: "#about"     },
-  { label: "Skills",    href: "#skills"    },
-  { label: "Education", href: "#education" },
-  { label: "Projects",  href: "#projects"  },
+interface NavbarProps {
+  name: string
+}
+
+const links = [
+  { label: 'Projects', href: '#projects' },
+  { label: 'Experience', href: '#experience' },
+  { label: 'Skills', href: '#skills' },
+  { label: 'More', href: '#more' },
 ]
 
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((w) => w[0].toUpperCase())
-    .join("")
-}
-
-function scrollTo(id: string) {
-  document.querySelector(id)?.scrollIntoView({ behavior: "smooth" })
-}
-
-export default function Navbar() {
-  const [scrolled, setScrolled]   = useState(false)
-  const [menuOpen, setMenuOpen]   = useState(false)
-
-  useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 50)
-    window.addEventListener("scroll", handler, { passive: true })
-    return () => window.removeEventListener("scroll", handler)
-  }, [])
-
-  const initials = getInitials(personalInfo.name)
+export default function Navbar({ name }: NavbarProps) {
+  const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <header
+    <nav
       style={{
-        position: "sticky",
+        background: '#0f0f0f',
+        borderBottom: '1px solid #2a2a2a',
+        padding: '1rem 2rem',
+        position: 'sticky',
         top: 0,
-        zIndex: 200,
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
-        background: "var(--nav-bg)",
-        borderBottom: "1px solid var(--border)",
-        boxShadow: scrolled
-          ? "0 4px 24px rgba(0,0,0,0.45)"
-          : "none",
-        transition: "box-shadow 0.25s ease",
+        zIndex: 100,
       }}
     >
-      <nav
-        style={{
-          width: "100%",
-          padding: "0 2.5rem",
-          height: 60,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "1.5rem",
-        }}
-      >
-        {/* ── Logo ── */}
-        <button
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.4rem",
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            padding: 0,
-          }}
-          aria-label="Back to top"
-        >
-          <span
-            style={{
-              fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.85rem",
-              fontWeight: 700,
-              color: "var(--text)",
-              letterSpacing: "0.05em",
-            }}
-          >
-            {initials}
-          </span>
-          <span
-            style={{
-              width: 7,
-              height: 7,
-              borderRadius: "50%",
-              background: "var(--a3)",
-              display: "inline-block",
-              flexShrink: 0,
-            }}
-          />
-        </button>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ fontWeight: 700, color: '#f0f0f0', fontSize: '1rem' }}>{name}</span>
 
-        {/* ── Desktop nav links ── */}
+        {/* Desktop links */}
         <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "1.75rem",
-            marginLeft: "auto",
-          }}
-          className="nav-links-desktop"
+          style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}
+          className="hidden sm:flex"
         >
-          {NAV_LINKS.map((link) => (
-            <button
+          {links.map((link) => (
+            <a
               key={link.href}
-              onClick={() => scrollTo(link.href)}
+              href={link.href}
               style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                fontFamily: "var(--font-jetbrains-mono)",
-                fontSize: "0.75rem",
-                textTransform: "uppercase",
-                letterSpacing: "0.08em",
-                color: "var(--muted)",
-                padding: 0,
-                transition: "color 0.15s ease",
+                color: '#888',
+                fontSize: '0.875rem',
+                textDecoration: 'none',
+                transition: 'color 0.15s',
               }}
-              onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLButtonElement).style.color = "var(--a1)")
-              }
-              onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLButtonElement).style.color = "var(--muted)")
-              }
+              onMouseEnter={(e) => ((e.target as HTMLElement).style.color = '#f0f0f0')}
+              onMouseLeave={(e) => ((e.target as HTMLElement).style.color = '#888')}
             >
               {link.label}
-            </button>
+            </a>
           ))}
-
-          {/* Theme toggle */}
-          <ThemeToggle />
-
-          {/* + Add button */}
-          <button
-            onClick={() => scrollTo("#add-project")}
-            style={{
-              background: "none",
-              border: "1px solid var(--a1)",
-              borderRadius: 4,
-              cursor: "pointer",
-              fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.7rem",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              color: "var(--a1)",
-              padding: "0.3rem 0.65rem",
-              transition: "background 0.15s ease, color 0.15s ease",
-            }}
-            onMouseEnter={(e) => {
-              const el = e.currentTarget as HTMLButtonElement
-              el.style.background = "var(--a1)"
-              el.style.color = "var(--bg)"
-            }}
-            onMouseLeave={(e) => {
-              const el = e.currentTarget as HTMLButtonElement
-              el.style.background = "none"
-              el.style.color = "var(--a1)"
-            }}
-          >
-            + Add
-          </button>
         </div>
 
-        {/* ── Theme toggle (always visible on mobile, hidden on desktop where it's in nav-links) ── */}
-        <div className="nav-theme-mobile">
-          <ThemeToggle />
-        </div>
-
-        {/* ── Hamburger (mobile) ── */}
+        {/* Mobile hamburger */}
         <button
-          className="nav-hamburger"
-          onClick={() => setMenuOpen((v) => !v)}
-          aria-label="Toggle menu"
+          className="flex sm:hidden"
+          onClick={() => setMenuOpen((o) => !o)}
           style={{
-            display: "none",
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            padding: "0.25rem",
-            color: "var(--muted)",
-            marginLeft: "auto",
+            background: 'none',
+            border: 'none',
+            color: '#888',
+            fontSize: '1.25rem',
+            cursor: 'pointer',
+            padding: '0.25rem',
           }}
+          aria-label="Toggle menu"
         >
-          {menuOpen ? (
-            /* X icon */
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8">
-              <line x1="4" y1="4" x2="16" y2="16" />
-              <line x1="16" y1="4" x2="4" y2="16" />
-            </svg>
-          ) : (
-            /* Hamburger icon */
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8">
-              <line x1="3" y1="6"  x2="17" y2="6"  />
-              <line x1="3" y1="10" x2="17" y2="10" />
-              <line x1="3" y1="14" x2="17" y2="14" />
-            </svg>
-          )}
+          ☰
         </button>
-      </nav>
+      </div>
 
-      {/* ── Mobile dropdown ── */}
+      {/* Mobile dropdown */}
       {menuOpen && (
         <div
-          className="nav-mobile-menu"
+          className="flex sm:hidden"
           style={{
-            borderTop: "1px solid var(--border)",
-            background: "var(--nav-bg-solid)",
-            padding: "1rem 2rem",
-            display: "flex",
-            flexDirection: "column",
-            gap: "1rem",
+            flexDirection: 'column',
+            gap: '1rem',
+            paddingTop: '1rem',
           }}
         >
-          {NAV_LINKS.map((link) => (
-            <button
+          {links.map((link) => (
+            <a
               key={link.href}
-              onClick={() => {
-                setMenuOpen(false)
-                scrollTo(link.href)
-              }}
+              href={link.href}
+              onClick={() => setMenuOpen(false)}
               style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                fontFamily: "var(--font-jetbrains-mono)",
-                fontSize: "0.8rem",
-                textTransform: "uppercase",
-                letterSpacing: "0.08em",
-                color: "var(--muted)",
-                textAlign: "left",
-                padding: 0,
+                color: '#888',
+                fontSize: '0.875rem',
+                textDecoration: 'none',
+                transition: 'color 0.15s',
               }}
+              onMouseEnter={(e) => ((e.target as HTMLElement).style.color = '#f0f0f0')}
+              onMouseLeave={(e) => ((e.target as HTMLElement).style.color = '#888')}
             >
               {link.label}
-            </button>
+            </a>
           ))}
-          <button
-            onClick={() => {
-              setMenuOpen(false)
-              scrollTo("#add-project")
-            }}
-            style={{
-              background: "none",
-              border: "1px solid var(--a1)",
-              borderRadius: 4,
-              cursor: "pointer",
-              fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.75rem",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              color: "var(--a1)",
-              padding: "0.4rem 0.75rem",
-              width: "fit-content",
-            }}
-          >
-            + Add
-          </button>
         </div>
       )}
-
-      {/* ── Responsive rules injected as a style tag ── */}
-      <style>{`
-        /* Desktop: hide the standalone mobile toggle (it's inside nav-links-desktop) */
-        .nav-theme-mobile { display: none; }
-
-        @media (max-width: 640px) {
-          .nav-links-desktop { display: none !important; }
-          .nav-hamburger     { display: flex !important; }
-          .nav-theme-mobile  { display: flex; }
-        }
-      `}</style>
-    </header>
+    </nav>
   )
 }
