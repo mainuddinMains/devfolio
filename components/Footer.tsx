@@ -1,58 +1,28 @@
-import { personalInfo } from "@/data/personal"
+interface FooterProps {
+  name: string
+}
 
-export default function Footer() {
-  const year = new Date().getFullYear()
-
+export default function Footer({ name }: FooterProps) {
   return (
     <footer
       style={{
-        borderTop: "1px solid var(--border)",
-        background: "var(--s1)",
-        padding: "2rem",
+        borderTop: '1px solid #2a2a2a',
+        background: '#0f0f0f',
+        padding: '2rem',
+        textAlign: 'center',
       }}
     >
-      <div
-        className="footer-inner"
+      <p style={{ color: '#888', fontSize: '0.875rem' }}>© 2025 {name}</p>
+      <p
         style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: "1rem",
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.75rem',
+          color: '#555',
+          marginTop: '0.4rem',
         }}
       >
-        <span
-          style={{
-            fontFamily: "var(--font-space-grotesk)",
-            fontSize: "0.85rem",
-            fontWeight: 600,
-            color: "var(--text)",
-          }}
-        >
-          {personalInfo.name}
-        </span>
-
-        <span
-          style={{
-            fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.68rem",
-            color: "var(--muted)",
-          }}
-        >
-          Built with Next.js &amp; TypeScript
-        </span>
-
-        <span
-          style={{
-            fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.68rem",
-            color: "var(--muted)",
-          }}
-        >
-          {year} · All rights reserved
-        </span>
-      </div>
+        Built with Next.js
+      </p>
     </footer>
   )
 }
