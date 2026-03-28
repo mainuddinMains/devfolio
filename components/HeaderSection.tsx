@@ -476,7 +476,7 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
             }}
           >
             {data.email ? (
-              <GhostButton href={`mailto:${data.email}`}>{data.email}</GhostButton>
+              <SocialIconButton href={`mailto:${data.email}`} platform="email" />
             ) : (
               <span style={{ color: '#555', fontSize: '0.875rem' }}>+ Add Email</span>
             )}
