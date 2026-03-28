@@ -439,6 +439,19 @@ export default function ExperienceSection() {
           + Add Experience
         </button>
       </div>
+
+      <style>{`
+        #experience { padding: 2.5rem 1rem !important; }
+        .exp-top-row { flex-direction: column !important; gap: 0.5rem !important; }
+        .exp-meta { align-items: flex-start !important; }
+        .exp-date { white-space: normal !important; }
+        @media (min-width: 640px) {
+          #experience { padding: 4rem 2rem !important; }
+          .exp-top-row { flex-direction: row !important; gap: 0 !important; }
+          .exp-meta { align-items: flex-end !important; }
+          .exp-date { white-space: nowrap !important; }
+        }
+      `}</style>
     </section>
   )
 }
