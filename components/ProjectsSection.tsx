@@ -33,10 +33,10 @@ function uid() {
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
-  background: '#111',
-  border: '1px solid #2a2a2a',
+  background: '#1c1b1b',
+  border: '1px solid #2e2d3d',
   borderRadius: '6px',
-  color: '#f0f0f0',
+  color: '#e5e2e1',
   padding: '0.5rem 0.75rem',
   fontSize: '0.875rem',
   fontFamily: 'inherit',
@@ -47,7 +47,7 @@ const inputStyle: React.CSSProperties = {
 const labelStyle: React.CSSProperties = {
   display: 'block',
   fontSize: '0.75rem',
-  color: '#888',
+  color: '#8e90a2',
   marginBottom: '0.3rem',
 }
 
@@ -117,8 +117,8 @@ function ProjectForm({ initial, onSave, onCancel }: ProjectFormProps) {
   return (
     <div
       style={{
-        background: '#1a1a1a',
-        border: '1px solid #22c55e',
+        background: '#201f1f',
+        border: '1px solid #2e5bff',
         borderRadius: '12px',
         padding: '1.5rem',
         display: 'flex',
@@ -129,24 +129,24 @@ function ProjectForm({ initial, onSave, onCancel }: ProjectFormProps) {
       <div>
         <label style={labelStyle}>Title *</label>
         <input
-          style={{ ...inputStyle, borderColor: errors.title ? '#ef4444' : '#2a2a2a' }}
+          style={{ ...inputStyle, borderColor: errors.title ? '#f38ba8' : '#2e2d3d' }}
           value={form.title}
           onChange={(e) => set('title', e.target.value)}
           placeholder="My awesome project"
         />
-        {errors.title && <span style={{ color: '#ef4444', fontSize: '0.75rem' }}>{errors.title}</span>}
+        {errors.title && <span style={{ color: '#f38ba8', fontSize: '0.75rem' }}>{errors.title}</span>}
       </div>
 
       <div>
         <label style={labelStyle}>Description *</label>
         <textarea
-          style={{ ...inputStyle, borderColor: errors.description ? '#ef4444' : '#2a2a2a', resize: 'vertical' }}
+          style={{ ...inputStyle, borderColor: errors.description ? '#f38ba8' : '#2e2d3d', resize: 'vertical' }}
           rows={3}
           value={form.description}
           onChange={(e) => set('description', e.target.value)}
           placeholder="What does this project do?"
         />
-        {errors.description && <span style={{ color: '#ef4444', fontSize: '0.75rem' }}>{errors.description}</span>}
+        {errors.description && <span style={{ color: '#f38ba8', fontSize: '0.75rem' }}>{errors.description}</span>}
       </div>
 
       <div>
@@ -183,7 +183,7 @@ function ProjectForm({ initial, onSave, onCancel }: ProjectFormProps) {
         <button
           onClick={handleSave}
           style={{
-            background: '#22c55e', color: '#fff', border: 'none',
+            background: '#2e5bff', color: '#fff', border: 'none',
             borderRadius: '8px', padding: '0.5rem 1.2rem',
             fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer',
           }}
@@ -193,7 +193,7 @@ function ProjectForm({ initial, onSave, onCancel }: ProjectFormProps) {
         <button
           onClick={onCancel}
           style={{
-            background: 'none', color: '#888', border: '1px solid #2a2a2a',
+            background: 'none', color: '#8e90a2', border: '1px solid #2e2d3d',
             borderRadius: '8px', padding: '0.5rem 1.2rem',
             fontSize: '0.875rem', cursor: 'pointer',
           }}
@@ -235,8 +235,8 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
     >
       <div
         style={{
-          background: '#1a1a1a',
-          border: '1px solid #2a2a2a',
+          background: '#201f1f',
+          border: '1px solid #2e2d3d',
           borderRadius: '16px',
           padding: '2rem',
           width: '100%',
@@ -251,7 +251,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
           onClick={onClose}
           style={{
             position: 'absolute', top: '1rem', right: '1rem',
-            background: 'none', border: 'none', color: '#888',
+            background: 'none', border: 'none', color: '#8e90a2',
             fontSize: '1.25rem', cursor: 'pointer', lineHeight: 1,
             padding: '0.25rem 0.5rem', borderRadius: '6px',
           }}
@@ -261,12 +261,12 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
         </button>
 
         {/* Title */}
-        <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f0f0f0', paddingRight: '2rem', marginBottom: '1rem' }}>
+        <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#e5e2e1', paddingRight: '2rem', marginBottom: '1rem' }}>
           {project.title}
         </h3>
 
         {/* Description */}
-        <p style={{ fontSize: '0.9375rem', color: '#aaa', lineHeight: 1.8, marginBottom: '1.25rem' }}>
+        <p style={{ fontSize: '0.9375rem', color: '#8e90a2', lineHeight: 1.8, marginBottom: '1.25rem' }}>
           {project.description}
         </p>
 
@@ -277,9 +277,9 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
               <span
                 key={tag}
                 style={{
-                  background: '#222', border: '1px solid #2a2a2a',
+                  background: '#1c1b1b', border: '1px solid #2e2d3d',
                   fontFamily: 'var(--font-mono)', fontSize: '0.75rem',
-                  color: '#888', borderRadius: '20px', padding: '0.25rem 0.7rem',
+                  color: '#8e90a2', borderRadius: '20px', padding: '0.25rem 0.7rem',
                 }}
               >
                 {tag}
@@ -290,7 +290,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
 
         {/* Divider */}
         {(project.github || project.url) && (
-          <div style={{ borderTop: '1px solid #2a2a2a', marginBottom: '1.25rem' }} />
+          <div style={{ borderTop: '1px solid #2e2d3d', marginBottom: '1.25rem' }} />
         )}
 
         {/* Links */}
@@ -302,19 +302,19 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
               rel="noopener noreferrer"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-                background: '#222', border: '1px solid #3a3a3a',
-                color: '#f0f0f0', borderRadius: '8px',
+                background: '#1c1b1b', border: '1px solid #434656',
+                color: '#e5e2e1', borderRadius: '8px',
                 padding: '0.5rem 1.1rem', fontSize: '0.875rem',
                 textDecoration: 'none', fontWeight: 600,
                 transition: 'border-color 0.15s, background 0.15s',
               }}
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = '#f0f0f0'
-                ;(e.currentTarget as HTMLElement).style.background = '#2a2a2a'
+                (e.currentTarget as HTMLElement).style.borderColor = '#e5e2e1'
+                ;(e.currentTarget as HTMLElement).style.background = '#2e2d3d'
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = '#3a3a3a'
-                ;(e.currentTarget as HTMLElement).style.background = '#222'
+                (e.currentTarget as HTMLElement).style.borderColor = '#434656'
+                ;(e.currentTarget as HTMLElement).style.background = '#1c1b1b'
               }}
             >
               <GithubIcon /> GitHub
@@ -328,14 +328,14 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
               rel="noopener noreferrer"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-                background: '#22c55e', border: '1px solid #22c55e',
+                background: '#2e5bff', border: '1px solid #2e5bff',
                 color: '#fff', borderRadius: '8px',
                 padding: '0.5rem 1.1rem', fontSize: '0.875rem',
                 textDecoration: 'none', fontWeight: 600,
                 transition: 'background 0.15s',
               }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = '#16a34a')}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = '#22c55e')}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = '#3a68ff')}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = '#2e5bff')}
             >
               <ExternalLinkIcon /> Live Demo
             </a>
@@ -358,7 +358,7 @@ function IconBtn({ onClick, title, children }: { onClick: () => void; title: str
       onMouseLeave={() => setHovered(false)}
       style={{
         background: 'none', border: 'none', cursor: 'pointer',
-        fontSize: '0.9rem', color: hovered ? '#f0f0f0' : '#888',
+        fontSize: '0.9rem', color: hovered ? '#e5e2e1' : '#8e90a2',
         padding: '0.1rem 0.2rem', transition: 'color 0.15s',
       }}
     >
@@ -382,8 +382,8 @@ function ProjectCard({ project, onEdit, onDelete, onOpen }: ProjectCardProps) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        background: '#1a1a1a',
-        border: `1px solid ${hovered ? '#3a3a3a' : '#2a2a2a'}`,
+        background: '#201f1f',
+        border: `1px solid ${hovered ? '#434656' : '#2e2d3d'}`,
         borderRadius: '12px',
         padding: '1.5rem',
         display: 'flex',
@@ -394,14 +394,14 @@ function ProjectCard({ project, onEdit, onDelete, onOpen }: ProjectCardProps) {
       onClick={onOpen}
     >
       {/* Title */}
-      <p style={{ fontWeight: 700, fontSize: '1rem', color: '#f0f0f0', marginBottom: '0.5rem' }}>
+      <p style={{ fontWeight: 700, fontSize: '1rem', color: '#e5e2e1', marginBottom: '0.5rem' }}>
         {project.title}
       </p>
 
       {/* Description — 3-line clamp */}
       <p
         style={{
-          fontSize: '0.875rem', color: '#888', lineHeight: 1.7,
+          fontSize: '0.875rem', color: '#8e90a2', lineHeight: 1.7,
           marginBottom: '0.75rem', flex: 1,
           display: '-webkit-box', WebkitLineClamp: 3,
           WebkitBoxOrient: 'vertical', overflow: 'hidden',
@@ -416,9 +416,9 @@ function ProjectCard({ project, onEdit, onDelete, onOpen }: ProjectCardProps) {
           <span
             key={tag}
             style={{
-              background: '#222', border: '1px solid #2a2a2a',
+              background: '#1c1b1b', border: '1px solid #2e2d3d',
               fontFamily: 'var(--font-mono)', fontSize: '0.7rem',
-              color: '#888', borderRadius: '20px', padding: '0.2rem 0.6rem',
+              color: '#8e90a2', borderRadius: '20px', padding: '0.2rem 0.6rem',
             }}
           >
             {tag}
@@ -430,12 +430,12 @@ function ProjectCard({ project, onEdit, onDelete, onOpen }: ProjectCardProps) {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
           {project.github && (
-            <span style={{ color: '#888', display: 'flex', alignItems: 'center' }}>
+            <span style={{ color: '#8e90a2', display: 'flex', alignItems: 'center' }}>
               <GithubIcon />
             </span>
           )}
           {project.url && (
-            <span style={{ color: '#22c55e', display: 'flex', alignItems: 'center' }}>
+            <span style={{ color: '#b8c3ff', display: 'flex', alignItems: 'center' }}>
               <ExternalLinkIcon />
             </span>
           )}
@@ -514,7 +514,7 @@ export default function ProjectsSection() {
 
   return (
     <section id="projects" style={{ padding: '4rem 2rem', maxWidth: '1100px', margin: '0 auto' }}>
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#f0f0f0', marginBottom: '1.5rem' }}>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#e5e2e1', marginBottom: '1.5rem' }}>
         Projects
       </h2>
 
@@ -550,7 +550,7 @@ export default function ProjectsSection() {
           onClick={() => { setEditingId(null); setAdding(true) }}
           className="add-project-btn"
           style={{
-            background: '#22c55e', color: '#fff', border: 'none',
+            background: '#2e5bff', color: '#fff', border: 'none',
             borderRadius: '8px', padding: '0.6rem 1.4rem',
             fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer', width: '100%',
           }}
