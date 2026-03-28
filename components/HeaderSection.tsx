@@ -10,6 +10,8 @@ const fallback: HeaderData = {
   title: 'Software Developer',
   bio: 'I build clean, efficient software. Click ✏️ to update this.',
   github: '',
+  linkedin: '',
+  instagram: '',
   email: '',
 }
 
@@ -362,6 +364,56 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
               <span style={{ color: '#555', fontSize: '0.875rem' }}>+ Add GitHub</span>
             )}
             <PencilBtn onClick={() => startEdit('github')} />
+          </div>
+        )}
+
+        {/* LinkedIn */}
+        {isEditing('linkedin') ? (
+          inlineEditor('linkedin')
+        ) : (
+          <div
+            className="editable-row"
+            style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+            onMouseEnter={(e) => {
+              const btn = e.currentTarget.querySelector<HTMLElement>('.pencil-btn')
+              if (btn) btn.style.opacity = '1'
+            }}
+            onMouseLeave={(e) => {
+              const btn = e.currentTarget.querySelector<HTMLElement>('.pencil-btn')
+              if (btn) btn.style.opacity = '0'
+            }}
+          >
+            {data.linkedin ? (
+              <GhostButton href={data.linkedin}>LinkedIn</GhostButton>
+            ) : (
+              <span style={{ color: '#555', fontSize: '0.875rem' }}>+ Add LinkedIn</span>
+            )}
+            <PencilBtn onClick={() => startEdit('linkedin')} />
+          </div>
+        )}
+
+        {/* Instagram */}
+        {isEditing('instagram') ? (
+          inlineEditor('instagram')
+        ) : (
+          <div
+            className="editable-row"
+            style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+            onMouseEnter={(e) => {
+              const btn = e.currentTarget.querySelector<HTMLElement>('.pencil-btn')
+              if (btn) btn.style.opacity = '1'
+            }}
+            onMouseLeave={(e) => {
+              const btn = e.currentTarget.querySelector<HTMLElement>('.pencil-btn')
+              if (btn) btn.style.opacity = '0'
+            }}
+          >
+            {data.instagram ? (
+              <GhostButton href={data.instagram}>Instagram</GhostButton>
+            ) : (
+              <span style={{ color: '#555', fontSize: '0.875rem' }}>+ Add Instagram</span>
+            )}
+            <PencilBtn onClick={() => startEdit('instagram')} />
           </div>
         )}
 
