@@ -8,10 +8,11 @@ import ExperienceSection from '@/components/ExperienceSection'
 import EducationSection from '@/components/EducationSection'
 import SkillsSection from '@/components/SkillsSection'
 import ExtrasSection from '@/components/ExtrasSection'
+import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/Footer'
 
 const divider = (
-  <div style={{ borderTop: '1px solid #2a2a2a', maxWidth: '1100px', margin: '0 auto' }} />
+  <div style={{ borderTop: '1px solid rgba(67,70,86,0.2)', maxWidth: '1100px', margin: '0 auto' }} />
 )
 
 export default function Home() {
@@ -31,6 +32,8 @@ export default function Home() {
       <SkillsSection />
       {divider}
       <ExtrasSection />
+      {divider}
+      <ContactSection />
       <Footer name={name} />
     </>
   )
