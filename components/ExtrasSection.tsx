@@ -175,7 +175,7 @@ function ExtrasForm({ initial, onSave, onCancel }: ExtrasFormProps) {
       </div>
 
       {/* Actions */}
-      <div style={{ display: 'flex', gap: '0.6rem' }}>
+      <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
         <button
           onClick={handleSave}
           style={{
@@ -377,10 +377,14 @@ export default function ExtrasSection() {
       </div>
 
       <style>{`
+        #more { padding: 2.5rem 1rem !important; }
         .extras-grid {
           display: grid;
           grid-template-columns: 1fr;
           gap: 1rem;
+        }
+        @media (min-width: 640px) {
+          #more { padding: 4rem 2rem !important; }
         }
         @media (min-width: 768px) {
           .extras-grid { grid-template-columns: repeat(2, 1fr); }
