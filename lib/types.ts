@@ -3,6 +3,8 @@ export interface HeaderData {
   title: string
   bio: string
   github: string
+  linkedin: string
+  instagram: string
   email: string
 }
 
