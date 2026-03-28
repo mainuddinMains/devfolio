@@ -85,11 +85,9 @@ function PencilBtn({ onClick }: { onClick: () => void }) {
 }
 
 function EditableRow({
-  value,
   onEdit,
   children,
 }: {
-  value: string
   onEdit: () => void
   children: React.ReactNode
 }) {
@@ -116,6 +114,8 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
   const [data, setData] = useState<HeaderData>(fallback)
   const [editing, setEditing] = useState<FieldState | null>(null)
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
+  const onNameChangeRef = useRef(onNameChange)
+  onNameChangeRef.current = onNameChange
 
   useEffect(() => {
     try {
@@ -123,12 +123,12 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
       if (stored) {
         const parsed = JSON.parse(stored) as HeaderData
         setData(parsed)
-        onNameChange(parsed.name)
+        onNameChangeRef.current(parsed.name)
       } else {
-        onNameChange(fallback.name)
+        onNameChangeRef.current(fallback.name)
       }
     } catch {
-      onNameChange(fallback.name)
+      onNameChangeRef.current(fallback.name)
     }
   }, [])
 
@@ -274,7 +274,7 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
         {isEditing('name') ? (
           inlineEditor('name')
         ) : (
-          <EditableRow value={data.name} onEdit={() => startEdit('name')}>
+          <EditableRow onEdit={() => startEdit('name')}>
             <span
               className="header-name"
               style={{
@@ -295,7 +295,7 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
         {isEditing('title') ? (
           inlineEditor('title')
         ) : (
-          <EditableRow value={data.title} onEdit={() => startEdit('title')}>
+          <EditableRow onEdit={() => startEdit('title')}>
             <span
               style={{
                 fontFamily: 'var(--font-mono)',
@@ -314,7 +314,7 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
         {isEditing('bio') ? (
           inlineEditor('bio', true)
         ) : (
-          <EditableRow value={data.bio} onEdit={() => startEdit('bio')}>
+          <EditableRow onEdit={() => startEdit('bio')}>
             <span
               style={{
                 fontSize: '1rem',
