@@ -25,10 +25,10 @@ function uid() {
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
-  background: '#111',
-  border: '1px solid #2a2a2a',
+  background: '#1c1b1b',
+  border: '1px solid #2e2d3d',
   borderRadius: '6px',
-  color: '#f0f0f0',
+  color: '#e5e2e1',
   padding: '0.5rem 0.75rem',
   fontSize: '0.875rem',
   fontFamily: 'inherit',
@@ -39,7 +39,7 @@ const inputStyle: React.CSSProperties = {
 const labelStyle: React.CSSProperties = {
   display: 'block',
   fontSize: '0.75rem',
-  color: '#888',
+  color: '#8e90a2',
   marginBottom: '0.3rem',
 }
 
@@ -84,7 +84,7 @@ function IconBtn({
         border: 'none',
         cursor: 'pointer',
         fontSize: '0.9rem',
-        color: hovered ? '#f0f0f0' : '#888',
+        color: hovered ? '#e5e2e1' : '#8e90a2',
         padding: '0.1rem 0.2rem',
         transition: 'color 0.15s',
       }}
@@ -122,8 +122,8 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
   return (
     <div
       style={{
-        background: '#1a1a1a',
-        border: '1px solid #22c55e',
+        background: '#201f1f',
+        border: '1px solid #2e5bff',
         borderRadius: '12px',
         padding: '1.5rem',
         display: 'flex',
@@ -135,13 +135,13 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
       <div>
         <label style={labelStyle}>Company *</label>
         <input
-          style={{ ...inputStyle, borderColor: errors.company ? '#ef4444' : '#2a2a2a' }}
+          style={{ ...inputStyle, borderColor: errors.company ? '#f38ba8' : '#2e2d3d' }}
           value={form.company}
           onChange={(e) => set('company', e.target.value)}
           placeholder="Acme Corp"
         />
         {errors.company && (
-          <span style={{ color: '#ef4444', fontSize: '0.75rem' }}>{errors.company}</span>
+          <span style={{ color: '#f38ba8', fontSize: '0.75rem' }}>{errors.company}</span>
         )}
       </div>
 
@@ -149,13 +149,13 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
       <div>
         <label style={labelStyle}>Role *</label>
         <input
-          style={{ ...inputStyle, borderColor: errors.role ? '#ef4444' : '#2a2a2a' }}
+          style={{ ...inputStyle, borderColor: errors.role ? '#f38ba8' : '#2e2d3d' }}
           value={form.role}
           onChange={(e) => set('role', e.target.value)}
           placeholder="Software Engineer"
         />
         {errors.role && (
-          <span style={{ color: '#ef4444', fontSize: '0.75rem' }}>{errors.role}</span>
+          <span style={{ color: '#f38ba8', fontSize: '0.75rem' }}>{errors.role}</span>
         )}
       </div>
 
@@ -164,13 +164,13 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
         <div style={{ flex: 1 }}>
           <label style={labelStyle}>Start Date *</label>
           <input
-            style={{ ...inputStyle, borderColor: errors.startDate ? '#ef4444' : '#2a2a2a' }}
+            style={{ ...inputStyle, borderColor: errors.startDate ? '#f38ba8' : '#2e2d3d' }}
             value={form.startDate}
             onChange={(e) => set('startDate', e.target.value)}
             placeholder="Jan 2022"
           />
           {errors.startDate && (
-            <span style={{ color: '#ef4444', fontSize: '0.75rem' }}>{errors.startDate}</span>
+            <span style={{ color: '#f38ba8', fontSize: '0.75rem' }}>{errors.startDate}</span>
           )}
         </div>
         <div style={{ flex: 1 }}>
@@ -190,7 +190,7 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
         <textarea
           style={{
             ...inputStyle,
-            borderColor: errors.description ? '#ef4444' : '#2a2a2a',
+            borderColor: errors.description ? '#f38ba8' : '#2e2d3d',
             resize: 'vertical',
           }}
           rows={4}
@@ -199,9 +199,9 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
           placeholder="One bullet point per line"
         />
         {errors.description && (
-          <span style={{ color: '#ef4444', fontSize: '0.75rem' }}>{errors.description}</span>
+          <span style={{ color: '#f38ba8', fontSize: '0.75rem' }}>{errors.description}</span>
         )}
-        <p style={{ fontSize: '0.72rem', color: '#555', marginTop: '0.3rem' }}>
+        <p style={{ fontSize: '0.72rem', color: '#434656', marginTop: '0.3rem' }}>
           Write one bullet point per line. Each line becomes a separate bullet.
         </p>
       </div>
@@ -211,7 +211,7 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
         <button
           onClick={handleSave}
           style={{
-            background: '#22c55e',
+            background: '#2e5bff',
             color: '#fff',
             border: 'none',
             borderRadius: '8px',
@@ -227,8 +227,8 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
           onClick={onCancel}
           style={{
             background: 'none',
-            color: '#888',
-            border: '1px solid #2a2a2a',
+            color: '#8e90a2',
+            border: '1px solid #2e2d3d',
             borderRadius: '8px',
             padding: '0.5rem 1.2rem',
             fontSize: '0.875rem',
@@ -252,8 +252,8 @@ function ExperienceCard({ experience, onEdit, onDelete }: ExperienceCardProps) {
   return (
     <div
       style={{
-        background: '#1a1a1a',
-        border: '1px solid #2a2a2a',
+        background: '#201f1f',
+        border: '1px solid #2e2d3d',
         borderRadius: '12px',
         padding: '1.5rem',
         display: 'flex',
@@ -264,7 +264,7 @@ function ExperienceCard({ experience, onEdit, onDelete }: ExperienceCardProps) {
       <div
         style={{
           width: '3px',
-          background: '#22c55e',
+          background: '#b8c3ff',
           borderRadius: '2px',
           alignSelf: 'stretch',
           flexShrink: 0,
@@ -277,10 +277,10 @@ function ExperienceCard({ experience, onEdit, onDelete }: ExperienceCardProps) {
         <div className="exp-top-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           {/* Left: company + role */}
           <div>
-            <p style={{ fontWeight: 700, fontSize: '1rem', color: '#f0f0f0' }}>
+            <p style={{ fontWeight: 700, fontSize: '1rem', color: '#e5e2e1' }}>
               {experience.company}
             </p>
-            <p style={{ fontSize: '0.875rem', color: '#22c55e', marginTop: '0.2rem' }}>
+            <p style={{ fontSize: '0.875rem', color: '#b8c3ff', marginTop: '0.2rem' }}>
               {experience.role}
             </p>
           </div>
@@ -292,7 +292,7 @@ function ExperienceCard({ experience, onEdit, onDelete }: ExperienceCardProps) {
               style={{
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.8rem',
-                color: '#888',
+                color: '#8e90a2',
                 whiteSpace: 'nowrap',
               }}
             >
@@ -311,7 +311,7 @@ function ExperienceCard({ experience, onEdit, onDelete }: ExperienceCardProps) {
             {experience.bullets.map((bullet, i) => (
               <li
                 key={i}
-                style={{ fontSize: '0.875rem', color: '#888', lineHeight: 1.7 }}
+                style={{ fontSize: '0.875rem', color: '#c4c5d9', lineHeight: 1.7 }}
               >
                 • {bullet}
               </li>
@@ -387,7 +387,7 @@ export default function ExperienceSection() {
 
   return (
     <section id="experience" style={{ padding: '4rem 2rem', maxWidth: '1100px', margin: '0 auto' }}>
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#f0f0f0', marginBottom: '1.5rem' }}>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#e5e2e1', marginBottom: '1.5rem' }}>
         Experience
       </h2>
 
@@ -426,7 +426,7 @@ export default function ExperienceSection() {
         <button
           onClick={() => { setEditingId(null); setAdding(true) }}
           style={{
-            background: '#22c55e',
+            background: '#2e5bff',
             color: '#fff',
             border: 'none',
             borderRadius: '8px',
