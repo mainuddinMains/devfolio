@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar'
 import HeaderSection from '@/components/HeaderSection'
 import ProjectsSection from '@/components/ProjectsSection'
 import ExperienceSection from '@/components/ExperienceSection'
+import EducationSection from '@/components/EducationSection'
 import SkillsSection from '@/components/SkillsSection'
 import ExtrasSection from '@/components/ExtrasSection'
 import Footer from '@/components/Footer'
@@ -24,6 +25,8 @@ export default function Home() {
       <ProjectsSection />
       {divider}
       <ExperienceSection />
+      {divider}
+      <EducationSection />
       {divider}
       <SkillsSection />
       {divider}
