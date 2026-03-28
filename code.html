@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#201f1f",
+              "secondary-fixed": "#dde1ff",
+              "on-tertiary-fixed-variant": "#812800",
+              "surface-dim": "#131313",
+              "primary-container": "#2e5bff",
+              "surface-tint": "#b8c3ff",
+              "on-secondary-fixed-variant": "#304189",
+              "on-secondary-container": "#a6b4ff",
+              "primary-fixed-dim": "#b8c3ff",
+              "on-secondary": "#172972",
+              "on-error-container": "#ffdad6",
+              "primary": "#b8c3ff",
+              "inverse-surface": "#e5e2e1",
+              "tertiary-container": "#c24100",
+              "background": "#131313",
+              "on-surface": "#e5e2e1",
+              "on-error": "#690005",
+              "tertiary-fixed": "#ffdbcf",
+              "surface-bright": "#3a3939",
+              "primary-fixed": "#dde1ff",
+              "tertiary-fixed-dim": "#ffb59b",
+              "on-tertiary-fixed": "#380d00",
+              "secondary-container": "#33438c",
+              "surface-container-low": "#1c1b1b",
+              "surface-container-highest": "#353534",
+              "error": "#ffb4ab",
+              "on-primary-fixed-variant": "#0035be",
+              "outline": "#8e90a2",
+              "tertiary": "#ffb59b",
+              "on-primary": "#002388",
+              "secondary": "#b8c3ff",
+              "on-tertiary": "#5b1a00",
+              "on-primary-fixed": "#001356",
+              "secondary-fixed-dim": "#b8c3ff",
+              "surface-container-high": "#2a2a2a",
+              "surface": "#131313",
+              "error-container": "#93000a",
+              "surface-variant": "#353534",
+              "on-background": "#e5e2e1",
+              "on-secondary-fixed": "#001356",
+              "on-primary-container": "#efefff",
+              "inverse-on-surface": "#313030",
+              "on-surface-variant": "#c4c5d9",
+              "outline-variant": "#434656",
+              "inverse-primary": "#124af0",
+              "surface-container-lowest": "#0e0e0e",
+              "on-tertiary-container": "#ffece6"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-nav {
+            background: rgba(19, 19, 19, 0.6);
+            backdrop-filter: blur(20px);
+        }
+        .glow-hover:hover {
+            box-shadow: 0 0 20px rgba(184, 195, 255, 0.15);
+        }
+        /* Custom form focus styles to match Obsidian Mono */
+        input:focus, textarea:focus, select:focus {
+            outline: none !important;
+            border-color: #2e5bff !important;
+            box-shadow: 0 0 0 1px #2e5bff !important;
+        }
+        @keyframes cursor-blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+        .cursor-blink {
+            animation: cursor-blink 1s step-end infinite;
+        }
+    </style>
+</head>
+<body class="selection:bg-primary-container selection:text-white">
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#131313]/60 backdrop-blur-xl shadow-[0_0_32px_0_rgba(184,195,255,0.08)]">
+<div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
+<div class="text-xl font-bold tracking-tighter text-indigo-300">CS_PORTFOLIO</div>
+<div class="hidden md:flex items-center gap-8 font-['Inter'] tracking-tight font-light">
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors" href="#">Projects</a>
+<a class="text-indigo-300 font-medium border-b-2 border-indigo-400 pb-1" href="#">Research</a>
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors" href="#">Stack</a>
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors" href="#">About</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-zinc-400 hover:text-indigo-300 transition-all duration-300 scale-95 active:scale-90">terminal</button>
+<button class="bg-primary-container text-on-primary-container px-5 py-1.5 rounded-lg font-medium text-sm hover:opacity-90 transition-all scale-95 active:scale-90">Connect</button>
+</div>
+</div>
+</nav>
+<main class="pt-32 pb-24 px-8 max-w-7xl mx-auto">
+<!-- Hero Header -->
+<header class="mb-24">
+<span class="font-['Inter'] text-[0.75rem] uppercase tracking-[0.1em] font-medium text-primary mb-4 block">SERVICES &amp; EXPERTISE</span>
+<h1 class="text-[3.5rem] font-extrabold tracking-[-0.02em] leading-none mb-8 max-w-4xl">
+            Engineering <span class="text-primary-container">Digital</span> Resilience &amp; Aesthetic Precision.
+        </h1>
+<p class="text-lg text-on-surface-variant max-w-2xl leading-relaxed opacity-80">
+            A multidisciplinary approach to software architecture and visual systems. We bridge the gap between complex backend logic and high-fidelity user experiences.
+        </p>
+</header>
+<!-- Services Bento Grid -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Service: UI/UX -->
+<div class="col-span-12 md:col-span-7 bg-surface-container rounded-lg p-10 flex flex-col justify-between group overflow-hidden relative min-h-[480px]">
+<div class="relative z-10">
+<span class="text-[0.75rem] font-bold tracking-widest text-primary mb-2 block uppercase">01 / Design Systems</span>
+<h3 class="text-3xl font-bold mb-6">Visual Identity &amp; UI/UX</h3>
+<p class="text-on-surface-variant max-w-md leading-relaxed">
+                    Creating scalable design languages that maintain consistency across platforms. From typography hierarchy to complex motion signatures.
+                </p>
+<ul class="mt-8 space-y-3">
+<li class="flex items-center gap-3 text-sm text-on-surface-variant"><span class="w-1.5 h-1.5 bg-primary-container rounded-full"></span> Design Tokens &amp; System Architecture</li>
+<li class="flex items-center gap-3 text-sm text-on-surface-variant"><span class="w-1.5 h-1.5 bg-primary-container rounded-full"></span> Interaction Prototypes</li>
+<li class="flex items-center gap-3 text-sm text-on-surface-variant"><span class="w-1.5 h-1.5 bg-primary-container rounded-full"></span> User Behavior Analytics</li>
+</ul>
+</div>
+<div class="absolute -right-12 -bottom-12 w-80 h-80 opacity-20 group-hover:opacity-40 transition-opacity">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" width="320" height="320" style="display:block;">
+<defs>
+<radialGradient id="g2-bg" cx="38%" cy="32%" r="72%">
+<stop offset="0%" stop-color="#1a1a2e"/>
+<stop offset="100%" stop-color="#0d0d18"/>
+</radialGradient>
+<radialGradient id="g2-edge" cx="50%" cy="50%" r="50%">
+<stop offset="65%" stop-color="#131313" stop-opacity="0"/>
+<stop offset="100%" stop-color="#0a0a12" stop-opacity="0.85"/>
+</radialGradient>
+<clipPath id="g2-clip">
+<circle cx="160" cy="160" r="160"/>
+</clipPath>
+</defs>
+<g clip-path="url(#g2-clip)">
+<!-- Background -->
+<circle cx="160" cy="160" r="160" fill="url(#g2-bg)"/>
+<!-- Blueprint grid -->
+<g stroke="#1c1c38" stroke-width="0.6" opacity="0.9">
+<line x1="0" y1="40" x2="320" y2="40"/><line x1="0" y1="80" x2="320" y2="80"/><line x1="0" y1="120" x2="320" y2="120"/><line x1="0" y1="160" x2="320" y2="160"/><line x1="0" y1="200" x2="320" y2="200"/><line x1="0" y1="240" x2="320" y2="240"/><line x1="0" y1="280" x2="320" y2="280"/>
+<line x1="40" y1="0" x2="40" y2="320"/><line x1="80" y1="0" x2="80" y2="320"/><line x1="120" y1="0" x2="120" y2="320"/><line x1="160" y1="0" x2="160" y2="320"/><line x1="200" y1="0" x2="200" y2="320"/><line x1="240" y1="0" x2="240" y2="320"/><line x1="280" y1="0" x2="280" y2="320"/>
+</g>
+<!-- Title bar -->
+<rect x="18" y="20" width="284" height="24" fill="#13132a" rx="3"/>
+<circle cx="32" cy="32" r="4" fill="#dc4c4c" opacity="0.55"/>
+<circle cx="45" cy="32" r="4" fill="#d4a843" opacity="0.55"/>
+<circle cx="58" cy="32" r="4" fill="#3fc14f" opacity="0.55"/>
+<rect x="70" y="27" width="52" height="10" fill="#2e5bff" rx="2" opacity="0.65"/>
+<rect x="127" y="27" width="42" height="10" fill="#1c1c35" rx="2"/>
+<rect x="174" y="27" width="42" height="10" fill="#1c1c35" rx="2"/>
+<text x="96" y="35" font-family="Inter,sans-serif" font-size="5.5" fill="#b8c3ff" text-anchor="middle">Overview</text>
+<text x="148" y="35" font-family="Inter,sans-serif" font-size="5.5" fill="#3a3a55" text-anchor="middle">Design</text>
+<text x="195" y="35" font-family="Inter,sans-serif" font-size="5.5" fill="#3a3a55" text-anchor="middle">Prototype</text>
+<!-- Sidebar -->
+<rect x="18" y="50" width="62" height="218" fill="#0f0f1e" rx="2" opacity="0.95"/>
+<rect x="24" y="58" width="50" height="8" fill="#2e5bff" rx="1.5" opacity="0.55"/>
+<text x="49" y="65" font-family="Inter,sans-serif" font-size="5.5" fill="#b8c3ff" text-anchor="middle" font-weight="600">Pages</text>
+<rect x="24" y="70" width="50" height="8" fill="#181830" rx="1.5"/><text x="49" y="77" font-family="Inter,sans-serif" font-size="5.5" fill="#3a3a58" text-anchor="middle">Components</text>
+<rect x="24" y="82" width="50" height="8" fill="#181830" rx="1.5"/><text x="49" y="89" font-family="Inter,sans-serif" font-size="5.5" fill="#3a3a58" text-anchor="middle">Tokens</text>
+<rect x="24" y="94" width="50" height="8" fill="#181830" rx="1.5"/><text x="49" y="101" font-family="Inter,sans-serif" font-size="5.5" fill="#3a3a58" text-anchor="middle">Variants</text>
+<!-- Layer tree -->
+<g opacity="0.7">
+<rect x="24" y="112" width="4" height="4" fill="#2e5bff" rx="0.5"/><rect x="31" y="113" width="32" height="3" fill="#252545" rx="1"/>
+<rect x="28" y="121" width="3" height="3" fill="#b8c3ff" rx="0.5"/><rect x="34" y="122" width="26" height="3" fill="#1e1e38" rx="1"/>
+<rect x="28" y="130" width="3" height="3" fill="#b8c3ff" rx="0.5"/><rect x="34" y="131" width="22" height="3" fill="#1e1e38" rx="1"/>
+<rect x="24" y="139" width="4" height="4" fill="#434656" rx="0.5"/><rect x="31" y="140" width="28" height="3" fill="#1e1e38" rx="1"/>
+<rect x="28" y="148" width="3" height="3" fill="#434656" rx="0.5"/><rect x="34" y="149" width="20" height="3" fill="#1e1e38" rx="1"/>
+<rect x="28" y="157" width="3" height="3" fill="#434656" rx="0.5"/><rect x="34" y="158" width="24" height="3" fill="#1e1e38" rx="1"/>
+<rect x="24" y="166" width="4" height="4" fill="#434656" rx="0.5"/><rect x="31" y="167" width="30" height="3" fill="#1e1e38" rx="1"/>
+</g>
+<!-- Colour swatches -->
+<rect x="22" y="208" width="56" height="4" fill="none" stroke="#2e2e48" stroke-width="0.5" rx="1"/>
+<rect x="22" y="208" width="12" height="4" fill="#2e5bff" rx="1"/>
+<rect x="36" y="208" width="10" height="4" fill="#b8c3ff"/>
+<rect x="48" y="208" width="10" height="4" fill="#ffb59b"/>
+<rect x="60" y="208" width="10" height="4" fill="#434656" rx="0.5"/>
+<!-- Main canvas: nav -->
+<rect x="87" y="50" width="215" height="20" fill="#13132a" rx="2"/>
+<rect x="93" y="57" width="28" height="6" fill="#b8c3ff" rx="1" opacity="0.3"/>
+<text x="107" y="62" font-family="Inter,sans-serif" font-size="5" fill="#b8c3ff" text-anchor="middle" opacity="0.8">LOGO</text>
+<rect x="128" y="59" width="16" height="4" fill="#1e1e38" rx="1"/>
+<rect x="148" y="59" width="16" height="4" fill="#1e1e38" rx="1"/>
+<rect x="168" y="59" width="16" height="4" fill="#1e1e38" rx="1"/>
+<rect x="276" y="57" width="20" height="7" fill="#2e5bff" rx="2" opacity="0.75"/>
+<text x="286" y="63" font-family="Inter,sans-serif" font-size="5" fill="#fff" text-anchor="middle">CTA</text>
+<!-- Hero -->
+<rect x="87" y="76" width="215" height="76" fill="#0f0f1e" rx="3"/>
+<rect x="95" y="84" width="64" height="5" fill="#434656" rx="1" opacity="0.5"/>
+<rect x="95" y="94" width="140" height="9" fill="#b8c3ff" rx="1" opacity="0.2"/>
+<rect x="95" y="107" width="115" height="9" fill="#b8c3ff" rx="1" opacity="0.15"/>
+<rect x="95" y="121" width="50" height="13" fill="#2e5bff" rx="2.5" opacity="0.8"/>
+<rect x="150" y="121" width="44" height="13" fill="#1a1a30" rx="2.5"/>
+<!-- Selection box on hero -->
+<rect x="87" y="76" width="215" height="76" fill="none" stroke="#2e5bff" stroke-width="1" rx="3" opacity="0.4"/>
+<rect x="85" y="74" width="5" height="5" fill="#2e5bff" rx="0.5" opacity="0.9"/>
+<rect x="194" y="74" width="5" height="5" fill="#2e5bff" rx="0.5" opacity="0.9"/>
+<rect x="299" y="74" width="5" height="5" fill="#2e5bff" rx="0.5" opacity="0.9"/>
+<rect x="85" y="148" width="5" height="5" fill="#2e5bff" rx="0.5" opacity="0.9"/>
+<rect x="194" y="148" width="5" height="5" fill="#2e5bff" rx="0.5" opacity="0.9"/>
+<rect x="299" y="148" width="5" height="5" fill="#2e5bff" rx="0.5" opacity="0.9"/>
+<!-- Cards row -->
+<rect x="87" y="159" width="67" height="54" fill="#13132a" rx="3"/>
+<rect x="93" y="165" width="55" height="16" fill="#1e1e35" rx="2"/><rect x="93" y="185" width="38" height="4" fill="#2e2e48" rx="1"/><rect x="93" y="193" width="28" height="4" fill="#2e2e48" rx="1"/><rect x="93" y="203" width="22" height="7" fill="#2e5bff" rx="1.5" opacity="0.7"/>
+<rect x="160" y="159" width="67" height="54" fill="#13132a" rx="3"/>
+<rect x="166" y="165" width="55" height="16" fill="#1e1e35" rx="2"/><rect x="166" y="185" width="38" height="4" fill="#2e2e48" rx="1"/><rect x="166" y="193" width="28" height="4" fill="#2e2e48" rx="1"/><rect x="166" y="203" width="22" height="7" fill="#2e5bff" rx="1.5" opacity="0.7"/>
+<rect x="233" y="159" width="69" height="54" fill="#13132a" rx="3"/>
+<rect x="239" y="165" width="55" height="16" fill="#1e1e35" rx="2"/><rect x="239" y="185" width="38" height="4" fill="#2e2e48" rx="1"/><rect x="239" y="193" width="28" height="4" fill="#2e2e48" rx="1"/><rect x="239" y="203" width="22" height="7" fill="#2e5bff" rx="1.5" opacity="0.7"/>
+<!-- UX Design label -->
+<rect x="88" y="220" width="214" height="22" fill="#0a0a16" rx="3" opacity="0.9"/>
+<text x="195" y="235" font-family="Inter,sans-serif" font-size="7.5" font-weight="700" fill="#b8c3ff" text-anchor="middle" letter-spacing="3">UX  DESIGN</text>
+<!-- Edge fade to circle -->
+<circle cx="160" cy="160" r="160" fill="url(#g2-edge)"/>
+</g>
+</svg>
+</div>
+</div>
+<!-- Service: Web Dev -->
+<div class="col-span-12 md:col-span-5 bg-surface-container-low rounded-lg p-10 border border-outline-variant/10 flex flex-col justify-between group min-h-[480px]">
+<div>
+<span class="text-[0.75rem] font-bold tracking-widest text-primary mb-2 block uppercase">02 / Technical</span>
+<h3 class="text-3xl font-bold mb-6">Web Development</h3>
+<p class="text-on-surface-variant leading-relaxed">
+                    High-performance frontend implementation with a focus on speed, SEO, and semantic integrity.
+                </p>
+</div>
+<div class="mt-8 rounded-lg overflow-hidden h-48">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 192" width="100%" height="192" style="display:block;" preserveAspectRatio="xMinYMin slice">
+<!-- Terminal background -->
+<rect width="520" height="192" fill="#0a0a0f"/>
+<!-- Title bar -->
+<rect width="520" height="30" fill="#141420"/>
+<rect x="0" y="29" width="520" height="1" fill="#1e1e30"/>
+<!-- Traffic lights -->
+<circle cx="18" cy="15" r="5" fill="#ff5f56" opacity="0.75"/>
+<circle cx="34" cy="15" r="5" fill="#ffbd2e" opacity="0.75"/>
+<circle cx="50" cy="15" r="5" fill="#27c93f" opacity="0.75"/>
+<!-- Filename -->
+<text x="260" y="19" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" fill="#8e90a2" text-anchor="middle">index.tsx — devfolio</text>
+<!-- Close/min/max icons -->
+<rect x="468" y="10" width="14" height="10" fill="#1e1e30" rx="1.5"/>
+<rect x="486" y="10" width="14" height="10" fill="#1e1e30" rx="1.5"/>
+<rect x="504" y="10" width="8" height="10" fill="#1e1e30" rx="1.5"/>
+<!-- Line number column bg -->
+<rect x="0" y="30" width="36" height="162" fill="#0d0d18"/>
+<rect x="36" y="30" width="1" height="162" fill="#1a1a28"/>
+<!-- Code lines: font-size 10.5px, line-height 18, starting at y=30 (bg), text baseline y=30+13=43 -->
+<!-- Line 1 -->
+<text x="12" y="47" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" fill="#434656" text-anchor="middle">1</text>
+<text x="47" y="47" font-family="'JetBrains Mono','Courier New',monospace" font-size="10.5"><tspan fill="#b8c3ff">import </tspan><tspan fill="#e5e2e1">React</tspan><tspan fill="#c4c5d9">, { </tspan><tspan fill="#a6b4ff">useState</tspan><tspan fill="#c4c5d9"> } </tspan><tspan fill="#b8c3ff">from </tspan><tspan fill="#ffb59b">'react'</tspan><tspan fill="#c4c5d9">;</tspan></text>
+<!-- Line 2 -->
+<text x="12" y="65" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" fill="#434656" text-anchor="middle">2</text>
+<text x="47" y="65" font-family="'JetBrains Mono','Courier New',monospace" font-size="10.5"><tspan fill="#b8c3ff">import </tspan><tspan fill="#c4c5d9">{ </tspan><tspan fill="#a6b4ff">motion</tspan><tspan fill="#c4c5d9"> } </tspan><tspan fill="#b8c3ff">from </tspan><tspan fill="#ffb59b">'framer-motion'</tspan><tspan fill="#c4c5d9">;</tspan></text>
+<!-- Line 3 empty -->
+<text x="12" y="83" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" fill="#2e2e42" text-anchor="middle">3</text>
+<!-- Line 4 -->
+<text x="12" y="101" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" fill="#434656" text-anchor="middle">4</text>
+<text x="47" y="101" font-family="'JetBrains Mono','Courier New',monospace" font-size="10.5"><tspan fill="#b8c3ff">const </tspan><tspan fill="#a6b4ff">Portfolio</tspan><tspan fill="#c4c5d9"> = () =&gt; {</tspan></text>
+<!-- Line 5 -->
+<text x="12" y="119" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" fill="#434656" text-anchor="middle">5</text>
+<text x="47" y="119" font-family="'JetBrains Mono','Courier New',monospace" font-size="10.5"><tspan fill="#c4c5d9">  </tspan><tspan fill="#b8c3ff">const </tspan><tspan fill="#c4c5d9">[</tspan><tspan fill="#e5e2e1">active</tspan><tspan fill="#c4c5d9">, </tspan><tspan fill="#e5e2e1">setActive</tspan><tspan fill="#c4c5d9">] = </tspan><tspan fill="#a6b4ff">useState</tspan><tspan fill="#c4c5d9">(</tspan><tspan fill="#ffb4ab">0</tspan><tspan fill="#c4c5d9">);</tspan></text>
+<!-- Line 6 empty -->
+<text x="12" y="137" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" fill="#2e2e42" text-anchor="middle">6</text>
+<!-- Line 7 -->
+<text x="12" y="155" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" fill="#434656" text-anchor="middle">7</text>
+<text x="47" y="155" font-family="'JetBrains Mono','Courier New',monospace" font-size="10.5"><tspan fill="#c4c5d9">  </tspan><tspan fill="#b8c3ff">return </tspan><tspan fill="#c4c5d9">(</tspan></text>
+<!-- Line 8 -->
+<text x="12" y="173" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" fill="#434656" text-anchor="middle">8</text>
+<text x="47" y="173" font-family="'JetBrains Mono','Courier New',monospace" font-size="10.5"><tspan fill="#c4c5d9">    &lt;</tspan><tspan fill="#a6b4ff">motion.div</tspan><tspan fill="#e5e2e1"> animate</tspan><tspan fill="#c4c5d9">={{ </tspan><tspan fill="#e5e2e1">opacity</tspan><tspan fill="#c4c5d9">: </tspan><tspan fill="#ffb4ab">1</tspan><tspan fill="#c4c5d9"> }}></tspan></text>
+<!-- Line 9 – cursor line -->
+<text x="12" y="191" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" fill="#2e2e42" text-anchor="middle">9</text>
+<text x="47" y="191" font-family="'JetBrains Mono','Courier New',monospace" font-size="10.5" fill="#434656">      </text>
+<!-- Blinking cursor -->
+<rect x="82" y="180" width="7" height="12" fill="#b8c3ff" rx="1" class="cursor-blink"/>
+<!-- Active line highlight -->
+<rect x="37" y="162" width="483" height="18" fill="#b8c3ff" fill-opacity="0.03"/>
+</svg>
+</div>
+</div>
+<!-- Full Width Image Section -->
+<div class="col-span-12 relative rounded-lg overflow-hidden h-[400px]">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="100%" height="100%" style="display:block;" preserveAspectRatio="xMidYMid slice">
+<defs>
+<linearGradient id="g1-fade" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#131313" stop-opacity="0.1"/>
+<stop offset="50%" stop-color="#131313" stop-opacity="0.25"/>
+<stop offset="100%" stop-color="#131313" stop-opacity="1"/>
+</linearGradient>
+<radialGradient id="g1-glow" cx="50%" cy="46%" r="38%">
+<stop offset="0%" stop-color="#2e5bff" stop-opacity="0.09"/>
+<stop offset="100%" stop-color="#131313" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<!-- Background -->
+<rect width="1200" height="400" fill="#131313"/>
+<rect width="1200" height="400" fill="url(#g1-glow)"/>
+<!-- HUMAN FIGURE — dark navy silhouette -->
+<g fill="#17173a" opacity="0.62">
+<!-- Head -->
+<circle cx="600" cy="66" r="34"/>
+<!-- Torso + hips + legs -->
+<path d="M582,98 L582,118 L553,200 L532,244 L532,395 L562,395 L562,244 L638,244 L638,395 L668,395 L668,244 L647,200 L618,118 L618,98 Z"/>
+<!-- Left arm -->
+<path d="M582,120 L502,120 L458,250 L480,257 L524,148 L582,132 Z"/>
+<!-- Right arm -->
+<path d="M618,120 L698,120 L742,250 L720,257 L676,148 L618,132 Z"/>
+</g>
+<!-- LEFT CODE BLOCK -->
+<g font-family="'JetBrains Mono','Courier New',monospace" font-size="10.5">
+<text x="24" y="36" opacity="0.80"><tspan fill="#b8c3ff">const </tspan><tspan fill="#a6b4ff">architect</tspan><tspan fill="#c4c5d9"> = </tspan><tspan fill="#b8c3ff">async </tspan><tspan fill="#c4c5d9">(</tspan><tspan fill="#e5e2e1">vision</tspan><tspan fill="#c4c5d9">) =&gt; {</tspan></text>
+<text x="24" y="54" opacity="0.80"><tspan fill="#8e90a2">  </tspan><tspan fill="#b8c3ff">const </tspan><tspan fill="#e5e2e1">solution </tspan><tspan fill="#c4c5d9">= </tspan><tspan fill="#b8c3ff">await </tspan><tspan fill="#a6b4ff">engineer</tspan><tspan fill="#c4c5d9">(</tspan><tspan fill="#e5e2e1">vision</tspan><tspan fill="#c4c5d9">);</tspan></text>
+<text x="24" y="72" opacity="0.80"><tspan fill="#8e90a2">  </tspan><tspan fill="#b8c3ff">return </tspan><tspan fill="#e5e2e1">solution</tspan><tspan fill="#c4c5d9">.</tspan><tspan fill="#a6b4ff">deploy</tspan><tspan fill="#c4c5d9">({</tspan><tspan fill="#e5e2e1"> env</tspan><tspan fill="#c4c5d9">: </tspan><tspan fill="#ffb59b">'production'</tspan><tspan fill="#c4c5d9"> });</tspan></text>
+<text x="24" y="90" fill="#c4c5d9" opacity="0.80">};</text>
+<text x="24" y="120" opacity="0.76"><tspan fill="#b8c3ff">function </tspan><tspan fill="#a6b4ff">buildSystems</tspan><tspan fill="#c4c5d9">(</tspan><tspan fill="#e5e2e1">constraints</tspan><tspan fill="#c4c5d9">) {</tspan></text>
+<text x="24" y="138" opacity="0.76"><tspan fill="#8e90a2">  </tspan><tspan fill="#b8c3ff">return </tspan><tspan fill="#e5e2e1">constraints</tspan><tspan fill="#c4c5d9">.</tspan><tspan fill="#a6b4ff">map</tspan><tspan fill="#c4c5d9">(</tspan><tspan fill="#e5e2e1">c</tspan><tspan fill="#c4c5d9"> =&gt; </tspan><tspan fill="#a6b4ff">solve</tspan><tspan fill="#c4c5d9">(</tspan><tspan fill="#e5e2e1">c</tspan><tspan fill="#c4c5d9">));</tspan></text>
+<text x="24" y="156" fill="#c4c5d9" opacity="0.76">}</text>
+<text x="24" y="186" opacity="0.72"><tspan fill="#b8c3ff">export default </tspan><tspan fill="#c4c5d9">{</tspan><tspan fill="#e5e2e1"> architect</tspan><tspan fill="#c4c5d9">,</tspan><tspan fill="#e5e2e1"> buildSystems </tspan><tspan fill="#c4c5d9">};</tspan></text>
+<text x="24" y="216" opacity="0.65"><tspan fill="#c4c5d9">.</tspan><tspan fill="#a6b4ff">then</tspan><tspan fill="#c4c5d9">(</tspan><tspan fill="#e5e2e1">data</tspan><tspan fill="#c4c5d9"> =&gt; </tspan><tspan fill="#a6b4ff">setState</tspan><tspan fill="#c4c5d9">(</tspan><tspan fill="#e5e2e1">data</tspan><tspan fill="#c4c5d9">))</tspan></text>
+<text x="24" y="234" opacity="0.65"><tspan fill="#c4c5d9">.</tspan><tspan fill="#a6b4ff">catch</tspan><tspan fill="#c4c5d9">(</tspan><tspan fill="#e5e2e1">err</tspan><tspan fill="#c4c5d9"> =&gt; </tspan><tspan fill="#a6b4ff">handleError</tspan><tspan fill="#c4c5d9">(</tspan><tspan fill="#e5e2e1">err</tspan><tspan fill="#c4c5d9">))</tspan></text>
+<text x="24" y="264" opacity="0.52"><tspan fill="#b8c3ff">const </tspan><tspan fill="#e5e2e1">config</tspan><tspan fill="#c4c5d9">: </tspan><tspan fill="#ffb59b">DeployConfig</tspan><tspan fill="#c4c5d9"> = {</tspan></text>
+<text x="24" y="282" opacity="0.52"><tspan fill="#8e90a2">  </tspan><tspan fill="#e5e2e1">env</tspan><tspan fill="#c4c5d9">: </tspan><tspan fill="#ffb59b">'production'</tspan><tspan fill="#c4c5d9">,</tspan></text>
+<text x="24" y="300" opacity="0.52"><tspan fill="#8e90a2">  </tspan><tspan fill="#e5e2e1">region</tspan><tspan fill="#c4c5d9">: </tspan><tspan fill="#ffb59b">'us-east-1'</tspan><tspan fill="#c4c5d9">,</tspan></text>
+<text x="24" y="318" fill="#c4c5d9" opacity="0.52">};</text>
+</g>
+<!-- RIGHT CODE BLOCK -->
+<g font-family="'JetBrains Mono','Courier New',monospace" font-size="10.5">
+<text x="762" y="36" opacity="0.80"><tspan fill="#b8c3ff">const </tspan><tspan fill="#c4c5d9">[</tspan><tspan fill="#e5e2e1">state</tspan><tspan fill="#c4c5d9">, </tspan><tspan fill="#e5e2e1">dispatch</tspan><tspan fill="#c4c5d9">] = </tspan><tspan fill="#a6b4ff">useReducer</tspan><tspan fill="#c4c5d9">(</tspan></text>
+<text x="762" y="54" opacity="0.80"><tspan fill="#8e90a2">  </tspan><tspan fill="#e5e2e1">reducer</tspan><tspan fill="#c4c5d9">, </tspan><tspan fill="#e5e2e1">initialState</tspan></text>
+<text x="762" y="72" fill="#c4c5d9" opacity="0.80">);</text>
+<text x="762" y="102" opacity="0.76"><tspan fill="#b8c3ff">useEffect</tspan><tspan fill="#c4c5d9">(() =&gt; {</tspan></text>
+<text x="762" y="120" opacity="0.76"><tspan fill="#8e90a2">  </tspan><tspan fill="#a6b4ff">fetchData</tspan><tspan fill="#c4c5d9">().</tspan><tspan fill="#a6b4ff">then</tspan><tspan fill="#c4c5d9">(</tspan><tspan fill="#e5e2e1">render</tspan><tspan fill="#c4c5d9">);</tspan></text>
+<text x="762" y="138" fill="#c4c5d9" opacity="0.76">}, []);</text>
+<text x="762" y="168" opacity="0.72"><tspan fill="#b8c3ff">type </tspan><tspan fill="#a6b4ff">Props</tspan><tspan fill="#c4c5d9"> = { </tspan><tspan fill="#e5e2e1">children</tspan><tspan fill="#c4c5d9">: </tspan><tspan fill="#ffb59b">ReactNode</tspan><tspan fill="#c4c5d9"> };</tspan></text>
+<text x="762" y="198" opacity="0.66"><tspan fill="#b8c3ff">const </tspan><tspan fill="#a6b4ff">App</tspan><tspan fill="#c4c5d9">: </tspan><tspan fill="#ffb59b">React.FC</tspan><tspan fill="#c4c5d9">&lt;</tspan><tspan fill="#a6b4ff">Props</tspan><tspan fill="#c4c5d9">&gt; = ({</tspan></text>
+<text x="762" y="216" opacity="0.66"><tspan fill="#8e90a2">  </tspan><tspan fill="#e5e2e1">children</tspan><tspan fill="#c4c5d9">,</tspan></text>
+<text x="762" y="234" opacity="0.66"><tspan fill="#c4c5d9">}) =&gt; &lt;</tspan><tspan fill="#a6b4ff">div</tspan><tspan fill="#c4c5d9">&gt;{</tspan><tspan fill="#e5e2e1">children</tspan><tspan fill="#c4c5d9">}&lt;/</tspan><tspan fill="#a6b4ff">div</tspan><tspan fill="#c4c5d9">&gt;;</tspan></text>
+<text x="762" y="264" opacity="0.52"><tspan fill="#8e90a2">// </tspan><tspan fill="#8e90a2">strict TypeScript</tspan></text>
+<text x="762" y="282" opacity="0.52"><tspan fill="#b8c3ff">interface </tspan><tspan fill="#a6b4ff">ApiResponse</tspan><tspan fill="#c4c5d9">&lt;</tspan><tspan fill="#ffb59b">T</tspan><tspan fill="#c4c5d9">&gt; {</tspan></text>
+<text x="762" y="300" opacity="0.52"><tspan fill="#8e90a2">  </tspan><tspan fill="#e5e2e1">data</tspan><tspan fill="#c4c5d9">: </tspan><tspan fill="#ffb59b">T</tspan><tspan fill="#c4c5d9">;</tspan></text>
+<text x="762" y="318" opacity="0.52"><tspan fill="#8e90a2">  </tspan><tspan fill="#e5e2e1">status</tspan><tspan fill="#c4c5d9">: </tspan><tspan fill="#ffb4ab">number</tspan><tspan fill="#c4c5d9">;</tspan></text>
+<text x="762" y="336" fill="#c4c5d9" opacity="0.52">}</text>
+</g>
+<!-- BOTTOM GRADIENT overlays code, reveals text below -->
+<rect width="1200" height="400" fill="url(#g1-fade)"/>
+<!-- CENTER TEXT — rendered on top of gradient -->
+<text x="600" y="334" text-anchor="middle" font-family="'Inter',sans-serif" font-size="22" font-weight="700" fill="#e5e2e1">Collaborative Engineering</text>
+<text x="600" y="360" text-anchor="middle" font-family="'Inter',sans-serif" font-size="13" fill="#c4c5d9" opacity="0.82">Bridging technical constraints with creative vision through agile methodology</text>
+<text x="600" y="378" text-anchor="middle" font-family="'Inter',sans-serif" font-size="13" fill="#c4c5d9" opacity="0.82">and constant feedback loops.</text>
+</svg>
+</div>
+<!-- Service: Branding -->
+<div class="col-span-12 md:col-span-4 bg-surface-container-high rounded-lg p-10 flex flex-col justify-between min-h-[400px]">
+<div>
+<span class="text-[0.75rem] font-bold tracking-widest text-primary mb-2 block uppercase">03 / Identity</span>
+<h3 class="text-2xl font-bold mb-4">Strategic Branding</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">
+                    Beyond logos. We build comprehensive brand systems that communicate authority and technical prowess.
+                </p>
+</div>
+<div class="pt-8 border-t border-outline-variant/20 flex justify-between items-center">
+<span class="text-xs font-mono text-outline">LOGOTYPE / TYPOGRAPHY / ASSETS</span>
+<span class="material-symbols-outlined text-primary">arrow_outward</span>
+</div>
+</div>
+<!-- Expertise Tags -->
+<div class="col-span-12 md:col-span-8 bg-surface-container-lowest border border-outline-variant/10 rounded-lg p-10">
+<h3 class="text-xl font-bold mb-8">The Stack</h3>
+<div class="flex flex-wrap gap-3">
+<span class="px-4 py-2 bg-surface-container text-on-surface-variant text-xs font-medium rounded-full border border-outline-variant/10">TypeScript</span>
+<span class="px-4 py-2 bg-surface-container text-on-surface-variant text-xs font-medium rounded-full border border-outline-variant/10">Next.js 14</span>
+<span class="px-4 py-2 bg-surface-container text-on-surface-variant text-xs font-medium rounded-full border border-outline-variant/10">Tailwind CSS</span>
+<span class="px-4 py-2 bg-surface-container text-on-surface-variant text-xs font-medium rounded-full border border-outline-variant/10">PostgreSQL</span>
+<span class="px-4 py-2 bg-surface-container text-on-surface-variant text-xs font-medium rounded-full border border-outline-variant/10">Docker</span>
+<span class="px-4 py-2 bg-surface-container text-on-surface-variant text-xs font-medium rounded-full border border-outline-variant/10">AWS</span>
+<span class="px-4 py-2 bg-surface-container text-on-surface-variant text-xs font-medium rounded-full border border-outline-variant/10">Figma</span>
+<span class="px-4 py-2 bg-surface-container text-on-surface-variant text-xs font-medium rounded-full border border-outline-variant/10">Node.js</span>
+<span class="px-4 py-2 bg-surface-container text-on-surface-variant text-xs font-medium rounded-full border border-outline-variant/10">GraphQL</span>
+<span class="px-4 py-2 bg-surface-container text-on-surface-variant text-xs font-medium rounded-full border border-outline-variant/10">Python</span>
+</div>
+<div class="mt-12 flex items-center justify-between">
+<div>
+<p class="text-sm font-bold">Workflow Efficiency</p>
+<p class="text-xs text-on-surface-variant">Optimized CI/CD pipelines for zero-downtime deployments.</p>
+</div>
+<div class="flex -space-x-3">
+<div class="w-10 h-10 rounded-full border-2 border-background bg-zinc-800 flex items-center justify-center text-[10px] font-bold">GH</div>
+<div class="w-10 h-10 rounded-full border-2 border-background bg-zinc-800 flex items-center justify-center text-[10px] font-bold">VR</div>
+<div class="w-10 h-10 rounded-full border-2 border-background bg-zinc-800 flex items-center justify-center text-[10px] font-bold">FL</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Contact Section -->
+<section class="mt-24" id="contact">
+<div class="grid grid-cols-12 gap-12">
+<!-- Left Side: Intro and Socials -->
+<div class="col-span-12 lg:col-span-5 space-y-12">
+<div>
+<span class="font-['Inter'] text-[0.75rem] uppercase tracking-[0.1em] font-medium text-primary mb-4 block">GET IN TOUCH</span>
+<h2 class="text-4xl font-extrabold tracking-tight mb-6">Let's build something <span class="text-primary-container">extraordinary</span> together.</h2>
+<p class="text-on-surface-variant leading-relaxed opacity-80">
+                        Whether you have a specific project in mind or just want to explore technical possibilities, I'm always open to discussing new challenges in engineering and design.
+                    </p>
+</div>
+<div class="space-y-6">
+<h4 class="text-sm font-bold uppercase tracking-widest text-outline">Professional Channels</h4>
+<div class="space-y-4">
+<a class="flex items-center gap-4 group" href="#">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center border border-outline-variant/10 group-hover:bg-primary-container/20 group-hover:border-primary-container/30 transition-all">
+<span class="material-symbols-outlined text-primary-fixed-dim">mail</span>
+</div>
+<div>
+<p class="text-xs font-mono text-outline">EMAIL</p>
+<p class="text-sm font-medium">hello@kineticdarkroom.com</p>
+</div>
+</a>
+<a class="flex items-center gap-4 group" href="#">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center border border-outline-variant/10 group-hover:bg-primary-container/20 group-hover:border-primary-container/30 transition-all">
+<span class="material-symbols-outlined text-primary-fixed-dim">terminal</span>
+</div>
+<div>
+<p class="text-xs font-mono text-outline">GITHUB</p>
+<p class="text-sm font-medium">github.com/kinetic-dr</p>
+</div>
+</a>
+<a class="flex items-center gap-4 group" href="#">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center border border-outline-variant/10 group-hover:bg-primary-container/20 group-hover:border-primary-container/30 transition-all">
+<span class="material-symbols-outlined text-primary-fixed-dim">work</span>
+</div>
+<div>
+<p class="text-xs font-mono text-outline">LINKEDIN</p>
+<p class="text-sm font-medium">linkedin.com/in/kineticdarkroom</p>
+</div>
+</a>
+</div>
+</div>
+</div>
+<!-- Right Side: Contact Form -->
+<div class="col-span-12 lg:col-span-7">
+<div class="bg-surface-container rounded-lg p-8 md:p-12 border border-outline-variant/10">
+<form class="space-y-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-outline ml-1">Name</label>
+<input class="w-full bg-surface-container-low border border-outline-variant/20 rounded-lg px-4 py-3 text-on-surface placeholder:text-zinc-600 focus:ring-1 focus:ring-primary-container transition-all" placeholder="John Doe" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-outline ml-1">Email</label>
+<input class="w-full bg-surface-container-low border border-outline-variant/20 rounded-lg px-4 py-3 text-on-surface placeholder:text-zinc-600 focus:ring-1 focus:ring-primary-container transition-all" placeholder="john@example.com" type="email"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-outline ml-1">Delivery Preference</label>
+<div class="flex gap-4">
+<label class="flex-1 cursor-pointer">
+<input checked="" class="hidden peer" name="delivery" type="radio" value="email"/>
+<div class="bg-surface-container-low border border-outline-variant/20 rounded-lg px-4 py-3 text-center peer-checked:bg-primary-container/20 peer-checked:border-primary-container peer-checked:text-primary transition-all text-sm font-medium text-zinc-400">
+                                        Send to Email
+                                    </div>
+</label>
+<label class="flex-1 cursor-pointer">
+<input class="hidden peer" name="delivery" type="radio" value="phone"/>
+<div class="bg-surface-container-low border border-outline-variant/20 rounded-lg px-4 py-3 text-center peer-checked:bg-primary-container/20 peer-checked:border-primary-container peer-checked:text-primary transition-all text-sm font-medium text-zinc-400">
+                                        Send to Phone
+                                    </div>
+</label>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-outline ml-1">Message</label>
+<textarea class="w-full bg-surface-container-low border border-outline-variant/20 rounded-lg px-4 py-3 text-on-surface placeholder:text-zinc-600 focus:ring-1 focus:ring-primary-container transition-all resize-none" placeholder="Tell me about your project..." rows="5"></textarea>
+</div>
+<button class="w-full bg-primary-container text-white py-4 rounded-lg font-bold uppercase tracking-widest text-xs hover:bg-primary-container/90 active:scale-[0.98] transition-all shadow-[0_0_20px_0_rgba(46,91,255,0.2)]" type="submit">
+                            TRANSMIT MESSAGE
+                        </button>
+</form>
+</div>
+</div>
+</div>
+</section>
+<!-- Original CTA Section -->
+<section class="mt-24 py-24 bg-surface-container-high rounded-lg flex flex-col items-center text-center px-8 relative overflow-hidden">
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-primary-container to-transparent opacity-30"></div>
+<h2 class="text-4xl font-extrabold mb-6">Ready to scale your vision?</h2>
+<p class="text-on-surface-variant max-w-xl mb-10">Currently accepting high-impact projects for Q3 2024. Let's discuss your technical requirements.</p>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary-fixed-variant px-10 py-4 rounded-lg font-bold uppercase tracking-widest text-xs glow-hover transition-all">
+            INITIATE PROJECT
+        </button>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#0e0e0e] w-full py-16 px-8 border-t border-zinc-800/20">
+<div class="flex flex-col md:flex-row justify-between items-center gap-8 max-w-7xl mx-auto">
+<div class="text-zinc-100 font-['Inter'] text-[0.75rem] uppercase tracking-[0.1em] font-medium">
+            © 2024 KINETIC DARKROOM | ENGINEERED FOR PERFORMANCE
+        </div>
+<div class="flex gap-8">
+<a class="text-zinc-500 hover:text-indigo-300 transition-colors underline-offset-4 hover:underline font-['Inter'] text-[0.75rem] uppercase tracking-[0.1em] font-medium" href="#">GitHub</a>
+<a class="text-zinc-500 hover:text-indigo-300 transition-colors underline-offset-4 hover:underline font-['Inter'] text-[0.75rem] uppercase tracking-[0.1em] font-medium" href="#">LinkedIn</a>
+<a class="text-zinc-500 hover:text-indigo-300 transition-colors underline-offset-4 hover:underline font-['Inter'] text-[0.75rem] uppercase tracking-[0.1em] font-medium" href="#">Source</a>
+<a class="text-zinc-500 hover:text-indigo-300 transition-colors underline-offset-4 hover:underline font-['Inter'] text-[0.75rem] uppercase tracking-[0.1em] font-medium" href="#">CV</a>
+</div>
+</div>
+</footer>
+</body></html>

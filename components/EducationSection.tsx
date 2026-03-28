@@ -1,21 +1,20 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Experience } from '@/lib/types'
+import { Education } from '@/lib/types'
 
-const STORAGE_KEY = 'pf_experience'
+const STORAGE_KEY = 'pf_education'
 
-const samples: Experience[] = [
+const samples: Education[] = [
   {
     id: '1',
-    company: 'Tech Company',
-    role: 'Software Developer',
-    startDate: 'Jan 2023',
-    endDate: 'Present',
-    bullets: [
-      'Built and maintained web applications using React and Node.js',
-      'Collaborated with cross-functional teams to deliver features on time',
-    ],
+    institution: 'University of Technology',
+    degree: 'Bachelor of Science',
+    field: 'Computer Science',
+    location: 'New York, USA',
+    startDate: 'Sep 2019',
+    endDate: 'May 2023',
+    description: '',
   },
 ]
 
@@ -43,25 +42,7 @@ const labelStyle: React.CSSProperties = {
   marginBottom: '0.3rem',
 }
 
-interface FormState {
-  company: string
-  role: string
-  startDate: string
-  endDate: string
-  description: string
-}
-
-const emptyForm: FormState = { company: '', role: '', startDate: '', endDate: '', description: '' }
-
-function toForm(e: Experience): FormState {
-  return {
-    company: e.company,
-    role: e.role,
-    startDate: e.startDate,
-    endDate: e.endDate,
-    description: e.bullets.join('\n'),
-  }
-}
+// ── Icon button ───────────────────────────────────────────────────────────────
 
 function IconBtn({
   onClick,
@@ -94,13 +75,47 @@ function IconBtn({
   )
 }
 
-interface ExperienceFormProps {
+// ── Form ──────────────────────────────────────────────────────────────────────
+
+interface FormState {
+  institution: string
+  degree: string
+  field: string
+  location: string
+  startDate: string
+  endDate: string
+  description: string
+}
+
+const emptyForm: FormState = {
+  institution: '',
+  degree: '',
+  field: '',
+  location: '',
+  startDate: '',
+  endDate: '',
+  description: '',
+}
+
+function toForm(e: Education): FormState {
+  return {
+    institution: e.institution,
+    degree: e.degree,
+    field: e.field,
+    location: e.location,
+    startDate: e.startDate,
+    endDate: e.endDate,
+    description: e.description,
+  }
+}
+
+interface EducationFormProps {
   initial: FormState
   onSave: (f: FormState) => void
   onCancel: () => void
 }
 
-function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
+function EducationForm({ initial, onSave, onCancel }: EducationFormProps) {
   const [form, setForm] = useState<FormState>(initial)
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
 
@@ -111,10 +126,9 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
 
   function handleSave() {
     const errs: typeof errors = {}
-    if (!form.company.trim()) errs.company = 'Company is required.'
-    if (!form.role.trim()) errs.role = 'Role is required.'
+    if (!form.institution.trim()) errs.institution = 'Institution is required.'
+    if (!form.degree.trim()) errs.degree = 'Degree is required.'
     if (!form.startDate.trim()) errs.startDate = 'Start date is required.'
-    if (!form.description.trim()) errs.description = 'Description is required.'
     if (Object.keys(errs).length) { setErrors(errs); return }
     onSave(form)
   }
@@ -131,43 +145,65 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
         gap: '0.875rem',
       }}
     >
-      {/* Company */}
+      {/* Institution */}
       <div>
-        <label style={labelStyle}>Company *</label>
+        <label style={labelStyle}>Institution *</label>
         <input
-          style={{ ...inputStyle, borderColor: errors.company ? '#f38ba8' : '#2e2d3d' }}
-          value={form.company}
-          onChange={(e) => set('company', e.target.value)}
-          placeholder="Acme Corp"
+          style={{ ...inputStyle, borderColor: errors.institution ? '#f38ba8' : '#2e2d3d' }}
+          value={form.institution}
+          onChange={(e) => set('institution', e.target.value)}
+          placeholder="MIT, Harvard, Stanford..."
         />
-        {errors.company && (
-          <span style={{ color: '#f38ba8', fontSize: '0.75rem' }}>{errors.company}</span>
+        {errors.institution && (
+          <span style={{ color: '#f38ba8', fontSize: '0.75rem' }}>{errors.institution}</span>
         )}
       </div>
 
-      {/* Role */}
-      <div>
-        <label style={labelStyle}>Role *</label>
-        <input
-          style={{ ...inputStyle, borderColor: errors.role ? '#f38ba8' : '#2e2d3d' }}
-          value={form.role}
-          onChange={(e) => set('role', e.target.value)}
-          placeholder="Software Engineer"
-        />
-        {errors.role && (
-          <span style={{ color: '#f38ba8', fontSize: '0.75rem' }}>{errors.role}</span>
-        )}
+      {/* Degree + Field side by side */}
+      <div style={{ display: 'flex', gap: '0.75rem' }} className="edu-form-row">
+        <div style={{ flex: 1 }}>
+          <label style={labelStyle}>Degree *</label>
+          <input
+            style={{ ...inputStyle, borderColor: errors.degree ? '#f38ba8' : '#2e2d3d' }}
+            value={form.degree}
+            onChange={(e) => set('degree', e.target.value)}
+            placeholder="Bachelor of Science"
+          />
+          {errors.degree && (
+            <span style={{ color: '#f38ba8', fontSize: '0.75rem' }}>{errors.degree}</span>
+          )}
+        </div>
+        <div style={{ flex: 1 }}>
+          <label style={labelStyle}>Field of Study</label>
+          <input
+            style={inputStyle}
+            value={form.field}
+            onChange={(e) => set('field', e.target.value)}
+            placeholder="Computer Science"
+          />
+        </div>
       </div>
 
-      {/* Dates row */}
-      <div style={{ display: 'flex', gap: '0.75rem' }}>
+      {/* Location */}
+      <div>
+        <label style={labelStyle}>Location</label>
+        <input
+          style={inputStyle}
+          value={form.location}
+          onChange={(e) => set('location', e.target.value)}
+          placeholder="New York, USA"
+        />
+      </div>
+
+      {/* Dates */}
+      <div style={{ display: 'flex', gap: '0.75rem' }} className="edu-form-row">
         <div style={{ flex: 1 }}>
           <label style={labelStyle}>Start Date *</label>
           <input
             style={{ ...inputStyle, borderColor: errors.startDate ? '#f38ba8' : '#2e2d3d' }}
             value={form.startDate}
             onChange={(e) => set('startDate', e.target.value)}
-            placeholder="Jan 2022"
+            placeholder="Sep 2019"
           />
           {errors.startDate && (
             <span style={{ color: '#f38ba8', fontSize: '0.75rem' }}>{errors.startDate}</span>
@@ -179,31 +215,21 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
             style={inputStyle}
             value={form.endDate}
             onChange={(e) => set('endDate', e.target.value)}
-            placeholder="Present"
+            placeholder="May 2023 or Present"
           />
         </div>
       </div>
 
       {/* Description */}
       <div>
-        <label style={labelStyle}>Description *</label>
+        <label style={labelStyle}>Notes (optional)</label>
         <textarea
-          style={{
-            ...inputStyle,
-            borderColor: errors.description ? '#f38ba8' : '#2e2d3d',
-            resize: 'vertical',
-          }}
-          rows={4}
+          style={{ ...inputStyle, resize: 'vertical' }}
+          rows={3}
           value={form.description}
           onChange={(e) => set('description', e.target.value)}
-          placeholder="One bullet point per line"
+          placeholder="Relevant coursework, achievements, GPA, clubs..."
         />
-        {errors.description && (
-          <span style={{ color: '#f38ba8', fontSize: '0.75rem' }}>{errors.description}</span>
-        )}
-        <p style={{ fontSize: '0.72rem', color: '#434656', marginTop: '0.3rem' }}>
-          Write one bullet point per line. Each line becomes a separate bullet.
-        </p>
       </div>
 
       {/* Actions */}
@@ -242,13 +268,15 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
   )
 }
 
-interface ExperienceCardProps {
-  experience: Experience
+// ── Card ──────────────────────────────────────────────────────────────────────
+
+interface EducationCardProps {
+  education: Education
   onEdit: () => void
   onDelete: () => void
 }
 
-function ExperienceCard({ experience, onEdit, onDelete }: ExperienceCardProps) {
+function EducationCard({ education, onEdit, onDelete }: EducationCardProps) {
   return (
     <div
       style={{
@@ -274,21 +302,29 @@ function ExperienceCard({ experience, onEdit, onDelete }: ExperienceCardProps) {
       {/* Content */}
       <div style={{ flex: 1 }}>
         {/* Top row */}
-        <div className="exp-top-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          {/* Left: company + role */}
+        <div className="edu-top-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          {/* Left */}
           <div>
             <p style={{ fontWeight: 700, fontSize: '1rem', color: '#e5e2e1' }}>
-              {experience.company}
+              {education.institution}
             </p>
             <p style={{ fontSize: '0.875rem', color: '#b8c3ff', marginTop: '0.2rem' }}>
-              {experience.role}
+              {education.degree}{education.field ? ` · ${education.field}` : ''}
             </p>
+            {education.location && (
+              <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                </svg>
+                {education.location}
+              </p>
+            )}
           </div>
 
-          {/* Right: date + actions */}
-          <div className="exp-meta" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.3rem' }}>
+          {/* Right: dates + actions */}
+          <div className="edu-meta" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.3rem' }}>
             <span
-              className="exp-date"
+              className="edu-date"
               style={{
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.8rem',
@@ -296,7 +332,7 @@ function ExperienceCard({ experience, onEdit, onDelete }: ExperienceCardProps) {
                 whiteSpace: 'nowrap',
               }}
             >
-              {experience.startDate} — {experience.endDate || 'Present'}
+              {education.startDate}{education.endDate ? ` — ${education.endDate}` : ''}
             </span>
             <div style={{ display: 'flex', gap: '0.25rem' }}>
               <IconBtn onClick={onEdit} title="Edit">✏️</IconBtn>
@@ -305,26 +341,28 @@ function ExperienceCard({ experience, onEdit, onDelete }: ExperienceCardProps) {
           </div>
         </div>
 
-        {/* Bullets */}
-        {experience.bullets.length > 0 && (
-          <ul style={{ marginTop: '0.75rem', padding: 0, listStyle: 'none' }}>
-            {experience.bullets.map((bullet, i) => (
-              <li
-                key={i}
-                style={{ fontSize: '0.875rem', color: '#c4c5d9', lineHeight: 1.7 }}
-              >
-                • {bullet}
-              </li>
-            ))}
-          </ul>
+        {/* Notes */}
+        {education.description && (
+          <p
+            style={{
+              fontSize: '0.875rem',
+              color: '#8e90a2',
+              lineHeight: 1.7,
+              marginTop: '0.75rem',
+            }}
+          >
+            {education.description}
+          </p>
         )}
       </div>
     </div>
   )
 }
 
-export default function ExperienceSection() {
-  const [entries, setEntries] = useState<Experience[]>([])
+// ── Main section ──────────────────────────────────────────────────────────────
+
+export default function EducationSection() {
+  const [entries, setEntries] = useState<Education[]>([])
   const [adding, setAdding] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
 
@@ -337,26 +375,21 @@ export default function ExperienceSection() {
     }
   }, [])
 
-  function persist(updated: Experience[]) {
+  function persist(updated: Education[]) {
     setEntries(updated)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
   }
 
-  function parseBullets(description: string): string[] {
-    return description
-      .split('\n')
-      .map((l) => l.trim())
-      .filter(Boolean)
-  }
-
   function handleAdd(form: FormState) {
-    const entry: Experience = {
+    const entry: Education = {
       id: uid(),
-      company: form.company.trim(),
-      role: form.role.trim(),
+      institution: form.institution.trim(),
+      degree: form.degree.trim(),
+      field: form.field.trim(),
+      location: form.location.trim(),
       startDate: form.startDate.trim(),
       endDate: form.endDate.trim(),
-      bullets: parseBullets(form.description),
+      description: form.description.trim(),
     }
     persist([entry, ...entries])
     setAdding(false)
@@ -368,11 +401,13 @@ export default function ExperienceSection() {
         e.id === id
           ? {
               ...e,
-              company: form.company.trim(),
-              role: form.role.trim(),
+              institution: form.institution.trim(),
+              degree: form.degree.trim(),
+              field: form.field.trim(),
+              location: form.location.trim(),
               startDate: form.startDate.trim(),
               endDate: form.endDate.trim(),
-              bullets: parseBullets(form.description),
+              description: form.description.trim(),
             }
           : e
       )
@@ -386,34 +421,32 @@ export default function ExperienceSection() {
   }
 
   return (
-    <section id="experience" style={{ padding: '4rem 2rem', maxWidth: '1100px', margin: '0 auto' }}>
+    <section id="education" style={{ padding: '4rem 2rem', maxWidth: '1100px', margin: '0 auto' }}>
       <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#e5e2e1', marginBottom: '1.5rem' }}>
-        Experience
+        Education
       </h2>
 
-      {/* List */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {entries.map((entry) =>
           editingId === entry.id ? (
-            <ExperienceForm
+            <EducationForm
               key={entry.id}
               initial={toForm(entry)}
               onSave={(f) => handleEdit(entry.id, f)}
               onCancel={() => setEditingId(null)}
             />
           ) : (
-            <ExperienceCard
+            <EducationCard
               key={entry.id}
-              experience={entry}
+              education={entry}
               onEdit={() => { setAdding(false); setEditingId(entry.id) }}
               onDelete={() => handleDelete(entry.id)}
             />
           )
         )}
 
-        {/* Add form — below list */}
         {adding && (
-          <ExperienceForm
+          <EducationForm
             initial={emptyForm}
             onSave={handleAdd}
             onCancel={() => setAdding(false)}
@@ -421,7 +454,6 @@ export default function ExperienceSection() {
         )}
       </div>
 
-      {/* Add button */}
       <div style={{ marginTop: '1.5rem' }}>
         <button
           onClick={() => { setEditingId(null); setAdding(true) }}
@@ -436,20 +468,22 @@ export default function ExperienceSection() {
             cursor: 'pointer',
           }}
         >
-          + Add Experience
+          + Add Education
         </button>
       </div>
 
       <style>{`
-        #experience { padding: 2.5rem 1rem !important; }
-        .exp-top-row { flex-direction: column !important; gap: 0.5rem !important; }
-        .exp-meta { align-items: flex-start !important; }
-        .exp-date { white-space: normal !important; }
+        #education { padding: 2.5rem 1rem !important; }
+        .edu-top-row { flex-direction: column !important; gap: 0.5rem !important; }
+        .edu-meta { align-items: flex-start !important; }
+        .edu-date { white-space: normal !important; }
+        .edu-form-row { flex-direction: column !important; }
         @media (min-width: 640px) {
-          #experience { padding: 4rem 2rem !important; }
-          .exp-top-row { flex-direction: row !important; gap: 0 !important; }
-          .exp-meta { align-items: flex-end !important; }
-          .exp-date { white-space: nowrap !important; }
+          #education { padding: 4rem 2rem !important; }
+          .edu-top-row { flex-direction: row !important; gap: 0 !important; }
+          .edu-meta { align-items: flex-end !important; }
+          .edu-date { white-space: nowrap !important; }
+          .edu-form-row { flex-direction: row !important; }
         }
       `}</style>
     </section>

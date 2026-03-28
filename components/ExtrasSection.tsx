@@ -22,19 +22,19 @@ function uid() {
 const TYPES: Extra['type'][] = ['Leadership', 'Award', 'Certification', 'Volunteering', 'Other']
 
 const badgeStyle: Record<Extra['type'], { background: string; color: string }> = {
-  Leadership:    { background: 'rgba(34,197,94,0.1)',    color: '#22c55e' },
+  Leadership:    { background: 'rgba(46,91,255,0.12)',   color: '#b8c3ff' },
   Award:         { background: 'rgba(251,191,36,0.1)',   color: '#fbbf24' },
   Certification: { background: 'rgba(59,130,246,0.1)',   color: '#3b82f6' },
   Volunteering:  { background: 'rgba(244,114,182,0.1)',  color: '#f472b6' },
-  Other:         { background: 'rgba(255,255,255,0.05)', color: '#888'    },
+  Other:         { background: 'rgba(255,255,255,0.05)', color: '#8e90a2' },
 }
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
-  background: '#111',
-  border: '1px solid #2a2a2a',
+  background: '#1c1b1b',
+  border: '1px solid #2e2d3d',
   borderRadius: '6px',
-  color: '#f0f0f0',
+  color: '#e5e2e1',
   padding: '0.5rem 0.75rem',
   fontSize: '0.875rem',
   fontFamily: 'inherit',
@@ -45,7 +45,7 @@ const inputStyle: React.CSSProperties = {
 const labelStyle: React.CSSProperties = {
   display: 'block',
   fontSize: '0.75rem',
-  color: '#888',
+  color: '#8e90a2',
   marginBottom: '0.3rem',
 }
 
@@ -64,7 +64,7 @@ function IconBtn({ onClick, title, children }: { onClick: () => void; title: str
         border: 'none',
         cursor: 'pointer',
         fontSize: '0.9rem',
-        color: hovered ? '#f0f0f0' : '#888',
+        color: hovered ? '#e5e2e1' : '#8e90a2',
         padding: '0.1rem 0.2rem',
         transition: 'color 0.15s',
       }}
@@ -115,8 +115,8 @@ function ExtrasForm({ initial, onSave, onCancel }: ExtrasFormProps) {
   return (
     <div
       style={{
-        background: '#1a1a1a',
-        border: '1px solid #22c55e',
+        background: '#201f1f',
+        border: '1px solid #2e5bff',
         borderRadius: '12px',
         padding: '1.5rem',
         display: 'flex',
@@ -142,25 +142,25 @@ function ExtrasForm({ initial, onSave, onCancel }: ExtrasFormProps) {
       <div>
         <label style={labelStyle}>Title *</label>
         <input
-          style={{ ...inputStyle, borderColor: errors.title ? '#ef4444' : '#2a2a2a' }}
+          style={{ ...inputStyle, borderColor: errors.title ? '#f38ba8' : '#2e2d3d' }}
           value={form.title}
           onChange={(e) => set('title', e.target.value)}
           placeholder="e.g. Dean's List"
         />
-        {errors.title && <span style={{ color: '#ef4444', fontSize: '0.75rem' }}>{errors.title}</span>}
+        {errors.title && <span style={{ color: '#f38ba8', fontSize: '0.75rem' }}>{errors.title}</span>}
       </div>
 
       {/* Description */}
       <div>
         <label style={labelStyle}>Description *</label>
         <textarea
-          style={{ ...inputStyle, borderColor: errors.description ? '#ef4444' : '#2a2a2a', resize: 'vertical' }}
+          style={{ ...inputStyle, borderColor: errors.description ? '#f38ba8' : '#2e2d3d', resize: 'vertical' }}
           rows={3}
           value={form.description}
           onChange={(e) => set('description', e.target.value)}
           placeholder="Brief description..."
         />
-        {errors.description && <span style={{ color: '#ef4444', fontSize: '0.75rem' }}>{errors.description}</span>}
+        {errors.description && <span style={{ color: '#f38ba8', fontSize: '0.75rem' }}>{errors.description}</span>}
       </div>
 
       {/* Date */}
@@ -179,7 +179,7 @@ function ExtrasForm({ initial, onSave, onCancel }: ExtrasFormProps) {
         <button
           onClick={handleSave}
           style={{
-            background: '#22c55e',
+            background: '#2e5bff',
             color: '#fff',
             border: 'none',
             borderRadius: '8px',
@@ -195,8 +195,8 @@ function ExtrasForm({ initial, onSave, onCancel }: ExtrasFormProps) {
           onClick={onCancel}
           style={{
             background: 'none',
-            color: '#888',
-            border: '1px solid #2a2a2a',
+            color: '#8e90a2',
+            border: '1px solid #2e2d3d',
             borderRadius: '8px',
             padding: '0.5rem 1.2rem',
             fontSize: '0.875rem',
@@ -224,8 +224,8 @@ function ExtraCard({ extra, onEdit, onDelete }: ExtraCardProps) {
   return (
     <div
       style={{
-        background: '#1a1a1a',
-        border: '1px solid #2a2a2a',
+        background: '#201f1f',
+        border: '1px solid #2e2d3d',
         borderRadius: '12px',
         padding: '1.5rem',
       }}
@@ -251,18 +251,18 @@ function ExtraCard({ extra, onEdit, onDelete }: ExtraCardProps) {
       </div>
 
       {/* Title */}
-      <p style={{ fontWeight: 700, fontSize: '0.95rem', color: '#f0f0f0', marginTop: '0.6rem' }}>
+      <p style={{ fontWeight: 700, fontSize: '0.95rem', color: '#e5e2e1', marginTop: '0.6rem' }}>
         {extra.title}
       </p>
 
       {/* Description */}
-      <p style={{ fontSize: '0.875rem', color: '#888', lineHeight: 1.7, marginTop: '0.4rem' }}>
+      <p style={{ fontSize: '0.875rem', color: '#8e90a2', lineHeight: 1.7, marginTop: '0.4rem' }}>
         {extra.description}
       </p>
 
       {/* Date */}
       {extra.date && (
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#888', marginTop: '0.5rem' }}>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#8e90a2', marginTop: '0.5rem' }}>
           {extra.date}
         </p>
       )}
@@ -321,7 +321,7 @@ export default function ExtrasSection() {
 
   return (
     <section id="more" style={{ padding: '4rem 2rem', maxWidth: '1100px', margin: '0 auto' }}>
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#f0f0f0', marginBottom: '1.5rem' }}>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#e5e2e1', marginBottom: '1.5rem' }}>
         More About Me
       </h2>
 
@@ -362,7 +362,7 @@ export default function ExtrasSection() {
         <button
           onClick={() => { setEditingId(null); setAdding(true) }}
           style={{
-            background: '#22c55e',
+            background: '#2e5bff',
             color: '#fff',
             border: 'none',
             borderRadius: '8px',

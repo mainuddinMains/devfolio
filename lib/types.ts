@@ -3,6 +3,8 @@ export interface HeaderData {
   title: string
   bio: string
   github: string
+  linkedin: string
+  instagram: string
   email: string
 }
 
@@ -11,6 +13,7 @@ export interface Project {
   title: string
   description: string
   techStack: string[]
+  github: string
   url: string
   createdAt: string
 }
@@ -22,6 +25,17 @@ export interface Experience {
   startDate: string
   endDate: string
   bullets: string[]
+}
+
+export interface Education {
+  id: string
+  institution: string
+  degree: string
+  field: string
+  location: string
+  startDate: string
+  endDate: string
+  description: string
 }
 
 export interface Skill {
