@@ -9,6 +9,7 @@ interface NavbarProps {
 const links = [
   { label: 'Projects', href: '#projects' },
   { label: 'Experience', href: '#experience' },
+  { label: 'Education', href: '#education' },
   { label: 'Skills', href: '#skills' },
   { label: 'More', href: '#more' },
 ]
