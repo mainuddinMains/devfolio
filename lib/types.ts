@@ -1,38 +1,39 @@
+export interface HeaderData {
+  name: string
+  title: string
+  bio: string
+  github: string
+  email: string
+}
+
 export interface Project {
   id: string
   title: string
   description: string
-  category: "dev" | "ai" | "design"
   techStack: string[]
-  liveUrl?: string
-  repoUrl?: string
-  thumbnailUrl?: string
-  emoji: string
-  featured: boolean
+  url: string
   createdAt: string
 }
 
-export interface Education {
+export interface Experience {
   id: string
-  degree: string
-  institution: string
-  field: string
-  startYear: string
-  endYear: string
-  type: "degree" | "certificate" | "course"
+  company: string
+  role: string
+  startDate: string
+  endDate: string
+  bullets: string[]
 }
 
 export interface Skill {
+  id: string
+  category: string
   name: string
-  category: "dev" | "ai" | "design"
 }
 
-export interface PersonalInfo {
-  name: string
+export interface Extra {
+  id: string
+  type: 'Leadership' | 'Award' | 'Certification' | 'Volunteering' | 'Other'
   title: string
-  bio: string
-  email?: string
-  github?: string
-  linkedin?: string
-  avatarUrl?: string
+  description: string
+  date: string
 }
