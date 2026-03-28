@@ -235,6 +235,7 @@ function CategoryRow({ category, skills, onDeleteSkill, onAddSkill }: CategoryRo
 
   return (
     <div
+      className="category-row"
       style={{
         display: 'flex',
         alignItems: 'flex-start',
@@ -408,6 +409,15 @@ export default function SkillsSection() {
           + Add Category
         </button>
       )}
+
+      <style>{`
+        #skills { padding: 2.5rem 1rem !important; }
+        .category-row { flex-direction: column !important; }
+        @media (min-width: 640px) {
+          #skills { padding: 4rem 2rem !important; }
+          .category-row { flex-direction: row !important; }
+        }
+      `}</style>
     </section>
   )
 }
