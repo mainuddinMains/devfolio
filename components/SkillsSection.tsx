@@ -1,93 +1,413 @@
-"use client"
+'use client'
 
-import { useRef, useEffect, useState } from "react"
-import { skills } from "@/data/skills"
-import Draggable from "@/components/Draggable"
+import { useEffect, useMemo, useState } from 'react'
+import { Skill } from '@/lib/types'
 
-const COLUMNS = [
-  { category: "dev"    as const, label: "Software Dev", emoji: "💻", accent: "#6ee7b7", iconBg: "rgba(110,231,183,0.12)" },
-  { category: "ai"     as const, label: "AI / ML",      emoji: "🧠", accent: "#818cf8", iconBg: "rgba(129,140,248,0.12)" },
-  { category: "design" as const, label: "Design",       emoji: "🎨", accent: "#f472b6", iconBg: "rgba(244,114,182,0.12)" },
+const STORAGE_KEY = 'pf_skills'
+
+const samples: Skill[] = [
+  { id: 's1', category: 'Languages', name: 'JavaScript' },
+  { id: 's2', category: 'Languages', name: 'TypeScript' },
+  { id: 's3', category: 'Languages', name: 'Python' },
+  { id: 's4', category: 'Languages', name: 'SQL' },
+  { id: 's5', category: 'Frameworks', name: 'React' },
+  { id: 's6', category: 'Frameworks', name: 'Next.js' },
+  { id: 's7', category: 'Frameworks', name: 'Node.js' },
+  { id: 's8', category: 'Frameworks', name: 'Express' },
+  { id: 's9', category: 'Tools', name: 'Git' },
+  { id: 's10', category: 'Tools', name: 'Docker' },
+  { id: 's11', category: 'Tools', name: 'VS Code' },
+  { id: 's12', category: 'Tools', name: 'Figma' },
 ]
 
-export default function SkillsSection() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const [visible, setVisible] = useState(false)
+function uid() {
+  return Math.random().toString(36).slice(2, 10)
+}
 
-  useEffect(() => {
-    const el = sectionRef.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect() } },
-      { threshold: 0.1 }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
+// ── Skill pill ────────────────────────────────────────────────────────────────
+
+interface SkillPillProps {
+  name: string
+  onDelete: () => void
+}
+
+function SkillPill({ name, onDelete }: SkillPillProps) {
+  const [hovered, setHovered] = useState(false)
 
   return (
-    <>
-      <style>{`
-        .skill-chip { transition: border-color 0.2s ease, color 0.2s ease; }
-        @media (max-width: 600px) {
-          .skills-grid { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
-
-      <section
-        id="skills"
-        ref={sectionRef}
-        className={visible ? "animate-in" : undefined}
-        style={{ opacity: visible ? undefined : 0 }}
+    <div
+      style={{ position: 'relative', display: 'inline-flex' }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <span
+        style={{
+          background: '#222',
+          border: '1px solid #2a2a2a',
+          color: '#f0f0f0',
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.8rem',
+          borderRadius: '20px',
+          padding: '0.3rem 0.85rem',
+          display: 'inline-block',
+          userSelect: 'none',
+        }}
       >
-        {/* ── Header ── */}
-        <div style={{ marginBottom: "1.75rem" }}>
-          <p className="section-eyebrow" style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "0.65rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.14em", margin: "0 0 0.45rem" }}>
-            Capabilities
-          </p>
-          <h2 className="section-title" style={{ fontFamily: "var(--font-space-grotesk)", fontSize: "1.4rem", fontWeight: 700, margin: "0 0 0.6rem", color: "var(--text)" }}>
-            Skills &amp; Tools
-          </h2>
-          <div style={{ width: 36, height: 2, borderRadius: 2, background: "linear-gradient(to right, #6ee7b7, #818cf8, #f472b6)" }} />
-        </div>
+        {name}
+      </span>
 
-        {/* ── Columns grid ── */}
-        <div
-          className="skills-grid"
-          style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}
+      {hovered && (
+        <button
+          onClick={onDelete}
+          title="Remove skill"
+          style={{
+            position: 'absolute',
+            top: '-6px',
+            right: '-6px',
+            width: '16px',
+            height: '16px',
+            background: '#ef4444',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '50%',
+            fontSize: '0.6rem',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 0,
+            lineHeight: 1,
+          }}
         >
-          {COLUMNS.map((col) => {
-            const colSkills = skills.filter((s) => s.category === col.category)
-            return (
-              <Draggable key={col.category} id={`skill-col-${col.category}`}>
-              <div style={{ background: "var(--s1)", border: "1px solid var(--border)", borderRadius: 10, padding: "1.1rem", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.85rem" }}>
-                  <div style={{ width: 28, height: 28, borderRadius: 6, background: col.iconBg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.9rem", flexShrink: 0 }}>
-                    {col.emoji}
-                  </div>
-                  <span style={{ fontSize: "0.78rem", fontWeight: 600, color: col.accent }}>
-                    {col.label}
-                  </span>
-                </div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.3rem" }}>
-                  {colSkills.map((skill) => (
-                    <span
-                      key={skill.name}
-                      className="skill-chip"
-                      style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "0.65rem", padding: "0.2rem 0.55rem", background: "var(--s3)", border: "1px solid var(--border2)", borderRadius: 3, color: "var(--muted)", cursor: "default" }}
-                      onMouseEnter={(e) => { const el = e.currentTarget as HTMLSpanElement; el.style.borderColor = col.accent; el.style.color = col.accent }}
-                      onMouseLeave={(e) => { const el = e.currentTarget as HTMLSpanElement; el.style.borderColor = "var(--border2)"; el.style.color = "var(--muted)" }}
-                    >
-                      {skill.name}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              </Draggable>
-            )
-          })}
-        </div>
-      </section>
-    </>
+          ×
+        </button>
+      )}
+    </div>
+  )
+}
+
+// ── Add-skill inline input ────────────────────────────────────────────────────
+
+interface AddSkillInputProps {
+  onSave: (name: string) => void
+  onCancel: () => void
+}
+
+function AddSkillInput({ onSave, onCancel }: AddSkillInputProps) {
+  const [value, setValue] = useState('')
+
+  function commit() {
+    const trimmed = value.trim()
+    if (trimmed) onSave(trimmed)
+    else onCancel()
+  }
+
+  return (
+    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+      <input
+        autoFocus
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') commit()
+          if (e.key === 'Escape') onCancel()
+        }}
+        style={{
+          width: '120px',
+          background: '#111',
+          border: '1px solid #3a3a3a',
+          borderRadius: '20px',
+          color: '#f0f0f0',
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.8rem',
+          padding: '0.3rem 0.75rem',
+          outline: 'none',
+        }}
+        placeholder="skill name"
+      />
+      <button
+        onClick={commit}
+        style={{
+          background: '#22c55e',
+          border: 'none',
+          color: '#fff',
+          borderRadius: '50%',
+          width: '20px',
+          height: '20px',
+          fontSize: '0.7rem',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 0,
+          flexShrink: 0,
+        }}
+      >
+        ✓
+      </button>
+    </div>
+  )
+}
+
+// ── Add-category inline input ─────────────────────────────────────────────────
+
+interface AddCategoryInputProps {
+  onSave: (category: string) => void
+  onCancel: () => void
+}
+
+function AddCategoryInput({ onSave, onCancel }: AddCategoryInputProps) {
+  const [value, setValue] = useState('')
+
+  function commit() {
+    const trimmed = value.trim()
+    if (trimmed) onSave(trimmed)
+    else onCancel()
+  }
+
+  return (
+    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginTop: '1rem' }}>
+      <input
+        autoFocus
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') commit()
+          if (e.key === 'Escape') onCancel()
+        }}
+        style={{
+          background: '#111',
+          border: '1px solid #3a3a3a',
+          borderRadius: '6px',
+          color: '#f0f0f0',
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.8rem',
+          padding: '0.4rem 0.75rem',
+          outline: 'none',
+          width: '180px',
+        }}
+        placeholder="Category name"
+      />
+      <button
+        onClick={commit}
+        style={{
+          background: '#22c55e',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '6px',
+          padding: '0.35rem 0.7rem',
+          fontSize: '0.8rem',
+          fontWeight: 700,
+          cursor: 'pointer',
+        }}
+      >
+        ✓
+      </button>
+      <button
+        onClick={onCancel}
+        style={{
+          background: 'none',
+          color: '#888',
+          border: '1px solid #2a2a2a',
+          borderRadius: '6px',
+          padding: '0.35rem 0.7rem',
+          fontSize: '0.8rem',
+          cursor: 'pointer',
+        }}
+      >
+        ✗
+      </button>
+    </div>
+  )
+}
+
+// ── Category row ──────────────────────────────────────────────────────────────
+
+interface CategoryRowProps {
+  category: string
+  skills: Skill[]
+  onDeleteSkill: (id: string) => void
+  onAddSkill: (category: string, name: string) => void
+}
+
+function CategoryRow({ category, skills, onDeleteSkill, onAddSkill }: CategoryRowProps) {
+  const [addingSkill, setAddingSkill] = useState(false)
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: '1rem',
+        flexWrap: 'wrap',
+        marginBottom: '1.25rem',
+      }}
+    >
+      {/* Category label */}
+      <span
+        style={{
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.8rem',
+          color: '#888',
+          textTransform: 'uppercase',
+          letterSpacing: '0.08em',
+          minWidth: '130px',
+          paddingTop: '0.3rem',
+          flexShrink: 0,
+        }}
+      >
+        {category}
+      </span>
+
+      {/* Pills area */}
+      <div style={{ flex: 1, display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
+        {skills.map((skill) => (
+          <SkillPill
+            key={skill.id}
+            name={skill.name}
+            onDelete={() => onDeleteSkill(skill.id)}
+          />
+        ))}
+
+        {/* + skill ghost pill or inline input */}
+        {addingSkill ? (
+          <AddSkillInput
+            onSave={(name) => {
+              onAddSkill(category, name)
+              setAddingSkill(false)
+            }}
+            onCancel={() => setAddingSkill(false)}
+          />
+        ) : (
+          <button
+            onClick={() => setAddingSkill(true)}
+            style={{
+              background: 'none',
+              border: '1px dashed #3a3a3a',
+              color: '#888',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.8rem',
+              borderRadius: '20px',
+              padding: '0.3rem 0.85rem',
+              cursor: 'pointer',
+              transition: 'border-color 0.15s, color 0.15s',
+            }}
+            onMouseEnter={(e) => {
+              ;(e.currentTarget as HTMLElement).style.borderColor = '#888'
+              ;(e.currentTarget as HTMLElement).style.color = '#f0f0f0'
+            }}
+            onMouseLeave={(e) => {
+              ;(e.currentTarget as HTMLElement).style.borderColor = '#3a3a3a'
+              ;(e.currentTarget as HTMLElement).style.color = '#888'
+            }}
+          >
+            + skill
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ── Main section ──────────────────────────────────────────────────────────────
+
+export default function SkillsSection() {
+  const [skills, setSkills] = useState<Skill[]>([])
+  const [addingCategory, setAddingCategory] = useState(false)
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY)
+      setSkills(stored ? JSON.parse(stored) : samples)
+    } catch {
+      setSkills(samples)
+    }
+  }, [])
+
+  function persist(updated: Skill[]) {
+    setSkills(updated)
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+  }
+
+  // Group by category, preserving insertion order
+  const grouped = useMemo(() => {
+    const map = new Map<string, Skill[]>()
+    for (const skill of skills) {
+      if (!map.has(skill.category)) map.set(skill.category, [])
+      map.get(skill.category)!.push(skill)
+    }
+    return map
+  }, [skills])
+
+  function handleDeleteSkill(id: string) {
+    persist(skills.filter((s) => s.id !== id))
+  }
+
+  function handleAddSkill(category: string, name: string) {
+    const skill: Skill = { id: uid(), category, name }
+    persist([...skills, skill])
+  }
+
+  function handleAddCategory(category: string) {
+    // Only add if category doesn't already exist
+    if (!grouped.has(category)) {
+      const skill: Skill = { id: uid(), category, name: '' }
+      // We add a placeholder that we'll immediately allow the user to populate.
+      // Actually: just create the category row with no skills — user adds skills via "+ skill".
+      // We store a sentinel with empty name that we filter out during render.
+      persist([...skills, { ...skill, name: '__placeholder__' }])
+    }
+    setAddingCategory(false)
+  }
+
+  return (
+    <section id="skills" style={{ padding: '4rem 2rem', maxWidth: '1100px', margin: '0 auto' }}>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#f0f0f0', marginBottom: '1.5rem' }}>
+        Skills
+      </h2>
+
+      {Array.from(grouped.entries()).map(([category, categorySkills]) => (
+        <CategoryRow
+          key={category}
+          category={category}
+          skills={categorySkills.filter((s) => s.name !== '__placeholder__')}
+          onDeleteSkill={handleDeleteSkill}
+          onAddSkill={handleAddSkill}
+        />
+      ))}
+
+      {/* Add category */}
+      {addingCategory ? (
+        <AddCategoryInput
+          onSave={handleAddCategory}
+          onCancel={() => setAddingCategory(false)}
+        />
+      ) : (
+        <button
+          onClick={() => setAddingCategory(true)}
+          style={{
+            background: 'none',
+            border: '1px dashed #3a3a3a',
+            color: '#888',
+            borderRadius: '8px',
+            padding: '0.5rem 1.2rem',
+            fontSize: '0.875rem',
+            cursor: 'pointer',
+            marginTop: '0.5rem',
+            transition: 'border-color 0.15s, color 0.15s',
+          }}
+          onMouseEnter={(e) => {
+            ;(e.currentTarget as HTMLElement).style.borderColor = '#888'
+            ;(e.currentTarget as HTMLElement).style.color = '#f0f0f0'
+          }}
+          onMouseLeave={(e) => {
+            ;(e.currentTarget as HTMLElement).style.borderColor = '#3a3a3a'
+            ;(e.currentTarget as HTMLElement).style.color = '#888'
+          }}
+        >
+          + Add Category
+        </button>
+      )}
+    </section>
   )
 }
