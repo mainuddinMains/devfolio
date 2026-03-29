@@ -4,7 +4,7 @@ interface FooterProps {
 
 export default function Footer({ name }: FooterProps) {
   const linkStyle: React.CSSProperties = {
-    color: '#434656',
+    color: '#c0bbb3',
     fontSize: '0.75rem',
     textTransform: 'uppercase',
     letterSpacing: '0.1em',
@@ -16,8 +16,8 @@ export default function Footer({ name }: FooterProps) {
   return (
     <footer
       style={{
-        background: '#0e0e0e',
-        borderTop: '1px solid rgba(67,70,86,0.2)',
+        background: '#ebe8e2',
+        borderTop: '1px solid rgba(100,96,88,0.2)',
         padding: '4rem 2rem',
         width: '100%',
       }}
@@ -37,7 +37,7 @@ export default function Footer({ name }: FooterProps) {
         {/* Left: copyright */}
         <p
           style={{
-            color: '#8e90a2',
+            color: '#6b6c7e',
             fontSize: '0.75rem',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
@@ -61,8 +61,8 @@ export default function Footer({ name }: FooterProps) {
               target={href.startsWith('http') ? '_blank' : undefined}
               rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
               style={linkStyle}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = '#b8c3ff' }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = '#434656' }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = '#2e5bff' }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = '#c0bbb3' }}
             >
               {label}
             </a>
