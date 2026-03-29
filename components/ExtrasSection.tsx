@@ -22,19 +22,19 @@ function uid() {
 const TYPES: Extra['type'][] = ['Leadership', 'Award', 'Certification', 'Volunteering', 'Other']
 
 const badgeStyle: Record<Extra['type'], { background: string; color: string }> = {
-  Leadership:    { background: 'rgba(46,91,255,0.12)',   color: '#b8c3ff' },
+  Leadership:    { background: 'rgba(46,91,255,0.12)',   color: '#2e5bff' },
   Award:         { background: 'rgba(251,191,36,0.1)',   color: '#fbbf24' },
   Certification: { background: 'rgba(59,130,246,0.1)',   color: '#3b82f6' },
   Volunteering:  { background: 'rgba(244,114,182,0.1)',  color: '#f472b6' },
-  Other:         { background: 'rgba(255,255,255,0.05)', color: '#8e90a2' },
+  Other:         { background: 'rgba(0,0,0,0.06)', color: '#6b6c7e' },
 }
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
-  background: '#1c1b1b',
-  border: '1px solid #2e2d3d',
+  background: '#f5f3ef',
+  border: '1px solid #e2ddd6',
   borderRadius: '6px',
-  color: '#e5e2e1',
+  color: '#1a1826',
   padding: '0.5rem 0.75rem',
   fontSize: '0.875rem',
   fontFamily: 'inherit',
@@ -45,7 +45,7 @@ const inputStyle: React.CSSProperties = {
 const labelStyle: React.CSSProperties = {
   display: 'block',
   fontSize: '0.75rem',
-  color: '#8e90a2',
+  color: '#6b6c7e',
   marginBottom: '0.3rem',
 }
 
@@ -64,7 +64,7 @@ function IconBtn({ onClick, title, children }: { onClick: () => void; title: str
         border: 'none',
         cursor: 'pointer',
         fontSize: '0.9rem',
-        color: hovered ? '#e5e2e1' : '#8e90a2',
+        color: hovered ? '#1a1826' : '#6b6c7e',
         padding: '0.1rem 0.2rem',
         transition: 'color 0.15s',
       }}
@@ -115,7 +115,7 @@ function ExtrasForm({ initial, onSave, onCancel }: ExtrasFormProps) {
   return (
     <div
       style={{
-        background: '#201f1f',
+        background: '#ffffff',
         border: '1px solid #2e5bff',
         borderRadius: '12px',
         padding: '1.5rem',
@@ -142,7 +142,7 @@ function ExtrasForm({ initial, onSave, onCancel }: ExtrasFormProps) {
       <div>
         <label style={labelStyle}>Title *</label>
         <input
-          style={{ ...inputStyle, borderColor: errors.title ? '#f38ba8' : '#2e2d3d' }}
+          style={{ ...inputStyle, borderColor: errors.title ? '#f38ba8' : '#e2ddd6' }}
           value={form.title}
           onChange={(e) => set('title', e.target.value)}
           placeholder="e.g. Dean's List"
@@ -154,7 +154,7 @@ function ExtrasForm({ initial, onSave, onCancel }: ExtrasFormProps) {
       <div>
         <label style={labelStyle}>Description *</label>
         <textarea
-          style={{ ...inputStyle, borderColor: errors.description ? '#f38ba8' : '#2e2d3d', resize: 'vertical' }}
+          style={{ ...inputStyle, borderColor: errors.description ? '#f38ba8' : '#e2ddd6', resize: 'vertical' }}
           rows={3}
           value={form.description}
           onChange={(e) => set('description', e.target.value)}
@@ -195,8 +195,8 @@ function ExtrasForm({ initial, onSave, onCancel }: ExtrasFormProps) {
           onClick={onCancel}
           style={{
             background: 'none',
-            color: '#8e90a2',
-            border: '1px solid #2e2d3d',
+            color: '#6b6c7e',
+            border: '1px solid #e2ddd6',
             borderRadius: '8px',
             padding: '0.5rem 1.2rem',
             fontSize: '0.875rem',
@@ -224,8 +224,8 @@ function ExtraCard({ extra, onEdit, onDelete }: ExtraCardProps) {
   return (
     <div
       style={{
-        background: '#201f1f',
-        border: '1px solid #2e2d3d',
+        background: '#ffffff',
+        border: '1px solid #e2ddd6',
         borderRadius: '12px',
         padding: '1.5rem',
       }}
@@ -251,18 +251,18 @@ function ExtraCard({ extra, onEdit, onDelete }: ExtraCardProps) {
       </div>
 
       {/* Title */}
-      <p style={{ fontWeight: 700, fontSize: '0.95rem', color: '#e5e2e1', marginTop: '0.6rem' }}>
+      <p style={{ fontWeight: 700, fontSize: '0.95rem', color: '#1a1826', marginTop: '0.6rem' }}>
         {extra.title}
       </p>
 
       {/* Description */}
-      <p style={{ fontSize: '0.875rem', color: '#8e90a2', lineHeight: 1.7, marginTop: '0.4rem' }}>
+      <p style={{ fontSize: '0.875rem', color: '#6b6c7e', lineHeight: 1.7, marginTop: '0.4rem' }}>
         {extra.description}
       </p>
 
       {/* Date */}
       {extra.date && (
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#8e90a2', marginTop: '0.5rem' }}>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#6b6c7e', marginTop: '0.5rem' }}>
           {extra.date}
         </p>
       )}
@@ -321,7 +321,7 @@ export default function ExtrasSection() {
 
   return (
     <section id="more" style={{ padding: '4rem 2rem', maxWidth: '1100px', margin: '0 auto' }}>
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#e5e2e1', marginBottom: '1.5rem' }}>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#1a1826', marginBottom: '1.5rem' }}>
         More About Me
       </h2>
 
