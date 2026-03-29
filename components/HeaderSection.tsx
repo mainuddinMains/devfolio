@@ -54,7 +54,7 @@ const icons = {
 }
 
 const brandHover: Record<string, string> = {
-  github: '#e5e2e1',
+  github: '#1a1826',
   linkedin: '#0a66c2',
   instagram: '#e1306c',
   email: '#b8c3ff',
@@ -74,9 +74,9 @@ function SocialIconButton({ href, platform }: { href: string; platform: keyof ty
       style={{
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
         width: '40px', height: '40px', borderRadius: '50%',
-        border: `1px solid ${hovered ? '#434656' : '#2e2d3d'}`,
-        background: hovered ? '#201f1f' : 'transparent',
-        color: hovered ? brandHover[platform] : '#8e90a2',
+        border: `1px solid ${hovered ? '#c0bbb3' : '#e2ddd6'}`,
+        background: hovered ? '#f0eeea' : 'transparent',
+        color: hovered ? brandHover[platform] : '#6b6c7e',
         textDecoration: 'none',
         transition: 'color 0.15s, border-color 0.15s, background 0.15s',
         flexShrink: 0,
@@ -96,7 +96,7 @@ function PencilBtn({ onClick }: { onClick: () => void }) {
         background: 'none', border: 'none', cursor: 'pointer',
         fontSize: '0.7rem', marginLeft: '0.35rem', opacity: 0,
         transition: 'opacity 0.15s', verticalAlign: 'middle',
-        padding: '0 0.2rem', color: '#8e90a2',
+        padding: '0 0.2rem', color: '#6b6c7e',
       }}
       className="pencil-btn"
     >
@@ -177,7 +177,7 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
           onChange={(e) => setEditing((prev) => prev && { ...prev, draft: e.target.value })}
           rows={3}
           style={{
-            background: '#1c1b1b', border: '1px solid #434656', color: '#e5e2e1',
+            background: '#f0eeea', border: '1px solid #c0bbb3', color: '#1a1826',
             borderRadius: '8px', padding: '0.5rem 0.75rem', fontSize: '1rem',
             width: '520px', maxWidth: '90vw', resize: 'vertical',
             fontFamily: 'inherit', lineHeight: 1.8, outline: 'none',
@@ -191,7 +191,7 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
           value={editing?.draft ?? ''}
           onChange={(e) => setEditing((prev) => prev && { ...prev, draft: e.target.value })}
           style={{
-            background: '#1c1b1b', border: '1px solid #434656', color: '#e5e2e1',
+            background: '#f0eeea', border: '1px solid #c0bbb3', color: '#1a1826',
             borderRadius: '8px', padding: '0.5rem 0.75rem', fontSize: '1rem',
             width: '320px', maxWidth: '80vw', fontFamily: 'inherit', outline: 'none',
           }}
@@ -199,7 +199,7 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
         />
       )}
       <button onClick={handleSave} title="Save" style={{ background: '#2e5bff', border: 'none', color: '#fff', borderRadius: '6px', padding: '0.4rem 0.7rem', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 700 }}>✓</button>
-      <button onClick={handleCancel} title="Cancel" style={{ background: 'none', border: '1px solid #434656', color: '#8e90a2', borderRadius: '6px', padding: '0.4rem 0.7rem', cursor: 'pointer', fontSize: '0.85rem' }}>✗</button>
+      <button onClick={handleCancel} title="Cancel" style={{ background: 'none', border: '1px solid #c0bbb3', color: '#6b6c7e', borderRadius: '6px', padding: '0.4rem 0.7rem', cursor: 'pointer', fontSize: '0.85rem' }}>✗</button>
     </div>
   )
 
@@ -207,7 +207,7 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
     <section id="header" className="header-section" style={{ padding: '8rem 2rem 5rem', maxWidth: '1100px', margin: '0 auto' }}>
 
       {/* Label */}
-      <span style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 600, color: '#b8c3ff', display: 'block', marginBottom: '1.25rem' }}>
+      <span style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 600, color: '#2e5bff', display: 'block', marginBottom: '1.25rem' }}>
         DEVELOPER PORTFOLIO
       </span>
 
@@ -226,7 +226,7 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
         <div>
           {isEditing('name') ? inlineEditor('name') : (
             <EditableRow onEdit={() => startEdit('name')}>
-              <h1 className="header-name" style={{ fontSize: '3rem', fontWeight: 800, color: '#e5e2e1', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+              <h1 className="header-name" style={{ fontSize: '3rem', fontWeight: 800, color: '#1a1826', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
                 {data.name}
               </h1>
             </EditableRow>
@@ -238,7 +238,7 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
       <div style={{ marginBottom: '1rem' }}>
         {isEditing('title') ? inlineEditor('title') : (
           <EditableRow onEdit={() => startEdit('title')}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', color: '#b8c3ff' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', color: '#2e5bff' }}>
               {data.title}
             </span>
           </EditableRow>
@@ -249,7 +249,7 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
       <div style={{ marginBottom: '2rem', maxWidth: '580px' }}>
         {isEditing('bio') ? inlineEditor('bio', true) : (
           <EditableRow onEdit={() => startEdit('bio')}>
-            <span style={{ fontSize: '1rem', color: '#c4c5d9', lineHeight: 1.8 }}>
+            <span style={{ fontSize: '1rem', color: '#4f505e', lineHeight: 1.8 }}>
               {data.bio}
             </span>
           </EditableRow>
@@ -271,7 +271,7 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
               ) : href ? (
                 <SocialIconButton href={href} platform={platform} />
               ) : (
-                <span style={{ color: '#434656', fontSize: '0.75rem', cursor: 'default' }}>
+                <span style={{ color: '#c0bbb3', fontSize: '0.75rem', cursor: 'default' }}>
                   + {platform.charAt(0).toUpperCase() + platform.slice(1)}
                 </span>
               )}
