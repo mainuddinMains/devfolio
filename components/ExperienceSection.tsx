@@ -25,10 +25,10 @@ function uid() {
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
-  background: '#1c1b1b',
-  border: '1px solid #2e2d3d',
+  background: '#f5f3ef',
+  border: '1px solid #e2ddd6',
   borderRadius: '6px',
-  color: '#e5e2e1',
+  color: '#1a1826',
   padding: '0.5rem 0.75rem',
   fontSize: '0.875rem',
   fontFamily: 'inherit',
@@ -39,7 +39,7 @@ const inputStyle: React.CSSProperties = {
 const labelStyle: React.CSSProperties = {
   display: 'block',
   fontSize: '0.75rem',
-  color: '#8e90a2',
+  color: '#6b6c7e',
   marginBottom: '0.3rem',
 }
 
@@ -84,7 +84,7 @@ function IconBtn({
         border: 'none',
         cursor: 'pointer',
         fontSize: '0.9rem',
-        color: hovered ? '#e5e2e1' : '#8e90a2',
+        color: hovered ? '#1a1826' : '#6b6c7e',
         padding: '0.1rem 0.2rem',
         transition: 'color 0.15s',
       }}
@@ -122,7 +122,7 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
   return (
     <div
       style={{
-        background: '#201f1f',
+        background: '#ffffff',
         border: '1px solid #2e5bff',
         borderRadius: '12px',
         padding: '1.5rem',
@@ -135,7 +135,7 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
       <div>
         <label style={labelStyle}>Company *</label>
         <input
-          style={{ ...inputStyle, borderColor: errors.company ? '#f38ba8' : '#2e2d3d' }}
+          style={{ ...inputStyle, borderColor: errors.company ? '#f38ba8' : '#e2ddd6' }}
           value={form.company}
           onChange={(e) => set('company', e.target.value)}
           placeholder="Acme Corp"
@@ -149,7 +149,7 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
       <div>
         <label style={labelStyle}>Role *</label>
         <input
-          style={{ ...inputStyle, borderColor: errors.role ? '#f38ba8' : '#2e2d3d' }}
+          style={{ ...inputStyle, borderColor: errors.role ? '#f38ba8' : '#e2ddd6' }}
           value={form.role}
           onChange={(e) => set('role', e.target.value)}
           placeholder="Software Engineer"
@@ -164,7 +164,7 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
         <div style={{ flex: 1 }}>
           <label style={labelStyle}>Start Date *</label>
           <input
-            style={{ ...inputStyle, borderColor: errors.startDate ? '#f38ba8' : '#2e2d3d' }}
+            style={{ ...inputStyle, borderColor: errors.startDate ? '#f38ba8' : '#e2ddd6' }}
             value={form.startDate}
             onChange={(e) => set('startDate', e.target.value)}
             placeholder="Jan 2022"
@@ -190,7 +190,7 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
         <textarea
           style={{
             ...inputStyle,
-            borderColor: errors.description ? '#f38ba8' : '#2e2d3d',
+            borderColor: errors.description ? '#f38ba8' : '#e2ddd6',
             resize: 'vertical',
           }}
           rows={4}
@@ -201,7 +201,7 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
         {errors.description && (
           <span style={{ color: '#f38ba8', fontSize: '0.75rem' }}>{errors.description}</span>
         )}
-        <p style={{ fontSize: '0.72rem', color: '#434656', marginTop: '0.3rem' }}>
+        <p style={{ fontSize: '0.72rem', color: '#c0bbb3', marginTop: '0.3rem' }}>
           Write one bullet point per line. Each line becomes a separate bullet.
         </p>
       </div>
@@ -227,8 +227,8 @@ function ExperienceForm({ initial, onSave, onCancel }: ExperienceFormProps) {
           onClick={onCancel}
           style={{
             background: 'none',
-            color: '#8e90a2',
-            border: '1px solid #2e2d3d',
+            color: '#6b6c7e',
+            border: '1px solid #e2ddd6',
             borderRadius: '8px',
             padding: '0.5rem 1.2rem',
             fontSize: '0.875rem',
@@ -252,8 +252,8 @@ function ExperienceCard({ experience, onEdit, onDelete }: ExperienceCardProps) {
   return (
     <div
       style={{
-        background: '#201f1f',
-        border: '1px solid #2e2d3d',
+        background: '#ffffff',
+        border: '1px solid #e2ddd6',
         borderRadius: '12px',
         padding: '1.5rem',
         display: 'flex',
@@ -277,10 +277,10 @@ function ExperienceCard({ experience, onEdit, onDelete }: ExperienceCardProps) {
         <div className="exp-top-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           {/* Left: company + role */}
           <div>
-            <p style={{ fontWeight: 700, fontSize: '1rem', color: '#e5e2e1' }}>
+            <p style={{ fontWeight: 700, fontSize: '1rem', color: '#1a1826' }}>
               {experience.company}
             </p>
-            <p style={{ fontSize: '0.875rem', color: '#b8c3ff', marginTop: '0.2rem' }}>
+            <p style={{ fontSize: '0.875rem', color: '#2e5bff', marginTop: '0.2rem' }}>
               {experience.role}
             </p>
           </div>
@@ -292,7 +292,7 @@ function ExperienceCard({ experience, onEdit, onDelete }: ExperienceCardProps) {
               style={{
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.8rem',
-                color: '#8e90a2',
+                color: '#6b6c7e',
                 whiteSpace: 'nowrap',
               }}
             >
@@ -311,7 +311,7 @@ function ExperienceCard({ experience, onEdit, onDelete }: ExperienceCardProps) {
             {experience.bullets.map((bullet, i) => (
               <li
                 key={i}
-                style={{ fontSize: '0.875rem', color: '#c4c5d9', lineHeight: 1.7 }}
+                style={{ fontSize: '0.875rem', color: '#4f505e', lineHeight: 1.7 }}
               >
                 • {bullet}
               </li>
@@ -387,7 +387,7 @@ export default function ExperienceSection() {
 
   return (
     <section id="experience" style={{ padding: '4rem 2rem', maxWidth: '1100px', margin: '0 auto' }}>
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#e5e2e1', marginBottom: '1.5rem' }}>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#1a1826', marginBottom: '1.5rem' }}>
         Experience
       </h2>
 

@@ -12,7 +12,7 @@ import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/Footer'
 
 const divider = (
-  <div style={{ borderTop: '1px solid rgba(67,70,86,0.2)', maxWidth: '1100px', margin: '0 auto' }} />
+  <div style={{ borderTop: '1px solid rgba(100,96,88,0.15)', maxWidth: '1100px', margin: '0 auto' }} />
 )
 
 export default function Home() {

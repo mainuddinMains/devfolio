@@ -24,10 +24,10 @@ function uid() {
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
-  background: '#1c1b1b',
-  border: '1px solid #2e2d3d',
+  background: '#f5f3ef',
+  border: '1px solid #e2ddd6',
   borderRadius: '6px',
-  color: '#e5e2e1',
+  color: '#1a1826',
   padding: '0.5rem 0.75rem',
   fontSize: '0.875rem',
   fontFamily: 'inherit',
@@ -38,7 +38,7 @@ const inputStyle: React.CSSProperties = {
 const labelStyle: React.CSSProperties = {
   display: 'block',
   fontSize: '0.75rem',
-  color: '#8e90a2',
+  color: '#6b6c7e',
   marginBottom: '0.3rem',
 }
 
@@ -65,7 +65,7 @@ function IconBtn({
         border: 'none',
         cursor: 'pointer',
         fontSize: '0.9rem',
-        color: hovered ? '#e5e2e1' : '#8e90a2',
+        color: hovered ? '#1a1826' : '#6b6c7e',
         padding: '0.1rem 0.2rem',
         transition: 'color 0.15s',
       }}
@@ -136,7 +136,7 @@ function EducationForm({ initial, onSave, onCancel }: EducationFormProps) {
   return (
     <div
       style={{
-        background: '#201f1f',
+        background: '#ffffff',
         border: '1px solid #2e5bff',
         borderRadius: '12px',
         padding: '1.5rem',
@@ -149,7 +149,7 @@ function EducationForm({ initial, onSave, onCancel }: EducationFormProps) {
       <div>
         <label style={labelStyle}>Institution *</label>
         <input
-          style={{ ...inputStyle, borderColor: errors.institution ? '#f38ba8' : '#2e2d3d' }}
+          style={{ ...inputStyle, borderColor: errors.institution ? '#f38ba8' : '#e2ddd6' }}
           value={form.institution}
           onChange={(e) => set('institution', e.target.value)}
           placeholder="MIT, Harvard, Stanford..."
@@ -164,7 +164,7 @@ function EducationForm({ initial, onSave, onCancel }: EducationFormProps) {
         <div style={{ flex: 1 }}>
           <label style={labelStyle}>Degree *</label>
           <input
-            style={{ ...inputStyle, borderColor: errors.degree ? '#f38ba8' : '#2e2d3d' }}
+            style={{ ...inputStyle, borderColor: errors.degree ? '#f38ba8' : '#e2ddd6' }}
             value={form.degree}
             onChange={(e) => set('degree', e.target.value)}
             placeholder="Bachelor of Science"
@@ -200,7 +200,7 @@ function EducationForm({ initial, onSave, onCancel }: EducationFormProps) {
         <div style={{ flex: 1 }}>
           <label style={labelStyle}>Start Date *</label>
           <input
-            style={{ ...inputStyle, borderColor: errors.startDate ? '#f38ba8' : '#2e2d3d' }}
+            style={{ ...inputStyle, borderColor: errors.startDate ? '#f38ba8' : '#e2ddd6' }}
             value={form.startDate}
             onChange={(e) => set('startDate', e.target.value)}
             placeholder="Sep 2019"
@@ -253,8 +253,8 @@ function EducationForm({ initial, onSave, onCancel }: EducationFormProps) {
           onClick={onCancel}
           style={{
             background: 'none',
-            color: '#8e90a2',
-            border: '1px solid #2e2d3d',
+            color: '#6b6c7e',
+            border: '1px solid #e2ddd6',
             borderRadius: '8px',
             padding: '0.5rem 1.2rem',
             fontSize: '0.875rem',
@@ -280,8 +280,8 @@ function EducationCard({ education, onEdit, onDelete }: EducationCardProps) {
   return (
     <div
       style={{
-        background: '#201f1f',
-        border: '1px solid #2e2d3d',
+        background: '#ffffff',
+        border: '1px solid #e2ddd6',
         borderRadius: '12px',
         padding: '1.5rem',
         display: 'flex',
@@ -305,14 +305,14 @@ function EducationCard({ education, onEdit, onDelete }: EducationCardProps) {
         <div className="edu-top-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           {/* Left */}
           <div>
-            <p style={{ fontWeight: 700, fontSize: '1rem', color: '#e5e2e1' }}>
+            <p style={{ fontWeight: 700, fontSize: '1rem', color: '#1a1826' }}>
               {education.institution}
             </p>
-            <p style={{ fontSize: '0.875rem', color: '#b8c3ff', marginTop: '0.2rem' }}>
+            <p style={{ fontSize: '0.875rem', color: '#2e5bff', marginTop: '0.2rem' }}>
               {education.degree}{education.field ? ` · ${education.field}` : ''}
             </p>
             {education.location && (
-              <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+              <p style={{ fontSize: '0.8rem', color: '#6b6c7e', marginTop: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                 </svg>
@@ -328,7 +328,7 @@ function EducationCard({ education, onEdit, onDelete }: EducationCardProps) {
               style={{
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.8rem',
-                color: '#8e90a2',
+                color: '#6b6c7e',
                 whiteSpace: 'nowrap',
               }}
             >
@@ -346,7 +346,7 @@ function EducationCard({ education, onEdit, onDelete }: EducationCardProps) {
           <p
             style={{
               fontSize: '0.875rem',
-              color: '#8e90a2',
+              color: '#6b6c7e',
               lineHeight: 1.7,
               marginTop: '0.75rem',
             }}
@@ -422,7 +422,7 @@ export default function EducationSection() {
 
   return (
     <section id="education" style={{ padding: '4rem 2rem', maxWidth: '1100px', margin: '0 auto' }}>
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#e5e2e1', marginBottom: '1.5rem' }}>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#1a1826', marginBottom: '1.5rem' }}>
         Education
       </h2>
 

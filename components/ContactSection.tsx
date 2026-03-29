@@ -4,10 +4,10 @@ import { useState } from 'react'
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
-  background: '#1c1b1b',
-  border: '1px solid rgba(67,70,86,0.2)',
+  background: '#f5f3ef',
+  border: '1px solid rgba(100,96,88,0.2)',
   borderRadius: '8px',
-  color: '#e5e2e1',
+  color: '#1a1826',
   padding: '0.75rem 1rem',
   fontSize: '0.875rem',
   fontFamily: 'inherit',
@@ -53,7 +53,7 @@ export default function ContactSection() {
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
                 fontWeight: 500,
-                color: '#b8c3ff',
+                color: '#2e5bff',
                 marginBottom: '1rem',
               }}
             >
@@ -65,14 +65,14 @@ export default function ContactSection() {
                 fontWeight: 800,
                 letterSpacing: '-0.02em',
                 lineHeight: 1.15,
-                color: '#e5e2e1',
+                color: '#1a1826',
                 marginBottom: '1.25rem',
               }}
             >
               Let&apos;s build something{' '}
               <span style={{ color: '#2e5bff' }}>extraordinary</span> together.
             </h2>
-            <p style={{ fontSize: '0.9rem', color: '#c4c5d9', lineHeight: 1.7, opacity: 0.85 }}>
+            <p style={{ fontSize: '0.9rem', color: '#4f505e', lineHeight: 1.7, opacity: 0.85 }}>
               Whether you have a specific project in mind or just want to explore possibilities, I&apos;m always open to discussing new challenges.
             </p>
           </div>
@@ -85,7 +85,7 @@ export default function ContactSection() {
                 fontWeight: 700,
                 textTransform: 'uppercase',
                 letterSpacing: '0.12em',
-                color: '#8e90a2',
+                color: '#6b6c7e',
                 marginBottom: '1.25rem',
               }}
             >
@@ -130,8 +130,8 @@ export default function ContactSection() {
         {/* ── Right: form card ── */}
         <div
           style={{
-            background: '#201f1f',
-            border: '1px solid rgba(67,70,86,0.1)',
+            background: '#ffffff',
+            border: '1px solid rgba(100,96,88,0.12)',
             borderRadius: '12px',
             padding: '2.5rem',
           }}
@@ -144,23 +144,23 @@ export default function ContactSection() {
               <div className="contact-form-row">
                 <FormField label="Name" error={errors.name}>
                   <input
-                    style={{ ...inputStyle, borderColor: errors.name ? '#f38ba8' : 'rgba(67,70,86,0.2)' }}
+                    style={{ ...inputStyle, borderColor: errors.name ? '#f38ba8' : 'rgba(100,96,88,0.2)' }}
                     value={form.name}
                     onChange={(e) => set('name', e.target.value)}
                     placeholder="John Doe"
                     onFocus={(e) => { e.target.style.borderColor = '#2e5bff'; e.target.style.boxShadow = '0 0 0 1px #2e5bff' }}
-                    onBlur={(e) => { e.target.style.borderColor = errors.name ? '#f38ba8' : 'rgba(67,70,86,0.2)'; e.target.style.boxShadow = 'none' }}
+                    onBlur={(e) => { e.target.style.borderColor = errors.name ? '#f38ba8' : 'rgba(100,96,88,0.2)'; e.target.style.boxShadow = 'none' }}
                   />
                 </FormField>
                 <FormField label="Email" error={errors.email}>
                   <input
                     type="email"
-                    style={{ ...inputStyle, borderColor: errors.email ? '#f38ba8' : 'rgba(67,70,86,0.2)' }}
+                    style={{ ...inputStyle, borderColor: errors.email ? '#f38ba8' : 'rgba(100,96,88,0.2)' }}
                     value={form.email}
                     onChange={(e) => set('email', e.target.value)}
                     placeholder="john@example.com"
                     onFocus={(e) => { e.target.style.borderColor = '#2e5bff'; e.target.style.boxShadow = '0 0 0 1px #2e5bff' }}
-                    onBlur={(e) => { e.target.style.borderColor = errors.email ? '#f38ba8' : 'rgba(67,70,86,0.2)'; e.target.style.boxShadow = 'none' }}
+                    onBlur={(e) => { e.target.style.borderColor = errors.email ? '#f38ba8' : 'rgba(100,96,88,0.2)'; e.target.style.boxShadow = 'none' }}
                   />
                 </FormField>
               </div>
@@ -173,7 +173,7 @@ export default function ContactSection() {
                     fontWeight: 700,
                     textTransform: 'uppercase',
                     letterSpacing: '0.12em',
-                    color: '#8e90a2',
+                    color: '#6b6c7e',
                     marginBottom: '0.75rem',
                     marginLeft: '0.25rem',
                   }}
@@ -200,14 +200,14 @@ export default function ContactSection() {
                       />
                       <div
                         style={{
-                          background: form.delivery === opt ? 'rgba(46,91,255,0.15)' : '#1c1b1b',
-                          border: `1px solid ${form.delivery === opt ? '#2e5bff' : 'rgba(67,70,86,0.2)'}`,
+                          background: form.delivery === opt ? 'rgba(46,91,255,0.15)' : '#f5f3ef',
+                          border: `1px solid ${form.delivery === opt ? '#2e5bff' : 'rgba(100,96,88,0.2)'}`,
                           borderRadius: '8px',
                           padding: '0.75rem 1rem',
                           textAlign: 'center',
                           fontSize: '0.875rem',
                           fontWeight: 500,
-                          color: form.delivery === opt ? '#b8c3ff' : '#8e90a2',
+                          color: form.delivery === opt ? '#2e5bff' : '#6b6c7e',
                           transition: 'all 0.15s',
                           userSelect: 'none',
                         }}
@@ -224,7 +224,7 @@ export default function ContactSection() {
                 <textarea
                   style={{
                     ...inputStyle,
-                    borderColor: errors.message ? '#f38ba8' : 'rgba(67,70,86,0.2)',
+                    borderColor: errors.message ? '#f38ba8' : 'rgba(100,96,88,0.2)',
                     resize: 'vertical',
                     minHeight: '120px',
                   }}
@@ -233,7 +233,7 @@ export default function ContactSection() {
                   onChange={(e) => set('message', e.target.value)}
                   placeholder="Tell me about your project..."
                   onFocus={(e) => { e.target.style.borderColor = '#2e5bff'; e.target.style.boxShadow = '0 0 0 1px #2e5bff' }}
-                  onBlur={(e) => { e.target.style.borderColor = errors.message ? '#f38ba8' : 'rgba(67,70,86,0.2)'; e.target.style.boxShadow = 'none' }}
+                  onBlur={(e) => { e.target.style.borderColor = errors.message ? '#f38ba8' : 'rgba(100,96,88,0.2)'; e.target.style.boxShadow = 'none' }}
                 />
               </FormField>
 
@@ -300,7 +300,7 @@ function FormField({ label, error, children }: { label: string; error?: string; 
           fontWeight: 700,
           textTransform: 'uppercase',
           letterSpacing: '0.12em',
-          color: '#8e90a2',
+          color: '#6b6c7e',
           marginBottom: '0.5rem',
           marginLeft: '0.25rem',
         }}
@@ -329,12 +329,12 @@ function ChannelLink({ label, value, href, icon }: { label: string; value: strin
           width: '48px',
           height: '48px',
           borderRadius: '8px',
-          background: hovered ? 'rgba(46,91,255,0.15)' : '#201f1f',
-          border: `1px solid ${hovered ? 'rgba(46,91,255,0.3)' : 'rgba(67,70,86,0.1)'}`,
+          background: hovered ? 'rgba(46,91,255,0.1)' : '#f5f3ef',
+          border: `1px solid ${hovered ? 'rgba(46,91,255,0.3)' : 'rgba(100,96,88,0.12)'}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: '#b8c3ff',
+          color: '#2e5bff',
           flexShrink: 0,
           transition: 'background 0.15s, border-color 0.15s',
         }}
@@ -342,10 +342,10 @@ function ChannelLink({ label, value, href, icon }: { label: string; value: strin
         {icon}
       </div>
       <div>
-        <p style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', color: '#8e90a2', letterSpacing: '0.06em', marginBottom: '0.1rem' }}>
+        <p style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', color: '#6b6c7e', letterSpacing: '0.06em', marginBottom: '0.1rem' }}>
           {label}
         </p>
-        <p style={{ fontSize: '0.875rem', fontWeight: 500, color: hovered ? '#e5e2e1' : '#c4c5d9', transition: 'color 0.15s' }}>
+        <p style={{ fontSize: '0.875rem', fontWeight: 500, color: hovered ? '#1a1826' : '#4f505e', transition: 'color 0.15s' }}>
           {value}
         </p>
       </div>
@@ -377,20 +377,20 @@ function SuccessState({ onReset }: { onReset: () => void }) {
           justifyContent: 'center',
         }}
       >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#b8c3ff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2e5bff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="20 6 9 17 4 12" />
         </svg>
       </div>
-      <p style={{ fontSize: '1.1rem', fontWeight: 700, color: '#e5e2e1' }}>Message sent!</p>
-      <p style={{ fontSize: '0.875rem', color: '#8e90a2', maxWidth: '260px' }}>
+      <p style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1a1826' }}>Message sent!</p>
+      <p style={{ fontSize: '0.875rem', color: '#6b6c7e', maxWidth: '260px' }}>
         Thanks for reaching out. I&apos;ll get back to you soon.
       </p>
       <button
         onClick={onReset}
         style={{
           background: 'none',
-          border: '1px solid rgba(67,70,86,0.2)',
-          color: '#8e90a2',
+          border: '1px solid rgba(100,96,88,0.2)',
+          color: '#6b6c7e',
           borderRadius: '8px',
           padding: '0.5rem 1.2rem',
           fontSize: '0.8rem',
