@@ -42,9 +42,9 @@ function SkillPill({ name, onDelete }: SkillPillProps) {
     >
       <span
         style={{
-          background: '#1c1b1b',
-          border: '1px solid #2e2d3d',
-          color: '#e5e2e1',
+          background: '#f5f3ef',
+          border: '1px solid #e2ddd6',
+          color: '#1a1826',
           fontFamily: 'var(--font-mono)',
           fontSize: '0.8rem',
           borderRadius: '20px',
@@ -114,10 +114,10 @@ function AddSkillInput({ onSave, onCancel }: AddSkillInputProps) {
         }}
         style={{
           width: '120px',
-          background: '#1c1b1b',
-          border: '1px solid #434656',
+          background: '#f5f3ef',
+          border: '1px solid #c0bbb3',
           borderRadius: '20px',
-          color: '#e5e2e1',
+          color: '#1a1826',
           fontFamily: 'var(--font-mono)',
           fontSize: '0.8rem',
           padding: '0.3rem 0.75rem',
@@ -176,10 +176,10 @@ function AddCategoryInput({ onSave, onCancel }: AddCategoryInputProps) {
           if (e.key === 'Escape') onCancel()
         }}
         style={{
-          background: '#1c1b1b',
-          border: '1px solid #434656',
+          background: '#f5f3ef',
+          border: '1px solid #c0bbb3',
           borderRadius: '6px',
-          color: '#e5e2e1',
+          color: '#1a1826',
           fontFamily: 'var(--font-mono)',
           fontSize: '0.8rem',
           padding: '0.4rem 0.75rem',
@@ -207,8 +207,8 @@ function AddCategoryInput({ onSave, onCancel }: AddCategoryInputProps) {
         onClick={onCancel}
         style={{
           background: 'none',
-          color: '#8e90a2',
-          border: '1px solid #2e2d3d',
+          color: '#6b6c7e',
+          border: '1px solid #e2ddd6',
           borderRadius: '6px',
           padding: '0.35rem 0.7rem',
           fontSize: '0.8rem',
@@ -249,7 +249,7 @@ function CategoryRow({ category, skills, onDeleteSkill, onAddSkill }: CategoryRo
         style={{
           fontFamily: 'var(--font-mono)',
           fontSize: '0.8rem',
-          color: '#8e90a2',
+          color: '#6b6c7e',
           textTransform: 'uppercase',
           letterSpacing: '0.08em',
           minWidth: '130px',
@@ -284,8 +284,8 @@ function CategoryRow({ category, skills, onDeleteSkill, onAddSkill }: CategoryRo
             onClick={() => setAddingSkill(true)}
             style={{
               background: 'none',
-              border: '1px dashed #434656',
-              color: '#8e90a2',
+              border: '1px dashed #c0bbb3',
+              color: '#6b6c7e',
               fontFamily: 'var(--font-mono)',
               fontSize: '0.8rem',
               borderRadius: '20px',
@@ -294,12 +294,12 @@ function CategoryRow({ category, skills, onDeleteSkill, onAddSkill }: CategoryRo
               transition: 'border-color 0.15s, color 0.15s',
             }}
             onMouseEnter={(e) => {
-              ;(e.currentTarget as HTMLElement).style.borderColor = '#8e90a2'
-              ;(e.currentTarget as HTMLElement).style.color = '#e5e2e1'
+              ;(e.currentTarget as HTMLElement).style.borderColor = '#6b6c7e'
+              ;(e.currentTarget as HTMLElement).style.color = '#1a1826'
             }}
             onMouseLeave={(e) => {
-              ;(e.currentTarget as HTMLElement).style.borderColor = '#434656'
-              ;(e.currentTarget as HTMLElement).style.color = '#8e90a2'
+              ;(e.currentTarget as HTMLElement).style.borderColor = '#c0bbb3'
+              ;(e.currentTarget as HTMLElement).style.color = '#6b6c7e'
             }}
           >
             + skill
@@ -363,7 +363,7 @@ export default function SkillsSection() {
 
   return (
     <section id="skills" style={{ padding: '4rem 2rem', maxWidth: '1100px', margin: '0 auto' }}>
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#e5e2e1', marginBottom: '1.5rem' }}>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#1a1826', marginBottom: '1.5rem' }}>
         Skills
       </h2>
 
@@ -388,8 +388,8 @@ export default function SkillsSection() {
           onClick={() => setAddingCategory(true)}
           style={{
             background: 'none',
-            border: '1px dashed #434656',
-            color: '#8e90a2',
+            border: '1px dashed #c0bbb3',
+            color: '#6b6c7e',
             borderRadius: '8px',
             padding: '0.5rem 1.2rem',
             fontSize: '0.875rem',
@@ -398,12 +398,12 @@ export default function SkillsSection() {
             transition: 'border-color 0.15s, color 0.15s',
           }}
           onMouseEnter={(e) => {
-            ;(e.currentTarget as HTMLElement).style.borderColor = '#8e90a2'
-            ;(e.currentTarget as HTMLElement).style.color = '#e5e2e1'
+            ;(e.currentTarget as HTMLElement).style.borderColor = '#6b6c7e'
+            ;(e.currentTarget as HTMLElement).style.color = '#1a1826'
           }}
           onMouseLeave={(e) => {
-            ;(e.currentTarget as HTMLElement).style.borderColor = '#434656'
-            ;(e.currentTarget as HTMLElement).style.color = '#8e90a2'
+            ;(e.currentTarget as HTMLElement).style.borderColor = '#c0bbb3'
+            ;(e.currentTarget as HTMLElement).style.color = '#6b6c7e'
           }}
         >
           + Add Category
