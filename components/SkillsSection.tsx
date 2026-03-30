@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { Skill } from '@/lib/types'
+import { usePreview } from '@/lib/PreviewContext'
 
 const STORAGE_KEY = 'pf_skills'
 
@@ -32,6 +33,7 @@ interface SkillPillProps {
 }
 
 function SkillPill({ name, onDelete }: SkillPillProps) {
+  const { preview } = usePreview()
   const [hovered, setHovered] = useState(false)
 
   return (
@@ -56,7 +58,7 @@ function SkillPill({ name, onDelete }: SkillPillProps) {
         {name}
       </span>
 
-      {hovered && (
+      {!preview && hovered && (
         <button
           onClick={onDelete}
           title="Remove skill"
@@ -231,6 +233,7 @@ interface CategoryRowProps {
 }
 
 function CategoryRow({ category, skills, onDeleteSkill, onAddSkill }: CategoryRowProps) {
+  const { preview } = usePreview()
   const [addingSkill, setAddingSkill] = useState(false)
 
   return (
@@ -271,7 +274,7 @@ function CategoryRow({ category, skills, onDeleteSkill, onAddSkill }: CategoryRo
         ))}
 
         {/* + skill ghost pill or inline input */}
-        {addingSkill ? (
+        {!preview && addingSkill ? (
           <AddSkillInput
             onSave={(name) => {
               onAddSkill(category, name)
@@ -279,7 +282,7 @@ function CategoryRow({ category, skills, onDeleteSkill, onAddSkill }: CategoryRo
             }}
             onCancel={() => setAddingSkill(false)}
           />
-        ) : (
+        ) : !preview ? (
           <button
             onClick={() => setAddingSkill(true)}
             style={{
@@ -304,7 +307,7 @@ function CategoryRow({ category, skills, onDeleteSkill, onAddSkill }: CategoryRo
           >
             + skill
           </button>
-        )}
+        ) : null}
       </div>
     </div>
   )
@@ -313,6 +316,7 @@ function CategoryRow({ category, skills, onDeleteSkill, onAddSkill }: CategoryRo
 // ── Main section ──────────────────────────────────────────────────────────────
 
 export default function SkillsSection() {
+  const { preview } = usePreview()
   const [skills, setSkills] = useState<Skill[]>([])
   const [addingCategory, setAddingCategory] = useState(false)
 
@@ -378,12 +382,12 @@ export default function SkillsSection() {
       ))}
 
       {/* Add category */}
-      {addingCategory ? (
+      {!preview && addingCategory ? (
         <AddCategoryInput
           onSave={handleAddCategory}
           onCancel={() => setAddingCategory(false)}
         />
-      ) : (
+      ) : !preview ? (
         <button
           onClick={() => setAddingCategory(true)}
           style={{
@@ -408,7 +412,7 @@ export default function SkillsSection() {
         >
           + Add Category
         </button>
-      )}
+      ) : null}
 
       <style>{`
         #skills { padding: 2.5rem 1rem !important; }
