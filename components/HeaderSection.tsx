@@ -149,6 +149,7 @@ function LiveTerminal({ name, title }: { name: string; title: string }) {
       return [
         { cmd: 'whoami', output: nameRef.current },
         { cmd: 'cat role.txt', output: titleRef.current },
+        { cmd: 'cat specialization.txt', output: 'AI Integration' },
         { cmd: 'ls ./projects/', output: 'portfolio/  blog/  api/' },
         { cmd: 'git log --oneline -1', output: 'b0676f9 latest commit' },
         { cmd: 'uptime', output: 'always building new things' },
@@ -199,7 +200,7 @@ function LiveTerminal({ name, title }: { name: string; title: string }) {
       background: '#0d1117',
       borderRadius: '12px',
       fontFamily: 'var(--font-mono)',
-      fontSize: '0.78rem',
+      fontSize: '0.92rem',
       color: '#c9d1d9',
       width: '100%',
       maxWidth: '400px',

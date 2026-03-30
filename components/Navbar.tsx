@@ -14,6 +14,7 @@ const links = [
   { label: 'Education', href: '#education' },
   { label: 'Skills', href: '#skills' },
   { label: 'More', href: '#more' },
+  { label: 'Contact', href: '#contact' },
 ]
 
 export default function Navbar({ name, profileImage }: NavbarProps) {
