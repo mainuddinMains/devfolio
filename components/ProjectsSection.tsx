@@ -599,6 +599,7 @@ export default function ProjectsSection() {
   function persist(updated: Project[]) {
     setProjects(updated)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+    window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY, newValue: JSON.stringify(updated) }))
   }
 
   function handleAdd(form: FormState) {
