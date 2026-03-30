@@ -127,6 +127,116 @@ function EditableRow({ onEdit, children }: { onEdit: () => void; children: React
   )
 }
 
+// ── Live Terminal ─────────────────────────────────────────────────────────────
+
+function LiveTerminal({ name, title }: { name: string; title: string }) {
+  type TermLine = { text: string; isCmd: boolean }
+  const [lines, setLines] = useState<TermLine[]>([])
+  const [typing, setTyping] = useState('')
+  const cancelledRef = useRef(false)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const nameRef = useRef(name)
+  const titleRef = useRef(title)
+  nameRef.current = name
+  titleRef.current = title
+
+  useEffect(() => {
+    cancelledRef.current = false
+    let seqIdx = 0
+    let accumulated: TermLine[] = []
+
+    function getSequence() {
+      return [
+        { cmd: 'whoami', output: nameRef.current },
+        { cmd: 'cat role.txt', output: titleRef.current },
+        { cmd: 'ls ./projects/', output: 'portfolio/  blog/  api/' },
+        { cmd: 'git log --oneline -1', output: 'b0676f9 latest commit' },
+        { cmd: 'uptime', output: 'always building new things' },
+      ]
+    }
+
+    function typeCmd(cmd: string, output: string, done: () => void) {
+      let charIdx = 0
+      function tick() {
+        if (cancelledRef.current) return
+        if (charIdx <= cmd.length) {
+          setTyping(cmd.slice(0, charIdx))
+          charIdx++
+          timerRef.current = setTimeout(tick, 55)
+        } else {
+          const newLines = [
+            ...accumulated,
+            { text: '$ ' + cmd, isCmd: true },
+            { text: output, isCmd: false },
+          ]
+          accumulated = newLines.slice(-16)
+          setLines([...accumulated])
+          setTyping('')
+          timerRef.current = setTimeout(done, 900)
+        }
+      }
+      timerRef.current = setTimeout(tick, 350)
+    }
+
+    function nextCmd() {
+      if (cancelledRef.current) return
+      const seq = getSequence()
+      const { cmd, output } = seq[seqIdx % seq.length]
+      seqIdx++
+      typeCmd(cmd, output, nextCmd)
+    }
+
+    nextCmd()
+
+    return () => {
+      cancelledRef.current = true
+      if (timerRef.current) clearTimeout(timerRef.current)
+    }
+  }, [])
+
+  return (
+    <div className="live-terminal" style={{
+      background: '#0d1117',
+      borderRadius: '12px',
+      fontFamily: 'var(--font-mono)',
+      fontSize: '0.78rem',
+      color: '#c9d1d9',
+      width: '100%',
+      maxWidth: '400px',
+      overflow: 'hidden',
+      border: '1px solid #30363d',
+      flexShrink: 0,
+      alignSelf: 'flex-start',
+    }}>
+      {/* Title bar */}
+      <div style={{
+        background: '#161b22',
+        padding: '0.5rem 0.85rem',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.4rem',
+        borderBottom: '1px solid #30363d',
+      }}>
+        <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ff5f57', display: 'inline-block' }} />
+        <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ffbd2e', display: 'inline-block' }} />
+        <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#28c840', display: 'inline-block' }} />
+        <span style={{ marginLeft: '0.5rem', color: '#8b949e', fontSize: '0.7rem' }}>terminal</span>
+      </div>
+      {/* Body */}
+      <div style={{ padding: '0.85rem 1rem', minHeight: '200px' }}>
+        {lines.map((line, i) => (
+          <div key={i} style={{ color: line.isCmd ? '#79c0ff' : '#c9d1d9', lineHeight: 1.75 }}>
+            {line.text}
+          </div>
+        ))}
+        <div style={{ color: '#79c0ff', lineHeight: 1.75 }}>
+          {'$ '}{typing}<span className="terminal-cursor">▋</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function HeaderSection({ onNameChange, onProfileImageChange }: HeaderSectionProps) {
   const { preview } = usePreview()
   const [data, setData] = useState<HeaderData>(fallback)
@@ -231,6 +341,10 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
       <span style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 600, color: '#2e5bff', display: 'block', marginBottom: '1.25rem' }}>
         DEVELOPER PORTFOLIO
       </span>
+
+      {/* Two-column layout: left content + right terminal */}
+      <div className="header-columns" style={{ display: 'flex', gap: '3rem', alignItems: 'flex-start' }}>
+      <div style={{ flex: 1, minWidth: 0 }}>
 
       {/* Avatar + Name row */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
@@ -341,6 +455,13 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
         })}
       </div>
 
+      </div>{/* end left column */}
+
+      {/* Right: Live Terminal */}
+      <LiveTerminal name={data.name} title={data.title} />
+
+      </div>{/* end header-columns */}
+
       <style>{`
         .header-section { padding: 6rem 1rem 3rem !important; }
         .header-name { font-size: 2rem !important; }
@@ -348,7 +469,14 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
           .header-section { padding: 8rem 2rem 5rem !important; }
           .header-name { font-size: 3rem !important; }
         }
+        .header-columns { flex-direction: column !important; }
+        @media (min-width: 900px) {
+          .header-columns { flex-direction: row !important; }
+          .live-terminal { max-width: 380px !important; }
+        }
         .avatar-upload:hover .avatar-overlay { opacity: 1 !important; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+        .terminal-cursor { animation: blink 1s step-end infinite; }
       `}</style>
     </section>
   )
