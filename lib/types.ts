@@ -7,6 +7,7 @@ export interface HeaderData {
   instagram: string
   email: string
   profileImage?: string
+  typewriterTexts?: string[]
 }
 
 export interface Project {
