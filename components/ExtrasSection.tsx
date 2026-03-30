@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Extra } from '@/lib/types'
+import { usePreview } from '@/lib/PreviewContext'
 
 const STORAGE_KEY = 'pf_extras'
 
@@ -219,6 +220,7 @@ interface ExtraCardProps {
 }
 
 function ExtraCard({ extra, onEdit, onDelete }: ExtraCardProps) {
+  const { preview } = usePreview()
   const badge = badgeStyle[extra.type]
 
   return (
@@ -244,10 +246,12 @@ function ExtraCard({ extra, onEdit, onDelete }: ExtraCardProps) {
         >
           {extra.type}
         </span>
-        <div style={{ display: 'flex', gap: '0.25rem' }}>
-          <IconBtn onClick={onEdit} title="Edit">✏️</IconBtn>
-          <IconBtn onClick={onDelete} title="Delete">🗑</IconBtn>
-        </div>
+        {!preview && (
+          <div style={{ display: 'flex', gap: '0.25rem' }}>
+            <IconBtn onClick={onEdit} title="Edit">✏️</IconBtn>
+            <IconBtn onClick={onDelete} title="Delete">🗑</IconBtn>
+          </div>
+        )}
       </div>
 
       {/* Title */}
@@ -273,6 +277,7 @@ function ExtraCard({ extra, onEdit, onDelete }: ExtraCardProps) {
 // ── Main section ──────────────────────────────────────────────────────────────
 
 export default function ExtrasSection() {
+  const { preview } = usePreview()
   const [entries, setEntries] = useState<Extra[]>([])
   const [adding, setAdding] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -328,7 +333,7 @@ export default function ExtrasSection() {
       {/* Grid */}
       <div className="extras-grid">
         {entries.map((entry) =>
-          editingId === entry.id ? (
+          !preview && editingId === entry.id ? (
             <ExtrasForm
               key={entry.id}
               initial={toForm(entry)}
@@ -347,7 +352,7 @@ export default function ExtrasSection() {
       </div>
 
       {/* Add form — below grid */}
-      {adding && (
+      {!preview && adding && (
         <div style={{ marginTop: '1rem' }}>
           <ExtrasForm
             initial={emptyForm}
@@ -358,23 +363,25 @@ export default function ExtrasSection() {
       )}
 
       {/* Add button */}
-      <div style={{ marginTop: '1.5rem' }}>
-        <button
-          onClick={() => { setEditingId(null); setAdding(true) }}
-          style={{
-            background: '#2e5bff',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '8px',
-            padding: '0.6rem 1.4rem',
-            fontWeight: 700,
-            fontSize: '0.875rem',
-            cursor: 'pointer',
-          }}
-        >
-          + Add Entry
-        </button>
-      </div>
+      {!preview && (
+        <div style={{ marginTop: '1.5rem' }}>
+          <button
+            onClick={() => { setEditingId(null); setAdding(true) }}
+            style={{
+              background: '#2e5bff',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '0.6rem 1.4rem',
+              fontWeight: 700,
+              fontSize: '0.875rem',
+              cursor: 'pointer',
+            }}
+          >
+            + Add Entry
+          </button>
+        </div>
+      )}
 
       <style>{`
         #more { padding: 2.5rem 1rem !important; }
