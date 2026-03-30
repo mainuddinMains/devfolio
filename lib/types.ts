@@ -6,6 +6,7 @@ export interface HeaderData {
   linkedin: string
   instagram: string
   email: string
+  profileImage?: string
 }
 
 export interface Project {

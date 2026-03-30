@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Project } from '@/lib/types'
+import { usePreview } from '@/lib/PreviewContext'
 
 const STORAGE_KEY = 'pf_projects'
 
@@ -375,6 +376,7 @@ interface ProjectCardProps {
 }
 
 function ProjectCard({ project, onEdit, onDelete, onOpen }: ProjectCardProps) {
+  const { preview } = usePreview()
   const [hovered, setHovered] = useState(false)
 
   return (
@@ -441,13 +443,15 @@ function ProjectCard({ project, onEdit, onDelete, onOpen }: ProjectCardProps) {
           )}
         </div>
 
-        <div
-          style={{ display: 'flex', gap: '0.5rem' }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <IconBtn onClick={onEdit} title="Edit">✏️</IconBtn>
-          <IconBtn onClick={onDelete} title="Delete">🗑</IconBtn>
-        </div>
+        {!preview && (
+          <div
+            style={{ display: 'flex', gap: '0.5rem' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <IconBtn onClick={onEdit} title="Edit">✏️</IconBtn>
+            <IconBtn onClick={onDelete} title="Delete">🗑</IconBtn>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -456,6 +460,7 @@ function ProjectCard({ project, onEdit, onDelete, onOpen }: ProjectCardProps) {
 // ── Section ───────────────────────────────────────────────────────────────────
 
 export default function ProjectsSection() {
+  const { preview } = usePreview()
   const [projects, setProjects] = useState<Project[]>([])
   const [adding, setAdding] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -518,7 +523,7 @@ export default function ProjectsSection() {
         Projects
       </h2>
 
-      {adding && (
+      {!preview && adding && (
         <div style={{ marginBottom: '1.25rem' }}>
           <ProjectForm initial={emptyForm} onSave={handleAdd} onCancel={() => setAdding(false)} />
         </div>
@@ -526,7 +531,7 @@ export default function ProjectsSection() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: '1.25rem' }} className="projects-grid">
         {projects.map((project) =>
-          editingId === project.id ? (
+          !preview && editingId === project.id ? (
             <ProjectForm
               key={project.id}
               initial={toForm(project)}
@@ -545,19 +550,21 @@ export default function ProjectsSection() {
         )}
       </div>
 
-      <div style={{ marginTop: '1.5rem' }}>
-        <button
-          onClick={() => { setEditingId(null); setAdding(true) }}
-          className="add-project-btn"
-          style={{
-            background: '#2e5bff', color: '#fff', border: 'none',
-            borderRadius: '8px', padding: '0.6rem 1.4rem',
-            fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer', width: '100%',
-          }}
-        >
-          + Add Project
-        </button>
-      </div>
+      {!preview && (
+        <div style={{ marginTop: '1.5rem' }}>
+          <button
+            onClick={() => { setEditingId(null); setAdding(true) }}
+            className="add-project-btn"
+            style={{
+              background: '#2e5bff', color: '#fff', border: 'none',
+              borderRadius: '8px', padding: '0.6rem 1.4rem',
+              fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer', width: '100%',
+            }}
+          >
+            + Add Project
+          </button>
+        </div>
+      )}
 
       {modalProject && (
         <ProjectModal project={modalProject} onClose={() => setModalProject(null)} />

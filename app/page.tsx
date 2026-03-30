@@ -10,6 +10,7 @@ import SkillsSection from '@/components/SkillsSection'
 import ExtrasSection from '@/components/ExtrasSection'
 import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/Footer'
+import { PreviewProvider } from '@/lib/PreviewContext'
 
 const divider = (
   <div style={{ borderTop: '1px solid rgba(100,96,88,0.15)', maxWidth: '1100px', margin: '0 auto' }} />
@@ -17,11 +18,12 @@ const divider = (
 
 export default function Home() {
   const [name, setName] = useState('Your Name')
+  const [profileImage, setProfileImage] = useState<string>('')
 
   return (
-    <>
-      <Navbar name={name} />
-      <HeaderSection onNameChange={setName} />
+    <PreviewProvider>
+      <Navbar name={name} profileImage={profileImage} />
+      <HeaderSection onNameChange={setName} onProfileImageChange={setProfileImage} />
       {divider}
       <ProjectsSection />
       {divider}
@@ -35,6 +37,6 @@ export default function Home() {
       {divider}
       <ContactSection />
       <Footer name={name} />
-    </>
+    </PreviewProvider>
   )
 }
