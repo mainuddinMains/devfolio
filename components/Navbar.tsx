@@ -1,9 +1,11 @@
 'use client'
 
 import { useState } from 'react'
+import { usePreview } from '@/lib/PreviewContext'
 
 interface NavbarProps {
   name: string
+  profileImage?: string
 }
 
 const links = [
@@ -14,8 +16,9 @@ const links = [
   { label: 'More', href: '#more' },
 ]
 
-export default function Navbar({ name }: NavbarProps) {
+export default function Navbar({ name, profileImage }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const { preview, setPreview } = usePreview()
 
   return (
     <nav
@@ -34,13 +37,27 @@ export default function Navbar({ name }: NavbarProps) {
       }}
     >
       <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontWeight: 700, color: '#2e5bff', fontSize: '0.95rem', letterSpacing: '0.05em' }}>
-          {name || 'PORTFOLIO'}
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          {profileImage && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={profileImage}
+              alt="Profile"
+              style={{
+                width: '28px', height: '28px', borderRadius: '50%',
+                objectFit: 'cover', flexShrink: 0,
+                border: '1.5px solid rgba(46,91,255,0.25)',
+              }}
+            />
+          )}
+          <span style={{ fontWeight: 700, color: '#2e5bff', fontSize: '0.95rem', letterSpacing: '0.05em' }}>
+            {name || 'PORTFOLIO'}
+          </span>
+        </div>
 
         {/* Desktop links */}
         <div className="hidden sm:flex" style={{ gap: '2rem', alignItems: 'center' }}>
-          {links.map((link) => (
+          {!preview && links.map((link) => (
             <a
               key={link.href}
               href={link.href}
@@ -58,6 +75,23 @@ export default function Navbar({ name }: NavbarProps) {
               {link.label}
             </a>
           ))}
+          <button
+            onClick={() => setPreview(!preview)}
+            style={{
+              background: preview ? '#1a1826' : 'transparent',
+              border: `1px solid ${preview ? '#1a1826' : '#c0bbb3'}`,
+              color: preview ? '#f8f7f3' : '#6b6c7e',
+              borderRadius: '6px',
+              padding: '0.3rem 0.75rem',
+              fontSize: '0.775rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              letterSpacing: '0.03em',
+              transition: 'all 0.15s',
+            }}
+          >
+            {preview ? '✕ Exit Preview' : '👁 Preview'}
+          </button>
         </div>
 
         {/* Hamburger */}
@@ -88,7 +122,7 @@ export default function Navbar({ name }: NavbarProps) {
             margin: '0 auto',
           }}
         >
-          {links.map((link) => (
+          {!preview && links.map((link) => (
             <a
               key={link.href}
               href={link.href}
@@ -103,6 +137,23 @@ export default function Navbar({ name }: NavbarProps) {
               {link.label}
             </a>
           ))}
+          <button
+            onClick={() => { setPreview(!preview); setMenuOpen(false) }}
+            style={{
+              background: preview ? '#1a1826' : 'transparent',
+              border: `1px solid ${preview ? '#1a1826' : '#c0bbb3'}`,
+              color: preview ? '#f8f7f3' : '#6b6c7e',
+              borderRadius: '6px',
+              padding: '0.3rem 0.75rem',
+              fontSize: '0.775rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              letterSpacing: '0.03em',
+              alignSelf: 'flex-start',
+            }}
+          >
+            {preview ? '✕ Exit Preview' : '👁 Preview'}
+          </button>
         </div>
       )}
     </nav>
