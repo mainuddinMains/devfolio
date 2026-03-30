@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Education } from '@/lib/types'
+import { usePreview } from '@/lib/PreviewContext'
 
 const STORAGE_KEY = 'pf_education'
 
@@ -277,6 +278,7 @@ interface EducationCardProps {
 }
 
 function EducationCard({ education, onEdit, onDelete }: EducationCardProps) {
+  const { preview } = usePreview()
   return (
     <div
       style={{
@@ -334,10 +336,12 @@ function EducationCard({ education, onEdit, onDelete }: EducationCardProps) {
             >
               {education.startDate}{education.endDate ? ` — ${education.endDate}` : ''}
             </span>
-            <div style={{ display: 'flex', gap: '0.25rem' }}>
-              <IconBtn onClick={onEdit} title="Edit">✏️</IconBtn>
-              <IconBtn onClick={onDelete} title="Delete">🗑</IconBtn>
-            </div>
+            {!preview && (
+              <div style={{ display: 'flex', gap: '0.25rem' }}>
+                <IconBtn onClick={onEdit} title="Edit">✏️</IconBtn>
+                <IconBtn onClick={onDelete} title="Delete">🗑</IconBtn>
+              </div>
+            )}
           </div>
         </div>
 
@@ -362,6 +366,7 @@ function EducationCard({ education, onEdit, onDelete }: EducationCardProps) {
 // ── Main section ──────────────────────────────────────────────────────────────
 
 export default function EducationSection() {
+  const { preview } = usePreview()
   const [entries, setEntries] = useState<Education[]>([])
   const [adding, setAdding] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -428,7 +433,7 @@ export default function EducationSection() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {entries.map((entry) =>
-          editingId === entry.id ? (
+          !preview && editingId === entry.id ? (
             <EducationForm
               key={entry.id}
               initial={toForm(entry)}
@@ -445,7 +450,7 @@ export default function EducationSection() {
           )
         )}
 
-        {adding && (
+        {!preview && adding && (
           <EducationForm
             initial={emptyForm}
             onSave={handleAdd}
@@ -454,23 +459,25 @@ export default function EducationSection() {
         )}
       </div>
 
-      <div style={{ marginTop: '1.5rem' }}>
-        <button
-          onClick={() => { setEditingId(null); setAdding(true) }}
-          style={{
-            background: '#2e5bff',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '8px',
-            padding: '0.6rem 1.4rem',
-            fontWeight: 700,
-            fontSize: '0.875rem',
-            cursor: 'pointer',
-          }}
-        >
-          + Add Education
-        </button>
-      </div>
+      {!preview && (
+        <div style={{ marginTop: '1.5rem' }}>
+          <button
+            onClick={() => { setEditingId(null); setAdding(true) }}
+            style={{
+              background: '#2e5bff',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '0.6rem 1.4rem',
+              fontWeight: 700,
+              fontSize: '0.875rem',
+              cursor: 'pointer',
+            }}
+          >
+            + Add Education
+          </button>
+        </div>
+      )}
 
       <style>{`
         #education { padding: 2.5rem 1rem !important; }
