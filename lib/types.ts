@@ -12,10 +12,12 @@ export interface HeaderData {
 export interface Project {
   id: string
   title: string
+  summary?: string
   description: string
   techStack: string[]
   github: string
   url: string
+  screenshot?: string
   createdAt: string
 }
 
