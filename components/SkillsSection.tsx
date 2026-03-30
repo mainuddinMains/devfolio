@@ -230,11 +230,13 @@ interface CategoryRowProps {
   skills: Skill[]
   onDeleteSkill: (id: string) => void
   onAddSkill: (category: string, name: string) => void
+  onDeleteCategory: (category: string) => void
 }
 
-function CategoryRow({ category, skills, onDeleteSkill, onAddSkill }: CategoryRowProps) {
+function CategoryRow({ category, skills, onDeleteSkill, onAddSkill, onDeleteCategory }: CategoryRowProps) {
   const { preview } = usePreview()
   const [addingSkill, setAddingSkill] = useState(false)
+  const [labelHovered, setLabelHovered] = useState(false)
 
   return (
     <div
@@ -248,20 +250,49 @@ function CategoryRow({ category, skills, onDeleteSkill, onAddSkill }: CategoryRo
       }}
     >
       {/* Category label */}
-      <span
-        style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: '0.8rem',
-          color: '#6b6c7e',
-          textTransform: 'uppercase',
-          letterSpacing: '0.08em',
-          minWidth: '130px',
-          paddingTop: '0.3rem',
-          flexShrink: 0,
-        }}
+      <div
+        style={{ position: 'relative', minWidth: '130px', paddingTop: '0.3rem', flexShrink: 0 }}
+        onMouseEnter={() => setLabelHovered(true)}
+        onMouseLeave={() => setLabelHovered(false)}
       >
-        {category}
-      </span>
+        <span
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.8rem',
+            color: '#6b6c7e',
+            textTransform: 'uppercase',
+            letterSpacing: '0.08em',
+          }}
+        >
+          {category}
+        </span>
+        {!preview && labelHovered && (
+          <button
+            onClick={() => onDeleteCategory(category)}
+            title="Remove category"
+            style={{
+              position: 'absolute',
+              top: '0',
+              right: '0',
+              width: '16px',
+              height: '16px',
+              background: '#f38ba8',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '50%',
+              fontSize: '0.6rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 0,
+              lineHeight: 1,
+            }}
+          >
+            ×
+          </button>
+        )}
+      </div>
 
       {/* Pills area */}
       <div style={{ flex: 1, display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
@@ -353,6 +384,10 @@ export default function SkillsSection() {
     persist([...skills, skill])
   }
 
+  function handleDeleteCategory(category: string) {
+    persist(skills.filter((s) => s.category !== category))
+  }
+
   function handleAddCategory(category: string) {
     // Only add if category doesn't already exist
     if (!grouped.has(category)) {
@@ -378,6 +413,7 @@ export default function SkillsSection() {
           skills={categorySkills.filter((s) => s.name !== '__placeholder__')}
           onDeleteSkill={handleDeleteSkill}
           onAddSkill={handleAddSkill}
+          onDeleteCategory={handleDeleteCategory}
         />
       ))}
 
