@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { HeaderData } from '@/lib/types'
+import { usePreview } from '@/lib/PreviewContext'
 
 const STORAGE_KEY = 'pf_header'
 
@@ -17,9 +18,10 @@ const fallback: HeaderData = {
 
 interface HeaderSectionProps {
   onNameChange: (name: string) => void
+  onProfileImageChange?: (image: string) => void
 }
 
-type EditableField = keyof HeaderData
+type EditableField = Exclude<keyof HeaderData, 'profileImage'>
 
 interface FieldState {
   field: EditableField
@@ -125,12 +127,16 @@ function EditableRow({ onEdit, children }: { onEdit: () => void; children: React
   )
 }
 
-export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
+export default function HeaderSection({ onNameChange, onProfileImageChange }: HeaderSectionProps) {
+  const { preview } = usePreview()
   const [data, setData] = useState<HeaderData>(fallback)
   const [editing, setEditing] = useState<FieldState | null>(null)
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
+  const imageInputRef = useRef<HTMLInputElement>(null)
   const onNameChangeRef = useRef(onNameChange)
   onNameChangeRef.current = onNameChange
+  const onProfileImageChangeRef = useRef(onProfileImageChange)
+  onProfileImageChangeRef.current = onProfileImageChange
 
   useEffect(() => {
     try {
@@ -139,6 +145,7 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
         const parsed = JSON.parse(stored) as HeaderData
         setData(parsed)
         onNameChangeRef.current(parsed.name)
+        if (parsed.profileImage) onProfileImageChangeRef.current?.(parsed.profileImage)
       } else {
         onNameChangeRef.current(fallback.name)
       }
@@ -146,6 +153,20 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
       onNameChangeRef.current(fallback.name)
     }
   }, [])
+
+  const handleImageUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      const base64 = reader.result as string
+      const updated = { ...data, profileImage: base64 }
+      setData(updated)
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+      onProfileImageChangeRef.current?.(base64)
+    }
+    reader.readAsDataURL(file)
+  }, [data])
 
   useEffect(() => {
     if (editing && inputRef.current) inputRef.current.focus()
@@ -213,18 +234,48 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
 
       {/* Avatar + Name row */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-        <div style={{
-          width: '64px', height: '64px', borderRadius: '50%',
-          background: 'linear-gradient(135deg, #2e5bff 0%, #b8c3ff 100%)',
-          color: '#fff', fontWeight: 800, fontSize: '1.3rem',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          flexShrink: 0,
-        }}>
-          {getInitials(data.name)}
+        <div
+          title={preview ? undefined : 'Click to upload photo'}
+          onClick={preview ? undefined : () => imageInputRef.current?.click()}
+          className={preview ? undefined : 'avatar-upload'}
+          style={{
+            width: '64px', height: '64px', borderRadius: '50%',
+            background: data.profileImage ? 'transparent' : 'linear-gradient(135deg, #2e5bff 0%, #b8c3ff 100%)',
+            color: '#fff', fontWeight: 800, fontSize: '1.3rem',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0, cursor: preview ? 'default' : 'pointer', overflow: 'hidden', position: 'relative',
+          }}
+        >
+          {data.profileImage ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={data.profileImage} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          ) : (
+            getInitials(data.name)
+          )}
+          {!preview && (
+            <div className="avatar-overlay" style={{
+              position: 'absolute', inset: 0, borderRadius: '50%',
+              background: 'rgba(0,0,0,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              opacity: 0, transition: 'opacity 0.15s', fontSize: '1.25rem',
+            }}>
+              📷
+            </div>
+          )}
         </div>
+        <input
+          ref={imageInputRef}
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          onChange={handleImageUpload}
+        />
 
         <div>
-          {isEditing('name') ? inlineEditor('name') : (
+          {!preview && isEditing('name') ? inlineEditor('name') : preview ? (
+            <h1 className="header-name" style={{ fontSize: '3rem', fontWeight: 800, color: '#1a1826', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+              {data.name}
+            </h1>
+          ) : (
             <EditableRow onEdit={() => startEdit('name')}>
               <h1 className="header-name" style={{ fontSize: '3rem', fontWeight: 800, color: '#1a1826', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
                 {data.name}
@@ -236,7 +287,9 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
 
       {/* Title */}
       <div style={{ marginBottom: '1rem' }}>
-        {isEditing('title') ? inlineEditor('title') : (
+        {!preview && isEditing('title') ? inlineEditor('title') : preview ? (
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', color: '#2e5bff' }}>{data.title}</span>
+        ) : (
           <EditableRow onEdit={() => startEdit('title')}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', color: '#2e5bff' }}>
               {data.title}
@@ -247,7 +300,9 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
 
       {/* Bio */}
       <div style={{ marginBottom: '2rem', maxWidth: '580px' }}>
-        {isEditing('bio') ? inlineEditor('bio', true) : (
+        {!preview && isEditing('bio') ? inlineEditor('bio', true) : preview ? (
+          <span style={{ fontSize: '1rem', color: '#4f505e', lineHeight: 1.8 }}>{data.bio}</span>
+        ) : (
           <EditableRow onEdit={() => startEdit('bio')}>
             <span style={{ fontSize: '1rem', color: '#4f505e', lineHeight: 1.8 }}>
               {data.bio}
@@ -260,6 +315,9 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
       <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', alignItems: 'center' }}>
         {(['github', 'linkedin', 'instagram', 'email'] as const).map((platform) => {
           const href = platform === 'email' ? (data.email ? `mailto:${data.email}` : '') : data[platform as keyof HeaderData]
+          if (preview) {
+            return href ? <SocialIconButton key={platform} href={href} platform={platform} /> : null
+          }
           return (
             <div key={platform} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}
               className="editable-row"
@@ -290,6 +348,7 @@ export default function HeaderSection({ onNameChange }: HeaderSectionProps) {
           .header-section { padding: 8rem 2rem 5rem !important; }
           .header-name { font-size: 3rem !important; }
         }
+        .avatar-upload:hover .avatar-overlay { opacity: 1 !important; }
       `}</style>
     </section>
   )
