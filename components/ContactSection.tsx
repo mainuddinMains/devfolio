@@ -143,11 +143,11 @@ function EditableChannel({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Icon box */}
-      {value && href ? (
+      {/* Icon box — phone is never a clickable link */}
+      {value && href && field !== 'phone' ? (
         <a
           href={href}
-          target={field !== 'email' && field !== 'phone' ? '_blank' : undefined}
+          target={field !== 'email' ? '_blank' : undefined}
           rel="noopener noreferrer"
           style={{
             width: '48px', height: '48px', borderRadius: '8px',
@@ -163,9 +163,10 @@ function EditableChannel({
       ) : (
         <div style={{
           width: '48px', height: '48px', borderRadius: '8px',
-          background: '#f5f3ef', border: '1px dashed rgba(100,96,88,0.25)',
+          background: field === 'phone' && value ? 'rgba(46,91,255,0.06)' : '#f5f3ef',
+          border: `1px ${value && field === 'phone' ? 'solid rgba(100,96,88,0.18)' : 'dashed rgba(100,96,88,0.25)'}`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: '#c0bbb3', flexShrink: 0,
+          color: field === 'phone' && value ? '#2e5bff' : '#c0bbb3', flexShrink: 0,
         }}>
           {channelIcons[field]}
         </div>
@@ -173,12 +174,19 @@ function EditableChannel({
 
       {/* Text */}
       <div style={{ flex: 1, minWidth: 0 }}>
-        <p style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', color: '#6b6c7e', letterSpacing: '0.06em', marginBottom: '0.1rem' }}>
-          {channelLabels[field]}
-        </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.1rem' }}>
+          <p style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', color: '#6b6c7e', letterSpacing: '0.06em' }}>
+            {channelLabels[field]}
+          </p>
+          {field === 'phone' && (
+            <span style={{ fontSize: '0.6rem', background: 'rgba(100,96,88,0.1)', color: '#6b6c7e', borderRadius: '4px', padding: '0.05rem 0.35rem', letterSpacing: '0.04em', fontWeight: 600 }}>
+              🔒 private
+            </span>
+          )}
+        </div>
         {value ? (
-          <p style={{ fontSize: '0.875rem', fontWeight: 500, color: hovered ? '#1a1826' : '#4f505e', transition: 'color 0.15s', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {value}
+          <p style={{ fontSize: '0.875rem', fontWeight: 500, color: '#4f505e', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {field === 'phone' ? value.replace(/\d(?=\d{4})/g, '•') : value}
           </p>
         ) : (
           !preview && (
@@ -210,6 +218,7 @@ function EditableChannel({
 // ── Main section ───────────────────────────────────────────────────────────────
 
 export default function ContactSection() {
+  const { preview } = usePreview()
   const [form, setForm] = useState({ name: '', email: '', delivery: 'email', message: '' })
   const [errors, setErrors] = useState<Partial<Record<'name' | 'email' | 'message', string>>>({})
   const [submitted, setSubmitted] = useState(false)
@@ -271,14 +280,16 @@ export default function ContactSection() {
               Professional Channels
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
-              {(Object.keys(channelLabels) as (keyof ContactInfo)[]).map((field) => (
-                <EditableChannel
-                  key={field}
-                  field={field}
-                  value={contactInfo[field]}
-                  onSave={(val) => saveChannel(field, val)}
-                />
-              ))}
+              {(Object.keys(channelLabels) as (keyof ContactInfo)[])
+                .filter((field) => !(preview && field === 'phone'))
+                .map((field) => (
+                  <EditableChannel
+                    key={field}
+                    field={field}
+                    value={contactInfo[field]}
+                    onSave={(val) => saveChannel(field, val)}
+                  />
+                ))}
             </div>
           </div>
         </div>
