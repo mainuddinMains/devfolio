@@ -148,15 +148,15 @@ function Typewriter({ texts }: { texts: string[] }) {
         if (phase === 'typing') {
           const next = target.slice(0, prev.length + 1)
           if (next === target) {
-            timerRef.current = setTimeout(() => { setPhase('pause'); tick() }, 1400)
+            timerRef.current = setTimeout(() => { setPhase('pause'); tick() }, 2800)
           } else {
-            timerRef.current = setTimeout(tick, 80)
+            timerRef.current = setTimeout(tick, 180)
           }
           return next
         }
         if (phase === 'pause') {
           setPhase('deleting')
-          timerRef.current = setTimeout(tick, 50)
+          timerRef.current = setTimeout(tick, 120)
           return prev
         }
         // deleting
@@ -164,9 +164,9 @@ function Typewriter({ texts }: { texts: string[] }) {
         if (next === '') {
           setIdx((i) => i + 1)
           setPhase('typing')
-          timerRef.current = setTimeout(tick, 300)
+          timerRef.current = setTimeout(tick, 500)
         } else {
-          timerRef.current = setTimeout(tick, 40)
+          timerRef.current = setTimeout(tick, 90)
         }
         return next
       })
@@ -286,7 +286,7 @@ function TypewriterEditor({
 
 function CoderCharacter() {
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', width: '100%', position: 'relative', zIndex: 1, marginBottom: '-10px' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
       <svg viewBox="0 0 160 100" width="180" height="112" aria-hidden="true" style={{ display: 'block', overflow: 'visible' }}>
         <g className="cc-body">
           {/* Torso */}
@@ -448,6 +448,7 @@ function LiveTerminal({ name, title }: { name: string; title: string }) {
       fontSize: '0.92rem',
       color: '#c9d1d9',
       width: '100%',
+      maxWidth: '400px',
       overflow: 'hidden',
       border: '1px solid #30363d',
     }}>
@@ -466,7 +467,7 @@ function LiveTerminal({ name, title }: { name: string; title: string }) {
         <span style={{ marginLeft: '0.5rem', color: '#8b949e', fontSize: '0.7rem' }}>terminal</span>
       </div>
       {/* Body */}
-      <div style={{ padding: '0.85rem 1rem', minHeight: '200px' }}>
+      <div style={{ padding: '0.85rem 1rem', height: '200px', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
         {lines.map((line, i) => (
           <div key={i} style={{ color: line.isCmd ? '#79c0ff' : '#c9d1d9', lineHeight: 1.75 }}>
             {line.text}
@@ -488,6 +489,7 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
   const [editingTypewriter, setEditingTypewriter] = useState(false)
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
   const imageInputRef = useRef<HTMLInputElement>(null)
+  const resumeInputRef = useRef<HTMLInputElement>(null)
   const onNameChangeRef = useRef(onNameChange)
   onNameChangeRef.current = onNameChange
   const onProfileImageChangeRef = useRef(onProfileImageChange)
@@ -522,6 +524,37 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
     }
     reader.readAsDataURL(file)
   }, [data])
+
+  const handleResumeUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      const base64 = reader.result as string
+      const updated = { ...data, resumeFile: base64 }
+      setData(updated)
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+    }
+    reader.readAsDataURL(file)
+    // reset input so same file can be re-uploaded
+    e.target.value = ''
+  }, [data])
+
+  function handleResumeDownload() {
+    if (!data.resumeFile) return
+    const firstName = data.name.trim().split(/\s+/)[0]
+    const filename = `${firstName}_resume.pdf`
+    const link = document.createElement('a')
+    link.href = data.resumeFile
+    link.download = filename
+    link.click()
+  }
+
+  function handleResumeRemove() {
+    const updated = { ...data, resumeFile: undefined }
+    setData(updated)
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+  }
 
   useEffect(() => {
     if (editing && inputRef.current) inputRef.current.focus()
@@ -725,6 +758,85 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
             </div>
           )
         })}
+      </div>
+
+      {/* Resume */}
+      <div style={{ marginTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+        {data.resumeFile ? (
+          <>
+            <button
+              onClick={handleResumeDownload}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.45rem',
+                background: '#2e5bff', color: '#fff', border: 'none',
+                borderRadius: '8px', padding: '0.5rem 1.1rem',
+                fontSize: '0.875rem', fontWeight: 700, cursor: 'pointer',
+                transition: 'background 0.15s',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = '#1a44e8')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = '#2e5bff')}
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Download Resume
+            </button>
+            {!preview && (
+              <>
+                <button
+                  onClick={() => resumeInputRef.current?.click()}
+                  style={{
+                    background: 'none', border: '1px solid #e2ddd6', borderRadius: '8px',
+                    padding: '0.5rem 0.9rem', fontSize: '0.8rem', cursor: 'pointer',
+                    color: '#6b6c7e', transition: 'border-color 0.15s',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#2e5bff')}
+                  onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#e2ddd6')}
+                >
+                  Replace
+                </button>
+                <button
+                  onClick={handleResumeRemove}
+                  style={{
+                    background: 'none', border: 'none', padding: '0.5rem 0.4rem',
+                    fontSize: '0.8rem', cursor: 'pointer', color: '#c0bbb3',
+                    transition: 'color 0.15s',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = '#f38ba8')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = '#c0bbb3')}
+                  title="Remove resume"
+                >
+                  ✕
+                </button>
+              </>
+            )}
+          </>
+        ) : !preview ? (
+          <button
+            onClick={() => resumeInputRef.current?.click()}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.45rem',
+              background: 'none', color: '#6b6c7e',
+              border: '1.5px dashed #c0bbb3', borderRadius: '8px',
+              padding: '0.5rem 1.1rem', fontSize: '0.875rem',
+              cursor: 'pointer', transition: 'border-color 0.15s, color 0.15s',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#2e5bff'; e.currentTarget.style.color = '#2e5bff' }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#c0bbb3'; e.currentTarget.style.color = '#6b6c7e' }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            Upload Resume
+          </button>
+        ) : null}
+        <input
+          ref={resumeInputRef}
+          type="file"
+          accept="application/pdf"
+          style={{ display: 'none' }}
+          onChange={handleResumeUpload}
+        />
       </div>
 
       </div>{/* end left column */}
