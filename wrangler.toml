@@ -1,0 +1,14 @@
+name            = "devfolio"
+compatibility_date  = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# ── D1 Database ───────────────────────────────────────────────────────────────
+# After running `npx wrangler d1 create devfolio-db`, paste the
+# generated database_id below and remove the placeholder.
+[[d1_databases]]
+binding      = "DB"
+database_name = "devfolio-db"
+database_id  = "PASTE_YOUR_DATABASE_ID_HERE"
+
+# ── Pages / local dev ─────────────────────────────────────────────────────────
+pages_build_output_dir = ".vercel/output/static"
