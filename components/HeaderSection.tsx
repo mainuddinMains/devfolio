@@ -561,7 +561,7 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
   }, [editing])
 
   function startEdit(field: EditableField) {
-    setEditing({ field, draft: data[field] })
+    setEditing({ field, draft: data[field] ?? '' })
   }
 
   function handleSave() {

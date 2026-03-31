@@ -9,11 +9,12 @@ export const runtime = 'edge'
 
 export async function GET(
   _request: Request,
-  { params }: { params: { key: string } }
+  { params }: { params: Promise<{ key: string }> }
 ) {
   try {
+    const { key } = await params
     const { env } = getRequestContext<CloudflareEnv>()
-    const data = await getSection(env.DB, params.key as PortfolioKey)
+    const data = await getSection(env.DB, key as PortfolioKey)
     return Response.json({ ok: true, data })
   } catch (err) {
     console.error('[portfolio GET key]', err)
