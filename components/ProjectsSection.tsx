@@ -10,6 +10,7 @@ const samples: Project[] = [
   {
     id: '1',
     title: 'Portfolio Website',
+    summary: 'Personal portfolio with dark mode and live editing.',
     description: 'Personal portfolio built with Next.js and Tailwind CSS.',
     techStack: ['Next.js', 'TypeScript', 'Tailwind'],
     github: '',
@@ -19,6 +20,7 @@ const samples: Project[] = [
   {
     id: '2',
     title: 'Task Manager App',
+    summary: 'Full-stack task app with real-time updates and auth.',
     description:
       'A full-stack task management app with authentication and real-time updates.',
     techStack: ['React', 'Node.js', 'PostgreSQL'],
@@ -72,21 +74,25 @@ const ExternalLinkIcon = () => (
 
 interface FormState {
   title: string
+  summary: string
   description: string
   techStack: string
   github: string
   url: string
+  screenshot: string
 }
 
-const emptyForm: FormState = { title: '', description: '', techStack: '', github: '', url: '' }
+const emptyForm: FormState = { title: '', summary: '', description: '', techStack: '', github: '', url: '', screenshot: '' }
 
 function toForm(p: Project): FormState {
   return {
     title: p.title,
+    summary: p.summary ?? '',
     description: p.description,
     techStack: p.techStack.join(', '),
     github: p.github ?? '',
     url: p.url,
+    screenshot: p.screenshot ?? '',
   }
 }
 
@@ -99,12 +105,21 @@ interface ProjectFormProps {
 function ProjectForm({ initial, onSave, onCancel }: ProjectFormProps) {
   const [form, setForm] = useState<FormState>(initial)
   const [errors, setErrors] = useState<{ title?: string; description?: string }>({})
+  const fileRef = useRef<HTMLInputElement>(null)
 
   function set(key: keyof FormState, value: string) {
     setForm((f) => ({ ...f, [key]: value }))
     if (errors[key as 'title' | 'description']) {
       setErrors((e) => ({ ...e, [key]: undefined }))
     }
+  }
+
+  function handleScreenshot(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => set('screenshot', reader.result as string)
+    reader.readAsDataURL(file)
   }
 
   function handleSave() {
@@ -127,6 +142,55 @@ function ProjectForm({ initial, onSave, onCancel }: ProjectFormProps) {
         gap: '0.875rem',
       }}
     >
+      {/* Screenshot upload */}
+      <div>
+        <label style={labelStyle}>Screenshot</label>
+        <div
+          onClick={() => fileRef.current?.click()}
+          style={{
+            border: '2px dashed #e2ddd6',
+            borderRadius: '8px',
+            padding: '0.75rem',
+            cursor: 'pointer',
+            textAlign: 'center',
+            background: '#f5f3ef',
+            transition: 'border-color 0.15s',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.borderColor = '#2e5bff')}
+          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.borderColor = '#e2ddd6')}
+        >
+          {form.screenshot ? (
+            <div style={{ position: 'relative' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={form.screenshot}
+                alt="Screenshot preview"
+                style={{ width: '100%', maxHeight: '180px', objectFit: 'cover', borderRadius: '6px', display: 'block' }}
+              />
+              <button
+                onClick={(e) => { e.stopPropagation(); set('screenshot', '') }}
+                style={{
+                  position: 'absolute', top: '0.4rem', right: '0.4rem',
+                  background: 'rgba(0,0,0,0.55)', color: '#fff', border: 'none',
+                  borderRadius: '50%', width: '24px', height: '24px',
+                  cursor: 'pointer', fontSize: '0.8rem', lineHeight: 1,
+                }}
+                title="Remove screenshot"
+              >
+                ×
+              </button>
+            </div>
+          ) : (
+            <span style={{ fontSize: '0.8rem', color: '#6b6c7e' }}>
+              📷 Click to upload screenshot
+            </span>
+          )}
+        </div>
+        <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleScreenshot} />
+      </div>
+
       <div>
         <label style={labelStyle}>Title *</label>
         <input
@@ -138,6 +202,29 @@ function ProjectForm({ initial, onSave, onCancel }: ProjectFormProps) {
         {errors.title && <span style={{ color: '#f38ba8', fontSize: '0.75rem' }}>{errors.title}</span>}
       </div>
 
+      {/* Short summary + live link side by side */}
+      <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+        <div style={{ flex: '1 1 200px' }}>
+          <label style={labelStyle}>Short Summary</label>
+          <input
+            style={inputStyle}
+            value={form.summary}
+            onChange={(e) => set('summary', e.target.value)}
+            placeholder="One-line description shown on the card"
+            maxLength={100}
+          />
+        </div>
+        <div style={{ flex: '1 1 200px' }}>
+          <label style={labelStyle}>Live Link</label>
+          <input
+            style={inputStyle}
+            value={form.url}
+            onChange={(e) => set('url', e.target.value)}
+            placeholder="https://myproject.com"
+          />
+        </div>
+      </div>
+
       <div>
         <label style={labelStyle}>Description *</label>
         <textarea
@@ -145,7 +232,7 @@ function ProjectForm({ initial, onSave, onCancel }: ProjectFormProps) {
           rows={3}
           value={form.description}
           onChange={(e) => set('description', e.target.value)}
-          placeholder="What does this project do?"
+          placeholder="Full description shown in the detail modal"
         />
         {errors.description && <span style={{ color: '#f38ba8', fontSize: '0.75rem' }}>{errors.description}</span>}
       </div>
@@ -167,16 +254,6 @@ function ProjectForm({ initial, onSave, onCancel }: ProjectFormProps) {
           value={form.github}
           onChange={(e) => set('github', e.target.value)}
           placeholder="https://github.com/username/repo"
-        />
-      </div>
-
-      <div>
-        <label style={labelStyle}>Live Demo URL</label>
-        <input
-          style={inputStyle}
-          value={form.url}
-          onChange={(e) => set('url', e.target.value)}
-          placeholder="https://myproject.com"
         />
       </div>
 
@@ -261,10 +338,27 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
           ×
         </button>
 
+        {/* Screenshot */}
+        {project.screenshot && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={project.screenshot}
+            alt={`${project.title} screenshot`}
+            style={{ width: '100%', borderRadius: '8px', marginBottom: '1.25rem', display: 'block', border: '1px solid #e2ddd6' }}
+          />
+        )}
+
         {/* Title */}
-        <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#1a1826', paddingRight: '2rem', marginBottom: '1rem' }}>
+        <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#1a1826', paddingRight: '2rem', marginBottom: '0.5rem' }}>
           {project.title}
         </h3>
+
+        {/* Summary */}
+        {project.summary && (
+          <p style={{ fontSize: '0.9rem', color: '#2e5bff', fontWeight: 600, marginBottom: '0.75rem' }}>
+            {project.summary}
+          </p>
+        )}
 
         {/* Description */}
         <p style={{ fontSize: '0.9375rem', color: '#6b6c7e', lineHeight: 1.8, marginBottom: '1.25rem' }}>
@@ -387,71 +481,98 @@ function ProjectCard({ project, onEdit, onDelete, onOpen }: ProjectCardProps) {
         background: '#ffffff',
         border: `1px solid ${hovered ? '#c0bbb3' : '#e2ddd6'}`,
         borderRadius: '12px',
-        padding: '1.5rem',
+        overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        transition: 'border-color 0.2s',
+        transition: 'border-color 0.2s, box-shadow 0.2s',
+        boxShadow: hovered ? '0 4px 16px rgba(0,0,0,0.07)' : 'none',
         cursor: 'pointer',
       }}
       onClick={onOpen}
     >
-      {/* Title */}
-      <p style={{ fontWeight: 700, fontSize: '1rem', color: '#1a1826', marginBottom: '0.5rem' }}>
-        {project.title}
-      </p>
+      {/* Screenshot */}
+      {project.screenshot ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={project.screenshot}
+          alt={`${project.title} screenshot`}
+          style={{ width: '100%', height: '160px', objectFit: 'cover', display: 'block', borderBottom: '1px solid #e2ddd6' }}
+        />
+      ) : (
+        <div style={{
+          width: '100%', height: '8px',
+          background: 'linear-gradient(90deg, #2e5bff22, #2e5bff11)',
+        }} />
+      )}
 
-      {/* Description — 3-line clamp */}
-      <p
-        style={{
-          fontSize: '0.875rem', color: '#6b6c7e', lineHeight: 1.7,
-          marginBottom: '0.75rem', flex: 1,
-          display: '-webkit-box', WebkitLineClamp: 3,
-          WebkitBoxOrient: 'vertical', overflow: 'hidden',
-        }}
-      >
-        {project.description}
-      </p>
-
-      {/* Tech tags */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem', marginBottom: '1rem' }}>
-        {project.techStack.map((tag) => (
-          <span
-            key={tag}
-            style={{
-              background: '#f5f3ef', border: '1px solid #e2ddd6',
-              fontFamily: 'var(--font-mono)', fontSize: '0.7rem',
-              color: '#6b6c7e', borderRadius: '20px', padding: '0.2rem 0.6rem',
-            }}
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
-
-      {/* Bottom row */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          {project.github && (
-            <span style={{ color: '#6b6c7e', display: 'flex', alignItems: 'center' }}>
-              <GithubIcon />
-            </span>
-          )}
+      <div style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
+        {/* Title + live link */}
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.5rem', marginBottom: '0.35rem' }}>
+          <p style={{ fontWeight: 700, fontSize: '1rem', color: '#1a1826', margin: 0 }}>
+            {project.title}
+          </p>
           {project.url && (
-            <span style={{ color: '#2e5bff', display: 'flex', alignItems: 'center' }}>
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              title="Live demo"
+              style={{ color: '#2e5bff', display: 'flex', alignItems: 'center', flexShrink: 0, marginTop: '2px' }}
+            >
               <ExternalLinkIcon />
-            </span>
+            </a>
           )}
         </div>
 
-        {!preview && (
-          <div
-            style={{ display: 'flex', gap: '0.5rem' }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <IconBtn onClick={onEdit} title="Edit">✏️</IconBtn>
-            <IconBtn onClick={onDelete} title="Delete">🗑</IconBtn>
-          </div>
+        {/* Short summary */}
+        {(project.summary || project.description) && (
+          <p style={{
+            fontSize: '0.825rem', color: '#6b6c7e', lineHeight: 1.6,
+            marginBottom: '0.75rem', flex: 1,
+            display: '-webkit-box', WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical', overflow: 'hidden',
+          }}>
+            {project.summary || project.description}
+          </p>
         )}
+
+        {/* Tech tags */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem', marginBottom: '0.75rem' }}>
+          {project.techStack.map((tag) => (
+            <span
+              key={tag}
+              style={{
+                background: '#f5f3ef', border: '1px solid #e2ddd6',
+                fontFamily: 'var(--font-mono)', fontSize: '0.7rem',
+                color: '#6b6c7e', borderRadius: '20px', padding: '0.2rem 0.6rem',
+              }}
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        {/* Bottom row */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            {project.github && (
+              <span style={{ color: '#6b6c7e', display: 'flex', alignItems: 'center' }}>
+                <GithubIcon />
+              </span>
+            )}
+          </div>
+
+          {!preview && (
+            <div
+              style={{ display: 'flex', gap: '0.5rem' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <IconBtn onClick={onEdit} title="Edit">✏️</IconBtn>
+              <IconBtn onClick={onDelete} title="Delete">🗑</IconBtn>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
@@ -478,16 +599,19 @@ export default function ProjectsSection() {
   function persist(updated: Project[]) {
     setProjects(updated)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+    window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY, newValue: JSON.stringify(updated) }))
   }
 
   function handleAdd(form: FormState) {
     const project: Project = {
       id: uid(),
       title: form.title.trim(),
+      summary: form.summary.trim(),
       description: form.description.trim(),
       techStack: form.techStack.split(',').map((s) => s.trim()).filter(Boolean),
       github: form.github.trim(),
       url: form.url.trim(),
+      screenshot: form.screenshot || undefined,
       createdAt: new Date().toISOString(),
     }
     persist([project, ...projects])
@@ -501,10 +625,12 @@ export default function ProjectsSection() {
           ? {
               ...p,
               title: form.title.trim(),
+              summary: form.summary.trim(),
               description: form.description.trim(),
               techStack: form.techStack.split(',').map((s) => s.trim()).filter(Boolean),
               github: form.github.trim(),
               url: form.url.trim(),
+              screenshot: form.screenshot || undefined,
             }
           : p
       )

@@ -7,15 +7,19 @@ export interface HeaderData {
   instagram: string
   email: string
   profileImage?: string
+  typewriterTexts?: string[]
+  resumeFile?: string
 }
 
 export interface Project {
   id: string
   title: string
+  summary?: string
   description: string
   techStack: string[]
   github: string
   url: string
+  screenshot?: string
   createdAt: string
 }
 

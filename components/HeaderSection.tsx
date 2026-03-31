@@ -14,6 +14,7 @@ const fallback: HeaderData = {
   linkedin: '',
   instagram: '',
   email: '',
+  typewriterTexts: ['Full-Stack Developer', 'Open Source Contributor', 'Problem Solver'],
 }
 
 interface HeaderSectionProps {
@@ -21,7 +22,7 @@ interface HeaderSectionProps {
   onProfileImageChange?: (image: string) => void
 }
 
-type EditableField = Exclude<keyof HeaderData, 'profileImage'>
+type EditableField = Exclude<keyof HeaderData, 'profileImage' | 'typewriterTexts'>
 
 interface FieldState {
   field: EditableField
@@ -127,6 +128,222 @@ function EditableRow({ onEdit, children }: { onEdit: () => void; children: React
   )
 }
 
+// ── Typewriter ────────────────────────────────────────────────────────────────
+
+function Typewriter({ texts }: { texts: string[] }) {
+  const [displayed, setDisplayed] = useState('')
+  const [phase, setPhase] = useState<'typing' | 'pause' | 'deleting'>('typing')
+  const [idx, setIdx] = useState(0)
+  const cancelledRef = useRef(false)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    cancelledRef.current = false
+    if (!texts.length) return
+
+    function tick() {
+      if (cancelledRef.current) return
+      setDisplayed((prev) => {
+        const target = texts[idx % texts.length]
+        if (phase === 'typing') {
+          const next = target.slice(0, prev.length + 1)
+          if (next === target) {
+            timerRef.current = setTimeout(() => { setPhase('pause'); tick() }, 2800)
+          } else {
+            timerRef.current = setTimeout(tick, 180)
+          }
+          return next
+        }
+        if (phase === 'pause') {
+          setPhase('deleting')
+          timerRef.current = setTimeout(tick, 120)
+          return prev
+        }
+        // deleting
+        const next = prev.slice(0, prev.length - 1)
+        if (next === '') {
+          setIdx((i) => i + 1)
+          setPhase('typing')
+          timerRef.current = setTimeout(tick, 500)
+        } else {
+          timerRef.current = setTimeout(tick, 90)
+        }
+        return next
+      })
+    }
+
+    timerRef.current = setTimeout(tick, 500)
+    return () => {
+      cancelledRef.current = true
+      if (timerRef.current) clearTimeout(timerRef.current)
+    }
+  }, [idx, phase, texts])
+
+  return (
+    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.1rem', color: '#2e5bff', fontWeight: 600 }}>
+      {displayed}
+      <span style={{ animation: 'tw-blink 1s step-end infinite', borderRight: '2px solid #2e5bff', marginLeft: '1px' }} />
+    </span>
+  )
+}
+
+function TypewriterEditor({
+  texts,
+  onSave,
+  onClose,
+}: {
+  texts: string[]
+  onSave: (texts: string[]) => void
+  onClose: () => void
+}) {
+  const [items, setItems] = useState<string[]>(texts.length ? [...texts] : [''])
+  const [newText, setNewText] = useState('')
+
+  function addItem() {
+    const trimmed = newText.trim()
+    if (!trimmed) return
+    setItems((prev) => [...prev, trimmed])
+    setNewText('')
+  }
+
+  function removeItem(i: number) {
+    setItems((prev) => prev.filter((_, j) => j !== i))
+  }
+
+  function updateItem(i: number, val: string) {
+    setItems((prev) => prev.map((t, j) => (j === i ? val : t)))
+  }
+
+  return (
+    <div style={{
+      background: '#fff', border: '1px solid #2e5bff', borderRadius: '12px',
+      padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem',
+      maxWidth: '420px',
+    }}>
+      <p style={{ fontWeight: 700, color: '#1a1826', fontSize: '0.875rem', margin: 0 }}>Typewriter Texts</p>
+
+      {items.map((item, i) => (
+        <div key={i} style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+          <input
+            value={item}
+            onChange={(e) => updateItem(i, e.target.value)}
+            style={{
+              flex: 1, background: '#f5f3ef', border: '1px solid #e2ddd6',
+              borderRadius: '6px', padding: '0.4rem 0.65rem', fontSize: '0.85rem',
+              color: '#1a1826', outline: 'none', fontFamily: 'inherit',
+            }}
+          />
+          <button
+            onClick={() => removeItem(i)}
+            style={{ background: 'none', border: 'none', color: '#f38ba8', cursor: 'pointer', fontSize: '1rem', padding: '0 0.2rem' }}
+            title="Remove"
+          >×</button>
+        </div>
+      ))}
+
+      <div style={{ display: 'flex', gap: '0.4rem' }}>
+        <input
+          value={newText}
+          onChange={(e) => setNewText(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter') addItem() }}
+          placeholder="Add a new phrase…"
+          style={{
+            flex: 1, background: '#f5f3ef', border: '1px dashed #c0bbb3',
+            borderRadius: '6px', padding: '0.4rem 0.65rem', fontSize: '0.85rem',
+            color: '#1a1826', outline: 'none', fontFamily: 'inherit',
+          }}
+        />
+        <button
+          onClick={addItem}
+          style={{
+            background: '#f5f3ef', border: '1px solid #e2ddd6', borderRadius: '6px',
+            padding: '0.4rem 0.7rem', fontSize: '0.85rem', cursor: 'pointer', color: '#2e5bff', fontWeight: 700,
+          }}
+        >+</button>
+      </div>
+
+      <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <button
+          onClick={() => onSave(items.filter((t) => t.trim()))}
+          style={{
+            background: '#2e5bff', color: '#fff', border: 'none', borderRadius: '7px',
+            padding: '0.45rem 1.1rem', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer',
+          }}
+        >Save</button>
+        <button
+          onClick={onClose}
+          style={{
+            background: 'none', color: '#6b6c7e', border: '1px solid #e2ddd6', borderRadius: '7px',
+            padding: '0.45rem 1.1rem', fontSize: '0.85rem', cursor: 'pointer',
+          }}
+        >Cancel</button>
+      </div>
+    </div>
+  )
+}
+
+// ── Coder Character ──────────────────────────────────────────────────────────
+
+function CoderCharacter() {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+      <svg viewBox="0 0 160 100" width="180" height="112" aria-hidden="true" style={{ display: 'block', overflow: 'visible' }}>
+        <g className="cc-body">
+          {/* Torso */}
+          <rect x="62" y="56" width="36" height="26" rx="6" fill="#2e5bff" />
+          {/* Collar V */}
+          <path d="M74 56 L80 64 L86 56" fill="none" stroke="#b8c3ff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Neck */}
+          <rect x="76" y="50" width="8" height="8" rx="3" fill="#ffd99a" />
+
+          {/* Head */}
+          <circle cx="80" cy="38" r="16" fill="#ffd99a" />
+
+          {/* Hair */}
+          <path d="M64 34 Q66 21 80 22 Q94 21 96 34 Q92 27 80 28 Q68 27 64 34Z" fill="#1a1826" />
+
+          {/* Ears */}
+          <ellipse cx="64" cy="39" rx="2.8" ry="3.8" fill="#f5c07a" />
+          <ellipse cx="96" cy="39" rx="2.8" ry="3.8" fill="#f5c07a" />
+
+          {/* Glasses frames */}
+          <rect x="69" y="35" width="9.5" height="7" rx="2.2" fill="none" stroke="#2e5bff" strokeWidth="1.3" />
+          <rect x="81.5" y="35" width="9.5" height="7" rx="2.2" fill="none" stroke="#2e5bff" strokeWidth="1.3" />
+          {/* Bridge */}
+          <line x1="78.5" y1="38.5" x2="81.5" y2="38.5" stroke="#2e5bff" strokeWidth="1.3" />
+          {/* Temples */}
+          <line x1="64" y1="38.5" x2="69" y2="38.5" stroke="#2e5bff" strokeWidth="1.3" />
+          <line x1="91" y1="38.5" x2="96" y2="38.5" stroke="#2e5bff" strokeWidth="1.3" />
+
+          {/* Eyes */}
+          <ellipse cx="73.8" cy="38.5" rx="2" ry="2.5" fill="#1a1826" className="cc-eye-l" />
+          <ellipse cx="86.2" cy="38.5" rx="2" ry="2.5" fill="#1a1826" className="cc-eye-r" />
+          {/* Eye shine */}
+          <circle cx="74.7" cy="37.4" r="0.7" fill="white" />
+          <circle cx="87.1" cy="37.4" r="0.7" fill="white" />
+
+          {/* Nose */}
+          <circle cx="80" cy="43.5" r="1.1" fill="#e8b87a" />
+          {/* Smile */}
+          <path d="M76 48 Q80 52 84 48" stroke="#c08060" strokeWidth="1.3" fill="none" strokeLinecap="round" />
+
+          {/* Left arm */}
+          <g className="cc-arm-l">
+            <path d="M63 65 Q50 78 47 94" stroke="#2e5bff" strokeWidth="11" strokeLinecap="round" fill="none" />
+            <circle cx="46" cy="96" r="7" fill="#ffd99a" />
+          </g>
+
+          {/* Right arm */}
+          <g className="cc-arm-r">
+            <path d="M97 65 Q110 78 113 94" stroke="#2e5bff" strokeWidth="11" strokeLinecap="round" fill="none" />
+            <circle cx="114" cy="96" r="7" fill="#ffd99a" />
+          </g>
+        </g>
+      </svg>
+    </div>
+  )
+}
+
 // ── Live Terminal ─────────────────────────────────────────────────────────────
 
 function LiveTerminal({ name, title }: { name: string; title: string }) {
@@ -137,8 +354,34 @@ function LiveTerminal({ name, title }: { name: string; title: string }) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const nameRef = useRef(name)
   const titleRef = useRef(title)
+  const projectsRef = useRef<string>('portfolio/  blog/  api/')
   nameRef.current = name
   titleRef.current = title
+
+  // Keep projectsRef in sync with localStorage
+  useEffect(() => {
+    function readProjects() {
+      try {
+        const stored = localStorage.getItem('pf_projects')
+        if (stored) {
+          const parsed = JSON.parse(stored) as { title: string }[]
+          if (parsed.length > 0) {
+            projectsRef.current = parsed
+              .map((p) => p.title.toLowerCase().replace(/\s+/g, '-') + '/')
+              .join('  ')
+            return
+          }
+        }
+      } catch { /* ignore */ }
+      projectsRef.current = 'portfolio/  blog/  api/'
+    }
+    readProjects()
+    function onStorage(e: StorageEvent) {
+      if (e.key === 'pf_projects') readProjects()
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [])
 
   useEffect(() => {
     cancelledRef.current = false
@@ -150,7 +393,7 @@ function LiveTerminal({ name, title }: { name: string; title: string }) {
         { cmd: 'whoami', output: nameRef.current },
         { cmd: 'cat role.txt', output: titleRef.current },
         { cmd: 'cat specialization.txt', output: 'AI Integration' },
-        { cmd: 'ls ./projects/', output: 'portfolio/  blog/  api/' },
+        { cmd: 'ls ./projects/', output: projectsRef.current },
         { cmd: 'git log --oneline -1', output: 'b0676f9 latest commit' },
         { cmd: 'uptime', output: 'always building new things' },
       ]
@@ -196,6 +439,8 @@ function LiveTerminal({ name, title }: { name: string; title: string }) {
   }, [])
 
   return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', alignSelf: 'flex-start', flexShrink: 0, width: '100%', maxWidth: '400px' }}>
+    <CoderCharacter />
     <div className="live-terminal" style={{
       background: '#0d1117',
       borderRadius: '12px',
@@ -206,8 +451,6 @@ function LiveTerminal({ name, title }: { name: string; title: string }) {
       maxWidth: '400px',
       overflow: 'hidden',
       border: '1px solid #30363d',
-      flexShrink: 0,
-      alignSelf: 'flex-start',
     }}>
       {/* Title bar */}
       <div style={{
@@ -224,7 +467,7 @@ function LiveTerminal({ name, title }: { name: string; title: string }) {
         <span style={{ marginLeft: '0.5rem', color: '#8b949e', fontSize: '0.7rem' }}>terminal</span>
       </div>
       {/* Body */}
-      <div style={{ padding: '0.85rem 1rem', minHeight: '200px' }}>
+      <div style={{ padding: '0.85rem 1rem', height: '200px', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
         {lines.map((line, i) => (
           <div key={i} style={{ color: line.isCmd ? '#79c0ff' : '#c9d1d9', lineHeight: 1.75 }}>
             {line.text}
@@ -235,6 +478,7 @@ function LiveTerminal({ name, title }: { name: string; title: string }) {
         </div>
       </div>
     </div>
+    </div>
   )
 }
 
@@ -242,8 +486,10 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
   const { preview } = usePreview()
   const [data, setData] = useState<HeaderData>(fallback)
   const [editing, setEditing] = useState<FieldState | null>(null)
+  const [editingTypewriter, setEditingTypewriter] = useState(false)
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
   const imageInputRef = useRef<HTMLInputElement>(null)
+  const resumeInputRef = useRef<HTMLInputElement>(null)
   const onNameChangeRef = useRef(onNameChange)
   onNameChangeRef.current = onNameChange
   const onProfileImageChangeRef = useRef(onProfileImageChange)
@@ -279,6 +525,37 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
     reader.readAsDataURL(file)
   }, [data])
 
+  const handleResumeUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      const base64 = reader.result as string
+      const updated = { ...data, resumeFile: base64 }
+      setData(updated)
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+    }
+    reader.readAsDataURL(file)
+    // reset input so same file can be re-uploaded
+    e.target.value = ''
+  }, [data])
+
+  function handleResumeDownload() {
+    if (!data.resumeFile) return
+    const firstName = data.name.trim().split(/\s+/)[0]
+    const filename = `${firstName}_resume.pdf`
+    const link = document.createElement('a')
+    link.href = data.resumeFile
+    link.download = filename
+    link.click()
+  }
+
+  function handleResumeRemove() {
+    const updated = { ...data, resumeFile: undefined }
+    setData(updated)
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+  }
+
   useEffect(() => {
     if (editing && inputRef.current) inputRef.current.focus()
   }, [editing])
@@ -299,6 +576,13 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
   function handleCancel() { setEditing(null) }
 
   function isEditing(field: EditableField) { return editing?.field === field }
+
+  function saveTypewriterTexts(texts: string[]) {
+    const updated = { ...data, typewriterTexts: texts }
+    setData(updated)
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+    setEditingTypewriter(false)
+  }
 
   const inlineEditor = (field: EditableField, multiline = false) => (
     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
@@ -400,6 +684,26 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
         </div>
       </div>
 
+      {/* Typewriter */}
+      <div style={{ marginBottom: '1rem', minHeight: '1.8rem' }}>
+        {!preview && editingTypewriter ? (
+          <TypewriterEditor
+            texts={data.typewriterTexts ?? fallback.typewriterTexts ?? []}
+            onSave={saveTypewriterTexts}
+            onClose={() => setEditingTypewriter(false)}
+          />
+        ) : (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+            className={preview ? '' : 'editable-row'}
+            onMouseEnter={preview ? undefined : (e) => { const btn = e.currentTarget.querySelector<HTMLElement>('.pencil-btn'); if (btn) btn.style.opacity = '1' }}
+            onMouseLeave={preview ? undefined : (e) => { const btn = e.currentTarget.querySelector<HTMLElement>('.pencil-btn'); if (btn) btn.style.opacity = '0' }}
+          >
+            <Typewriter texts={data.typewriterTexts?.length ? data.typewriterTexts : (fallback.typewriterTexts ?? [])} />
+            {!preview && <PencilBtn onClick={() => setEditingTypewriter(true)} />}
+          </div>
+        )}
+      </div>
+
       {/* Title */}
       <div style={{ marginBottom: '1rem' }}>
         {!preview && isEditing('title') ? inlineEditor('title') : preview ? (
@@ -429,7 +733,7 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
       {/* Social links */}
       <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', alignItems: 'center' }}>
         {(['github', 'linkedin', 'instagram', 'email'] as const).map((platform) => {
-          const href = platform === 'email' ? (data.email ? `mailto:${data.email}` : '') : data[platform as keyof HeaderData]
+          const href = platform === 'email' ? (data.email ? `mailto:${data.email}` : '') : data[platform] as string
           if (preview) {
             return href ? <SocialIconButton key={platform} href={href} platform={platform} /> : null
           }
@@ -456,6 +760,85 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
         })}
       </div>
 
+      {/* Resume */}
+      <div style={{ marginTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+        {data.resumeFile ? (
+          <>
+            <button
+              onClick={handleResumeDownload}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.45rem',
+                background: '#2e5bff', color: '#fff', border: 'none',
+                borderRadius: '8px', padding: '0.5rem 1.1rem',
+                fontSize: '0.875rem', fontWeight: 700, cursor: 'pointer',
+                transition: 'background 0.15s',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = '#1a44e8')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = '#2e5bff')}
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Download Resume
+            </button>
+            {!preview && (
+              <>
+                <button
+                  onClick={() => resumeInputRef.current?.click()}
+                  style={{
+                    background: 'none', border: '1px solid #e2ddd6', borderRadius: '8px',
+                    padding: '0.5rem 0.9rem', fontSize: '0.8rem', cursor: 'pointer',
+                    color: '#6b6c7e', transition: 'border-color 0.15s',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#2e5bff')}
+                  onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#e2ddd6')}
+                >
+                  Replace
+                </button>
+                <button
+                  onClick={handleResumeRemove}
+                  style={{
+                    background: 'none', border: 'none', padding: '0.5rem 0.4rem',
+                    fontSize: '0.8rem', cursor: 'pointer', color: '#c0bbb3',
+                    transition: 'color 0.15s',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = '#f38ba8')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = '#c0bbb3')}
+                  title="Remove resume"
+                >
+                  ✕
+                </button>
+              </>
+            )}
+          </>
+        ) : !preview ? (
+          <button
+            onClick={() => resumeInputRef.current?.click()}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.45rem',
+              background: 'none', color: '#6b6c7e',
+              border: '1.5px dashed #c0bbb3', borderRadius: '8px',
+              padding: '0.5rem 1.1rem', fontSize: '0.875rem',
+              cursor: 'pointer', transition: 'border-color 0.15s, color 0.15s',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#2e5bff'; e.currentTarget.style.color = '#2e5bff' }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#c0bbb3'; e.currentTarget.style.color = '#6b6c7e' }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            Upload Resume
+          </button>
+        ) : null}
+        <input
+          ref={resumeInputRef}
+          type="file"
+          accept="application/pdf"
+          style={{ display: 'none' }}
+          onChange={handleResumeUpload}
+        />
+      </div>
+
       </div>{/* end left column */}
 
       {/* Right: Live Terminal */}
@@ -478,6 +861,16 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
         .avatar-upload:hover .avatar-overlay { opacity: 1 !important; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
         .terminal-cursor { animation: blink 1s step-end infinite; }
+        @keyframes tw-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+        @keyframes cc-bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+        @keyframes cc-arm-l-anim { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+        @keyframes cc-arm-r-anim { 0%,50%{transform:translateY(6px)} 25%,75%{transform:translateY(0)} }
+        @keyframes cc-blink { 0%,88%{transform:scaleY(1)} 93%{transform:scaleY(0.08)} 97%{transform:scaleY(1)} }
+        .cc-body { animation: cc-bob 2.8s ease-in-out infinite; }
+        .cc-arm-l { animation: cc-arm-l-anim 0.48s ease-in-out infinite; }
+        .cc-arm-r { animation: cc-arm-r-anim 0.48s ease-in-out infinite; }
+        .cc-eye-l { animation: cc-blink 3.5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+        .cc-eye-r { animation: cc-blink 3.5s ease-in-out 0.07s infinite; transform-box: fill-box; transform-origin: center; }
       `}</style>
     </section>
   )
