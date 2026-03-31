@@ -8,6 +8,7 @@ export interface HeaderData {
   email: string
   profileImage?: string
   typewriterTexts?: string[]
+  resumeFile?: string
 }
 
 export interface Project {
