@@ -7,14 +7,12 @@ import { getSection, type PortfolioKey } from '@/lib/db'
 
 export const runtime = 'edge'
 
-export async function GET(
-  _request: Request,
-  { params }: { params: Promise<{ key: string }> }
-) {
+export async function GET(request: Request) {
   try {
-    const { key } = await params
+    // Parse key from URL to avoid Next.js version-specific params typing issues
+    const key = new URL(request.url).pathname.split('/').pop() as PortfolioKey
     const { env } = getRequestContext<CloudflareEnv>()
-    const data = await getSection(env.DB, key as PortfolioKey)
+    const data = await getSection(env.DB, key)
     return Response.json({ ok: true, data })
   } catch (err) {
     console.error('[portfolio GET key]', err)
