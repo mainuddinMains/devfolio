@@ -14,7 +14,7 @@
     "db:migrate:local": "wrangler d1 execute devfolio-db --local --file=./migrations/0001_schema.sql"
   },
   "dependencies": {
-    "next": "14.2.35",
+    "next": "^15.4.11",
     "react": "^18",
     "react-dom": "^18"
   },
