@@ -133,52 +133,56 @@ function EditableRow({ onEdit, children }: { onEdit: () => void; children: React
 
 function Typewriter({ texts }: { texts: string[] }) {
   const [displayed, setDisplayed] = useState('')
-  const [phase, setPhase] = useState<'typing' | 'pause' | 'deleting'>('typing')
-  const [idx, setIdx] = useState(0)
-  const cancelledRef = useRef(false)
+  const phaseRef = useRef<'typing' | 'pause' | 'deleting'>('typing')
+  const idxRef = useRef(0)
+  const displayedRef = useRef('')
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
-    cancelledRef.current = false
     if (!texts.length) return
 
+    phaseRef.current = 'typing'
+    idxRef.current = 0
+    displayedRef.current = ''
+    setDisplayed('')
+
     function tick() {
-      if (cancelledRef.current) return
-      setDisplayed((prev) => {
-        const target = texts[idx % texts.length]
-        if (phase === 'typing') {
-          const next = target.slice(0, prev.length + 1)
-          if (next === target) {
-            timerRef.current = setTimeout(() => { setPhase('pause'); tick() }, 2800)
-          } else {
-            timerRef.current = setTimeout(tick, 180)
-          }
-          return next
+      const phase = phaseRef.current
+      const target = texts[idxRef.current % texts.length]
+      const prev = displayedRef.current
+
+      if (phase === 'typing') {
+        const next = target.slice(0, prev.length + 1)
+        displayedRef.current = next
+        setDisplayed(next)
+        if (next === target) {
+          phaseRef.current = 'pause'
+          timerRef.current = setTimeout(tick, 2800)
+        } else {
+          timerRef.current = setTimeout(tick, 100)
         }
-        if (phase === 'pause') {
-          setPhase('deleting')
-          timerRef.current = setTimeout(tick, 120)
-          return prev
-        }
-        // deleting
+      } else if (phase === 'pause') {
+        phaseRef.current = 'deleting'
+        timerRef.current = setTimeout(tick, 120)
+      } else {
         const next = prev.slice(0, prev.length - 1)
+        displayedRef.current = next
+        setDisplayed(next)
         if (next === '') {
-          setIdx((i) => i + 1)
-          setPhase('typing')
+          idxRef.current += 1
+          phaseRef.current = 'typing'
           timerRef.current = setTimeout(tick, 500)
         } else {
-          timerRef.current = setTimeout(tick, 90)
+          timerRef.current = setTimeout(tick, 60)
         }
-        return next
-      })
+      }
     }
 
     timerRef.current = setTimeout(tick, 500)
     return () => {
-      cancelledRef.current = true
       if (timerRef.current) clearTimeout(timerRef.current)
     }
-  }, [idx, phase, texts])
+  }, [texts])
 
   return (
     <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.1rem', color: '#2e5bff', fontWeight: 600 }}>
@@ -627,11 +631,6 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
 
   return (
     <section id="header" className="header-section" style={{ padding: '8rem 2rem 5rem', maxWidth: '1100px', margin: '0 auto' }}>
-
-      {/* Label */}
-      <span style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 600, color: '#2e5bff', display: 'block', marginBottom: '1.25rem' }}>
-        DEVELOPER PORTFOLIO
-      </span>
 
       {/* Two-column layout: left content + right terminal */}
       <div className="header-columns" style={{ display: 'flex', gap: '3rem', alignItems: 'flex-start' }}>
