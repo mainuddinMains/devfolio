@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { usePreview } from '@/lib/PreviewContext'
+import { syncSection } from '@/lib/syncToDb'
 
-const CONTACT_KEY = 'pf_contact_info'
+const CONTACT_KEY = 'pf_contact'
 
 interface ContactInfo {
   email: string
@@ -235,6 +236,7 @@ export default function ContactSection() {
     const updated = { ...contactInfo, [field]: value }
     setContactInfo(updated)
     localStorage.setItem(CONTACT_KEY, JSON.stringify(updated))
+    syncSection(CONTACT_KEY, updated)
   }
 
   function set(key: keyof typeof form, value: string) {
