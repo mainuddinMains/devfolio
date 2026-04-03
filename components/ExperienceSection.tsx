@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Experience } from '@/lib/types'
 import { usePreview } from '@/lib/PreviewContext'
+import { syncSection } from '@/lib/syncToDb'
 
 const STORAGE_KEY = 'pf_experience'
 
@@ -345,6 +346,7 @@ export default function ExperienceSection() {
   function persist(updated: Experience[]) {
     setEntries(updated)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+    syncSection(STORAGE_KEY, updated)
   }
 
   function parseBullets(description: string): string[] {
