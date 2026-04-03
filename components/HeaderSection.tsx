@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { HeaderData } from '@/lib/types'
 import { usePreview } from '@/lib/PreviewContext'
+import { syncSection } from '@/lib/syncToDb'
 
 const STORAGE_KEY = 'pf_header'
 
@@ -520,6 +521,7 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
       const updated = { ...data, profileImage: base64 }
       setData(updated)
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+      syncSection(STORAGE_KEY, updated)
       onProfileImageChangeRef.current?.(base64)
     }
     reader.readAsDataURL(file)
@@ -534,6 +536,7 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
       const updated = { ...data, resumeFile: base64 }
       setData(updated)
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+      syncSection(STORAGE_KEY, updated)
     }
     reader.readAsDataURL(file)
     // reset input so same file can be re-uploaded
@@ -554,6 +557,7 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
     const updated = { ...data, resumeFile: undefined }
     setData(updated)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+    syncSection(STORAGE_KEY, updated)
   }
 
   useEffect(() => {
@@ -569,6 +573,7 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
     const updated = { ...data, [editing.field]: editing.draft }
     setData(updated)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+    syncSection(STORAGE_KEY, updated)
     if (editing.field === 'name') onNameChangeRef.current(editing.draft)
     setEditing(null)
   }
@@ -581,6 +586,7 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
     const updated = { ...data, typewriterTexts: texts }
     setData(updated)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+    syncSection(STORAGE_KEY, updated)
     setEditingTypewriter(false)
   }
 
