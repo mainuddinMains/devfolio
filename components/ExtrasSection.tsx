@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Extra } from '@/lib/types'
 import { usePreview } from '@/lib/PreviewContext'
+import { syncSection } from '@/lib/syncToDb'
 
 const STORAGE_KEY = 'pf_extras'
 
@@ -294,6 +295,7 @@ export default function ExtrasSection() {
   function persist(updated: Extra[]) {
     setEntries(updated)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+    syncSection(STORAGE_KEY, updated)
   }
 
   function handleAdd(form: FormState) {
