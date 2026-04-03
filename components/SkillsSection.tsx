@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Skill } from '@/lib/types'
 import { usePreview } from '@/lib/PreviewContext'
+import { syncSection } from '@/lib/syncToDb'
 
 const STORAGE_KEY = 'pf_skills'
 
@@ -363,6 +364,7 @@ export default function SkillsSection() {
   function persist(updated: Skill[]) {
     setSkills(updated)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+    syncSection(STORAGE_KEY, updated)
   }
 
   // Group by category, preserving insertion order
