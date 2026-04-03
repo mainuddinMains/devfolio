@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Education } from '@/lib/types'
 import { usePreview } from '@/lib/PreviewContext'
+import { syncSection } from '@/lib/syncToDb'
 
 const STORAGE_KEY = 'pf_education'
 
@@ -383,6 +384,7 @@ export default function EducationSection() {
   function persist(updated: Education[]) {
     setEntries(updated)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+    syncSection(STORAGE_KEY, updated)
   }
 
   function handleAdd(form: FormState) {
