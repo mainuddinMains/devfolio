@@ -223,6 +223,8 @@ export default function ContactSection() {
   const [form, setForm] = useState({ name: '', email: '', delivery: 'email', message: '' })
   const [errors, setErrors] = useState<Partial<Record<'name' | 'email' | 'message', string>>>({})
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [sendError, setSendError] = useState('')
   const [contactInfo, setContactInfo] = useState<ContactInfo>(fallbackContact)
 
   useEffect(() => {
@@ -246,7 +248,7 @@ export default function ContactSection() {
     }
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const errs: typeof errors = {}
     if (!form.name.trim()) errs.name = 'Name is required.'
@@ -254,7 +256,22 @@ export default function ContactSection() {
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = 'Enter a valid email.'
     if (!form.message.trim()) errs.message = 'Message is required.'
     if (Object.keys(errs).length) { setErrors(errs); return }
-    setSubmitted(true)
+
+    setSending(true)
+    setSendError('')
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: form.name, email: form.email, message: form.message }),
+      })
+      if (!res.ok) throw new Error('Failed to send.')
+      setSubmitted(true)
+    } catch {
+      setSendError('Something went wrong. Please try again.')
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -299,7 +316,7 @@ export default function ContactSection() {
         {/* ── Right: form card ── */}
         <div style={{ background: '#ffffff', border: '1px solid rgba(100,96,88,0.12)', borderRadius: '12px', padding: '2.5rem' }}>
           {submitted ? (
-            <SuccessState onReset={() => { setSubmitted(false); setForm({ name: '', email: '', delivery: 'email', message: '' }) }} />
+            <SuccessState onReset={() => { setSubmitted(false); setSendError(''); setForm({ name: '', email: '', delivery: 'email', message: '' }) }} />
           ) : (
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
               {/* Name + Email row */}
@@ -365,18 +382,23 @@ export default function ContactSection() {
               </FormField>
 
               {/* Submit */}
+              {sendError && (
+                <p style={{ color: '#f38ba8', fontSize: '0.8rem', textAlign: 'center' }}>{sendError}</p>
+              )}
               <button
                 type="submit"
+                disabled={sending}
                 style={{
                   width: '100%', background: '#2e5bff', color: '#fff', border: 'none',
                   borderRadius: '8px', padding: '1rem', fontWeight: 700, fontSize: '0.75rem',
-                  letterSpacing: '0.12em', textTransform: 'uppercase', cursor: 'pointer',
+                  letterSpacing: '0.12em', textTransform: 'uppercase', cursor: sending ? 'not-allowed' : 'pointer',
                   transition: 'opacity 0.15s', boxShadow: '0 0 20px 0 rgba(46,91,255,0.2)',
+                  opacity: sending ? 0.7 : 1,
                 }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.opacity = '0.9' }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.opacity = '1' }}
+                onMouseEnter={(e) => { if (!sending) (e.currentTarget as HTMLButtonElement).style.opacity = '0.9' }}
+                onMouseLeave={(e) => { if (!sending) (e.currentTarget as HTMLButtonElement).style.opacity = '1' }}
               >
-                TRANSMIT MESSAGE
+                {sending ? 'SENDING...' : 'TRANSMIT MESSAGE'}
               </button>
             </form>
           )}
