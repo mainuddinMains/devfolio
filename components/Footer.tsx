@@ -44,7 +44,7 @@ export default function Footer({ name }: FooterProps) {
             fontWeight: 500,
           }}
         >
-          © 2025 {name} | ENGINEERED FOR PERFORMANCE
+          © {new Date().toLocaleString('default', { month: 'long', year: 'numeric' })} {name} | ENGINEERED FOR PERFORMANCE
         </p>
 
         {/* Right: links */}
