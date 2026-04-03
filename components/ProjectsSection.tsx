@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Project } from '@/lib/types'
 import { usePreview } from '@/lib/PreviewContext'
+import { syncSection } from '@/lib/syncToDb'
 
 const STORAGE_KEY = 'pf_projects'
 
@@ -599,6 +600,7 @@ export default function ProjectsSection() {
   function persist(updated: Project[]) {
     setProjects(updated)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+    syncSection(STORAGE_KEY, updated)
     window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY, newValue: JSON.stringify(updated) }))
   }
 
