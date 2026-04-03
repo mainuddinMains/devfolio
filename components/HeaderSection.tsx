@@ -549,8 +549,9 @@ export default function HeaderSection({ onNameChange, onProfileImageChange }: He
 
   function handleResumeDownload() {
     if (!data.resumeFile) return
-    const firstName = data.name.trim().split(/\s+/)[0]
-    const filename = `${firstName}_resume.pdf`
+    const rawName = data.name.trim()
+    const firstName = (rawName && rawName !== 'Your Name') ? rawName.split(/\s+/)[0] : 'Mainuddin'
+    const filename = `${firstName}.pdf`
     const link = document.createElement('a')
     link.href = data.resumeFile
     link.download = filename
