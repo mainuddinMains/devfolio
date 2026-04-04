@@ -1,7 +1,7 @@
 export const runtime = 'edge'
 
 export async function POST(req: Request) {
-  const { name, email, message } = await req.json()
+  const { name, email, message } = await req.json() as { name: string; email: string; message: string }
 
   const apiKey = process.env.RESEND_API_KEY
   if (!apiKey) {
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     },
     body: JSON.stringify({
       from: 'Portfolio Contact <onboarding@resend.dev>',
-      to: ['mainuddinsarker@gmail.com'],
+      to: ['mainuddin.fnu@gmail.com'],
       reply_to: email,
       subject: `New message from ${name}`,
       html: `
