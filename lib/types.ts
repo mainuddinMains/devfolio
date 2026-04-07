@@ -56,3 +56,10 @@ export interface Extra {
   description: string
   date: string
 }
+
+export interface MediaEntry {
+  id: string
+  mediaUrl: string      // base64 data URL (image) or external URL (image/video)
+  mediaType: 'image' | 'video'
+  text: string          // displayed to the right of the media
+}

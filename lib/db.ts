@@ -10,6 +10,7 @@ export type PortfolioKey =
   | 'pf_education'
   | 'pf_skills'
   | 'pf_extras'
+  | 'pf_about_media'
   | 'pf_contact'
 
 export async function getSection<T>(db: D1Database, key: PortfolioKey): Promise<T | null> {
