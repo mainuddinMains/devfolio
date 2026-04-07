@@ -1,10 +1,11 @@
 /**
- * GET  /api/portfolio        – return all sections
- * PUT  /api/portfolio        – upsert one section  { key, data }
+ * GET  /api/portfolio        – return all sections (public)
+ * PUT  /api/portfolio        – upsert one section  { key, data } (owner only)
  */
 
 import { getRequestContext } from '@cloudflare/next-on-pages'
 import { getAllSections, setSection, type PortfolioKey } from '@/lib/db'
+import { verifyToken, getCookieFromHeader, COOKIE_NAME } from '@/lib/auth'
 
 export const runtime = 'edge'
 
@@ -22,8 +23,15 @@ export async function GET() {
 export async function PUT(request: Request) {
   try {
     const { env } = getRequestContext<CloudflareEnv>()
-    const body = await request.json() as { key: PortfolioKey; data: unknown }
 
+    // Verify owner authentication
+    const cookieHeader = request.headers.get('cookie') || ''
+    const token = getCookieFromHeader(cookieHeader, COOKIE_NAME)
+    if (!token || !(await verifyToken(token, env.JWT_SECRET))) {
+      return Response.json({ ok: false, error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const body = await request.json() as { key: PortfolioKey; data: unknown }
     if (!body.key || body.data === undefined) {
       return Response.json({ ok: false, error: 'Missing key or data' }, { status: 400 })
     }
