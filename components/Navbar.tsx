@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { usePreview } from '@/lib/PreviewContext'
 
 interface NavbarProps {
@@ -24,6 +24,26 @@ export default function Navbar({ name, profileImage }: NavbarProps) {
   const [loginError, setLoginError] = useState('')
   const [loggingIn, setLoggingIn] = useState(false)
   const { preview, setPreview, isOwner, setIsOwner } = usePreview()
+  const keyPresses = useRef<number[]>([])
+
+  // Secret trigger: press 'L' three times within 1 second to open login
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (isOwner) return
+      if (e.key.toLowerCase() !== 'l') return
+      // Ignore when typing in an input/textarea
+      const tag = (e.target as HTMLElement).tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return
+      const now = Date.now()
+      keyPresses.current = [...keyPresses.current.filter(t => now - t < 1000), now]
+      if (keyPresses.current.length >= 3) {
+        keyPresses.current = []
+        setShowLogin(true)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [isOwner])
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
@@ -114,7 +134,7 @@ export default function Navbar({ name, profileImage }: NavbarProps) {
               </a>
             ))}
 
-            {isOwner ? (
+            {isOwner && (
               <>
                 <button
                   onClick={() => setPreview(!preview)}
@@ -151,24 +171,6 @@ export default function Navbar({ name, profileImage }: NavbarProps) {
                   Logout
                 </button>
               </>
-            ) : (
-              <button
-                onClick={() => setShowLogin(true)}
-                style={{
-                  background: 'transparent',
-                  border: '1px solid #c0bbb3',
-                  color: '#6b6c7e',
-                  borderRadius: '6px',
-                  padding: '0.3rem 0.75rem',
-                  fontSize: '0.775rem',
-                  fontWeight: 500,
-                  cursor: 'pointer',
-                  letterSpacing: '0.03em',
-                  transition: 'all 0.15s',
-                }}
-              >
-                Login
-              </button>
             )}
           </div>
 
@@ -216,7 +218,7 @@ export default function Navbar({ name, profileImage }: NavbarProps) {
               </a>
             ))}
 
-            {isOwner ? (
+            {isOwner && (
               <>
                 <button
                   onClick={() => { setPreview(!preview); setMenuOpen(false) }}
@@ -252,23 +254,6 @@ export default function Navbar({ name, profileImage }: NavbarProps) {
                   Logout
                 </button>
               </>
-            ) : (
-              <button
-                onClick={() => { setShowLogin(true); setMenuOpen(false) }}
-                style={{
-                  background: 'transparent',
-                  border: '1px solid #c0bbb3',
-                  color: '#6b6c7e',
-                  borderRadius: '6px',
-                  padding: '0.3rem 0.75rem',
-                  fontSize: '0.775rem',
-                  fontWeight: 500,
-                  cursor: 'pointer',
-                  alignSelf: 'flex-start',
-                }}
-              >
-                Login
-              </button>
             )}
           </div>
         )}
