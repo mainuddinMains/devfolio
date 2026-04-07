@@ -6,6 +6,8 @@
 export type PortfolioKey =
   | 'pf_header'
   | 'pf_projects'
+  | 'pf_project_intro'
+  | 'pf_project_media'
   | 'pf_experience'
   | 'pf_education'
   | 'pf_skills'
