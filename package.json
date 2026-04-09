@@ -20,9 +20,9 @@
     "react-dom": "^18"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.13.16",
     "@cloudflare/workers-types": "^4.20260329.1",
     "@opennextjs/cloudflare": "^1.18.1",
+    "esbuild": "^0.27.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
