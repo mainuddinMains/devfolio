@@ -3,15 +3,13 @@
  * PUT  /api/portfolio        – upsert one section  { key, data } (owner only)
  */
 
-import { getRequestContext } from '@cloudflare/next-on-pages'
+import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { getAllSections, setSection, type PortfolioKey } from '@/lib/db'
 import { verifyToken, getCookieFromHeader, COOKIE_NAME } from '@/lib/auth'
 
-export const runtime = 'edge'
-
 export async function GET() {
   try {
-    const { env } = getRequestContext<CloudflareEnv>()
+    const { env } = await getCloudflareContext<CloudflareEnv>()
     const all = await getAllSections(env.DB)
     return Response.json({ ok: true, data: all })
   } catch (err) {
@@ -22,9 +20,8 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   try {
-    const { env } = getRequestContext<CloudflareEnv>()
+    const { env } = await getCloudflareContext<CloudflareEnv>()
 
-    // Verify owner authentication
     const cookieHeader = request.headers.get('cookie') || ''
     const token = getCookieFromHeader(cookieHeader, COOKIE_NAME)
     if (!token || !(await verifyToken(token, env.JWT_SECRET))) {

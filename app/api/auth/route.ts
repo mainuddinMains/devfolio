@@ -4,10 +4,8 @@
  * DELETE /api/auth  – logout → clears cookie
  */
 
-import { getRequestContext } from '@cloudflare/next-on-pages'
+import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { signToken, verifyToken, getCookieFromHeader, COOKIE_NAME, COOKIE_MAX_AGE } from '@/lib/auth'
-
-export const runtime = 'edge'
 
 export async function GET(request: Request) {
   const cookieHeader = request.headers.get('cookie') || ''
@@ -15,7 +13,7 @@ export async function GET(request: Request) {
   if (!token) return Response.json({ ok: false, owner: false })
 
   try {
-    const { env } = getRequestContext<CloudflareEnv>()
+    const { env } = await getCloudflareContext<CloudflareEnv>()
     const valid = await verifyToken(token, env.JWT_SECRET)
     return Response.json({ ok: valid, owner: valid })
   } catch {
@@ -25,7 +23,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const { env } = getRequestContext<CloudflareEnv>()
+    const { env } = await getCloudflareContext<CloudflareEnv>()
     const { password } = await request.json() as { password?: string }
 
     if (!password || password !== env.OWNER_PASSWORD) {
