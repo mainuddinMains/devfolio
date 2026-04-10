@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 /**
  * GET    /api/auth  – check if the current cookie is a valid owner token
  * POST   /api/auth  – login with password → sets httpOnly cookie
