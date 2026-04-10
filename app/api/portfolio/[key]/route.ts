@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 /**
  * GET /api/portfolio/:key  – return a single section
  */
