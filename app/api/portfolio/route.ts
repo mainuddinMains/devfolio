@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 /**
  * GET  /api/portfolio        – return all sections (public)
  * PUT  /api/portfolio        – upsert one section  { key, data } (owner only)
