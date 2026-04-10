@@ -1,5 +1,3 @@
-export const runtime = 'edge';
-
 /**
  * GET    /api/auth  – check if the current cookie is a valid owner token
  * POST   /api/auth  – login with password → sets httpOnly cookie
@@ -15,7 +13,7 @@ export async function GET(request: Request) {
   if (!token) return Response.json({ ok: false, owner: false })
 
   try {
-    const { env } = await getCloudflareContext<CloudflareEnv>()
+    const { env } = getCloudflareContext<CloudflareEnv>()
     const valid = await verifyToken(token, env.JWT_SECRET)
     return Response.json({ ok: valid, owner: valid })
   } catch {
@@ -25,7 +23,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const { env } = await getCloudflareContext<CloudflareEnv>()
+    const { env } = getCloudflareContext<CloudflareEnv>()
     const { password } = await request.json() as { password?: string }
 
     if (!password || password !== env.OWNER_PASSWORD) {

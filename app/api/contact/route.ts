@@ -1,5 +1,3 @@
-export const runtime = 'edge';
-
 export async function POST(req: Request) {
   const { name, email, message } = await req.json() as { name: string; email: string; message: string }
 

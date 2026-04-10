@@ -1,5 +1,3 @@
-export const runtime = 'edge';
-
 /**
  * GET  /api/portfolio        – return all sections (public)
  * PUT  /api/portfolio        – upsert one section  { key, data } (owner only)
@@ -11,7 +9,7 @@ import { verifyToken, getCookieFromHeader, COOKIE_NAME } from '@/lib/auth'
 
 export async function GET() {
   try {
-    const { env } = await getCloudflareContext<CloudflareEnv>()
+    const { env } = getCloudflareContext<CloudflareEnv>()
     const all = await getAllSections(env.DB)
     return Response.json({ ok: true, data: all })
   } catch (err) {
@@ -22,7 +20,7 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   try {
-    const { env } = await getCloudflareContext<CloudflareEnv>()
+    const { env } = getCloudflareContext<CloudflareEnv>()
 
     const cookieHeader = request.headers.get('cookie') || ''
     const token = getCookieFromHeader(cookieHeader, COOKIE_NAME)

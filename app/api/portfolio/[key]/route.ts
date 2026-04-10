@@ -1,5 +1,3 @@
-export const runtime = 'edge';
-
 /**
  * GET /api/portfolio/:key  – return a single section
  */
@@ -10,7 +8,7 @@ import { getSection, type PortfolioKey } from '@/lib/db'
 export async function GET(request: Request) {
   try {
     const key = new URL(request.url).pathname.split('/').pop() as PortfolioKey
-    const { env } = await getCloudflareContext<CloudflareEnv>()
+    const { env } = getCloudflareContext<CloudflareEnv>()
     const data = await getSection(env.DB, key)
     return Response.json({ ok: true, data })
   } catch (err) {
