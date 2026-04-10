@@ -5,3 +5,7 @@ main                = ".open-next/worker.js"
 
 [assets]
 directory = ".open-next/assets"
+
+[[d1_databases]]
+binding     = "porthfolio"
+database_id = "242f9182-0307-4005-ac91-40f8beb18734"
