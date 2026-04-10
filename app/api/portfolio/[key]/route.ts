@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   try {
     const key = new URL(request.url).pathname.split('/').pop() as PortfolioKey
     const { env } = getCloudflareContext<CloudflareEnv>()
-    const data = await getSection(env.DB, key)
+    const data = await getSection(env.porthfolio, key)
     return Response.json({ ok: true, data })
   } catch (err) {
     console.error('[portfolio GET key]', err)

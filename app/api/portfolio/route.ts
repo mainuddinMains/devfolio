@@ -10,7 +10,7 @@ import { verifyToken, getCookieFromHeader, COOKIE_NAME } from '@/lib/auth'
 export async function GET() {
   try {
     const { env } = getCloudflareContext<CloudflareEnv>()
-    const all = await getAllSections(env.DB)
+    const all = await getAllSections(env.porthfolio)
     return Response.json({ ok: true, data: all })
   } catch (err) {
     console.error('[portfolio GET]', err)
@@ -33,7 +33,7 @@ export async function PUT(request: Request) {
       return Response.json({ ok: false, error: 'Missing key or data' }, { status: 400 })
     }
 
-    await setSection(env.DB, body.key, body.data)
+    await setSection(env.porthfolio, body.key, body.data)
     return Response.json({ ok: true })
   } catch (err) {
     console.error('[portfolio PUT]', err)
